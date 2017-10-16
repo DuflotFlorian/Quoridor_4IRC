@@ -24,10 +24,9 @@ public class Coordonnees {
 	public void setY(int y) {
 		this.y = y;
 	}
-	
-	@Override
+
 	public String toString() {
-		return super.toString();
+		return "x = " + this.x + " y = " + this.y;
 	}
 	
 	public boolean equals(Coordonnees coord) {
