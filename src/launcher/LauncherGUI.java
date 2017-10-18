@@ -1,7 +1,6 @@
 package launcher;
 
 import java.awt.Dimension;
-import java.util.Observer;
 
 import javax.swing.JFrame;
 
@@ -15,15 +14,12 @@ import vue.QuoridorGUI;
  */
 public class LauncherGUI {
 
-    /**
-     * @param args
-     */
     public static void main(String[] args) {
 
         JFrame frame;
         Dimension dim;
-        dim = new Dimension(800, 800);
-        frame = new QuoridorGUI("Quoridor", dim, 9,2);
+        dim = new Dimension(900, 900);
+        frame = new QuoridorGUI("Quoridor", dim ,9);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocation(600, 10);
         frame.setResizable(false);
