@@ -38,7 +38,7 @@ public class Jeu {
 	}
 
 	public boolean moveIfAllow(Joueur j, Coordonnees coord) {
-		if(getCurrentPlayer().equals(j) && getAvailableMove(j).contains(coord)){
+		if(getCurrentPlayer().equals(j) && getAvailableMove(j).contains(coord) && !isPlayerHere(coord)){
 			j.move(coord);
 			this.currentPlayer = (this.currentPlayer + 1) % this.nbJoueurs;
 			return true;
