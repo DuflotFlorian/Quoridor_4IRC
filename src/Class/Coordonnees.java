@@ -28,8 +28,17 @@ public class Coordonnees {
 	public String toString() {
 		return "x = " + this.x + " y = " + this.y;
 	}
-	
-	public boolean equals(Coordonnees coord) {
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) return true;
+		if (!(obj instanceof Coordonnees)) {
+			return false;
+		}
+
+		Coordonnees coord = (Coordonnees) obj;
 		return ((this.x == coord.getX()) && (this.y == coord.getY()));
+
 	}
+
 }
