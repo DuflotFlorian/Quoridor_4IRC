@@ -87,7 +87,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                     PlateauQuoridor.add(square,constraints);
                     casePosX += tailleCasePion ;
                     casePosY += tailleCasePion ;
-                    mapCoordPanelPion.put(new Coordonnees(casePosX,casePosY),square);
+                    mapCoordPanelPion.put(new Coordonnees(i,j),square);
                 } else if (i % 2 == 0 && j % 2 == 1) {
                     JPanel square = new JPanel();
                     //square.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 5));
@@ -99,7 +99,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                     PlateauQuoridor.add(square,constraints);
                     casePosX += tailleCasePion ;
                     casePosY += tailleCaseMur ;
-                    mapCoordPanelMur.put(new Coordonnees(casePosX,casePosY),square);
+                    mapCoordPanelMur.put(new Coordonnees(i,j),square);
                 } else if (i % 2 == 1 && j % 2 == 0) {
                     JPanel square = new JPanel();
                     //square.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 5));
@@ -110,7 +110,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                     //PlateauQuoridor.add(square);
                     casePosX += tailleCaseMur ;
                     casePosY += tailleCasePion ;
-                    mapCoordPanelMur.put(new Coordonnees(casePosX,casePosY),square);
+                    mapCoordPanelMur.put(new Coordonnees(i,j),square);
                 } else if (i % 2 == 1 && j % 2 == 1) {
                     JPanel square = new JPanel();
                     //square.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 5));
@@ -121,7 +121,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                     PlateauQuoridor.add(square,constraints);
                     casePosX += tailleCaseMur ;
                     casePosY += tailleCaseMur ;
-                    mapCoordPanelMur.put(new Coordonnees(casePosX,casePosY),square);
+                    mapCoordPanelMur.put(new Coordonnees(i,j),square);
                 }
             }
         }
