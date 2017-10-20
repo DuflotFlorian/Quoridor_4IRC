@@ -32,10 +32,11 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private int taille;
     private HashMap<Coordonnees,JPanel> mapCoordPanelPion ;
     private HashMap<Coordonnees,JPanel> mapCoordPanelMur ;
+    private JLabel pion;
 
     public QuoridorGUI(String title, int coeffTaille, int taille) {
         super(title);
-
+        pion=null;
         //Creation des maps murs + pions
         mapCoordPanelPion = new HashMap<Coordonnees,JPanel>();
         mapCoordPanelMur = new HashMap<Coordonnees,JPanel>();
@@ -141,10 +142,9 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int x = e.getX();
-        int y = e.getY();
 
-        System.out.println(plateauQuoridor.getComponentAt(x,y));
+
+
         Object o = e.getSource();
         //System.out.println(o);
         //update();
@@ -152,12 +152,21 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     @Override
     public void mousePressed(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
 
+        JPanel jp = (JPanel) plateauQuoridor.getComponentAt(x,y);
+        if(jp.getComponents().length == 1) {
+            pion = (JLabel)  jp.getComponent(0);
+            //pion.setLocation(e.getX(), e.getY());
+            //pion.setSize(pion.getWidth(), pion.getHeight());
+            layeredPane.add(pion, JLayeredPane.DRAG_LAYER);
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
+        pion= null;
     }
 
     @Override
@@ -172,7 +181,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
+        if (pion == null) {
+            return;
+        }
+        pion.setLocation(e.getX(), e.getY());
     }
 
     @Override
