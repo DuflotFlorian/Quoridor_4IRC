@@ -7,6 +7,7 @@ import static java.awt.GridBagConstraints.NORTHWEST;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
 import java.util.HashMap;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -20,142 +21,133 @@ import java.util.Map;
 public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionListener {
 
     private JLayeredPane layeredPane;
-    private JPanel PlateauQuoridor;
+    private JPanel plateauQuoridor;
     // private JLabel chessPiece;
     private int xAdjustment;
     private int yAdjustment;
+    private Dimension dim;
+    private int tailleCasePion;
+    private int tailleCaseMur;
+    private int tailleIHM;
+    private int taille;
     private HashMap<Coordonnees,JPanel> mapCoordPanelPion ;
     private HashMap<Coordonnees,JPanel> mapCoordPanelMur ;
 
-    public QuoridorGUI(String title, Dimension dim, int Taille) {
-        //public ChessGameGUI(String title, ChessGameControlers chessGameControler, Dimension dim) {
+    public QuoridorGUI(String title, int coeffTaille, int taille) {
         super(title);
+
+        //Creation des maps murs + pions
         mapCoordPanelPion = new HashMap<Coordonnees,JPanel>();
         mapCoordPanelMur = new HashMap<Coordonnees,JPanel>();
-        Dimension boardSize = new Dimension(Taille * 100, Taille * 100);
-        int TailleIHM = Taille * 100 ;
-        int tailleCasePion = (int) ((0.8 * TailleIHM) / Taille);
-        int tailleCaseMur = (int) ((0.2 * TailleIHM) / Taille);
-        System.out.println(Taille+","+tailleCasePion +","+tailleCaseMur);
-        //  Use a Layered Pane for this this application
+
+        this.taille=taille;
+        tailleCasePion = (int) ((0.85 * coeffTaille));
+        tailleCaseMur = (int) ((0.15 * coeffTaille));
+
+        tailleIHM = taille * tailleCasePion + (taille-1)*tailleCaseMur ;
+
+        this.dim = new Dimension(tailleIHM,tailleIHM);
+        System.out.println(taille+","+tailleCasePion +","+tailleCaseMur);
+
+        //  LayeredPane pour ajouter DRAG_LAYER
         layeredPane = new JLayeredPane();
         getContentPane().add(layeredPane);
-        layeredPane.setPreferredSize(boardSize);
+        layeredPane.setPreferredSize(dim);
         layeredPane.addMouseListener(this);
         layeredPane.addMouseMotionListener(this);
 
-        //Add a chess board to the Layered Pane
-        PlateauQuoridor = new JPanel();
-        //PlateauQuoridor.setBackground(Color.red);
-        layeredPane.add(PlateauQuoridor, JLayeredPane.DEFAULT_LAYER);
-        //PlateauQuoridor.setLayout(new GridLayout(Taille*2-1, Taille*2-1));
-        PlateauQuoridor.setLayout(new GridBagLayout());
-       // PlateauQuoridor.setLayout(new GridLayout(17,17));                                        // LayoutMgr
-        PlateauQuoridor.setPreferredSize(boardSize);
-        PlateauQuoridor.setBounds(0, 0, boardSize.width, boardSize.height);
-        //PlateauQuoridor.setSize(100, 100);
-        //PlateauQuoridor.setBackground(Color.red);
-        int casePosX = 0; // used to set starting gridX position
-        int casePosY = 0; // used to set starting gridY position
+        //Ajout du plateau de jeu
+        plateauQuoridor = new JPanel();
+        layeredPane.add(plateauQuoridor, JLayeredPane.DEFAULT_LAYER);
+        //GridBagLayout pour grille personnalisée
+        plateauQuoridor.setLayout(new GridBagLayout());
+        plateauQuoridor.setPreferredSize(dim);
+        plateauQuoridor.setBounds(0, 0, dim.width, dim.height);
+
+        int casePosX = 0; // Position sur le grille
+        int casePosY = 0; // Position sur la grille
 
 
         GridBagConstraints constraints = new GridBagConstraints();
-        //constraints.anchor = NORTHWEST;
-        //constraints.gridx = casePosX ;
-        //constraints.gridy = casePosY ;
-        //constraints.insets = new Insets(0, 30, 40, 0); // AbsPos
         constraints.weightx = 1;
         constraints.weighty = 1;
-        //constraints.fill = GridBagConstraints.NONE;
-        //constraints.insets =
-        //constraints.anchor = GridBagConstraints.CENTER;
 
-        for (int i = 0; i < (Taille * 2 - 1); i++) {
-            constraints.gridx = i ;
+        for (int i = 0; i < (taille * 2 - 1); i++) {
+            constraints.gridx = i ;//décalage dans le grid bag layout
 
-            for (int j = 0; j < (Taille * 2 - 1); j++) {
+            for (int j = 0; j < (taille * 2 - 1); j++) {
 
-                constraints.gridy = j ;
+                constraints.gridy = j ;//décalage dans le grid bag layout
 
                 if (i % 2 == 0 && j % 2 == 0) {         // Case pion
-                    JPanel square = new JPanel();
+                    JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCasePion,tailleCasePion));
-                    //square.setMinimumSize(new Dimension(tailleCasePion,tailleCasePion));
-                    square.setMaximumSize(new Dimension(tailleCasePion,tailleCasePion));
-                    //square.setSize(tailleCasePion, tailleCasePion);
-                    //square.setSize(tailleCasePion, tailleCasePion);
-                    //square.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 5));
-                    //constraints.ipadx = tailleCasePion;
-                    //constraints.ipady = tailleCasePion;
-                    square.setBackground(Color.DARK_GRAY);
-                    PlateauQuoridor.add(square,constraints);
+                    square.setBackground(Color.LIGHT_GRAY);
+                    plateauQuoridor.add(square,constraints);
+                    //ajout à la map
                     casePosX += tailleCasePion ;
                     casePosY += tailleCasePion ;
                     mapCoordPanelPion.put(new Coordonnees(i,j),square);
                 } else if (i % 2 == 0 && j % 2 == 1) {         // Case mur horizontal
-                    JPanel square = new JPanel();
+                    JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCasePion,tailleCaseMur));
-                   // square.setMinimumSize(new Dimension(tailleCasePion,tailleCaseMur));
-                   // square.setMaximumSize(new Dimension(tailleCasePion,tailleCaseMur));
-                    //square.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 5));
-                    //square.setSize(tailleCasePion, 10);
-                    //constraints.ipadx = tailleCasePion;
-                    //constraints.ipady = tailleCaseMur;
                     square.setBackground(Color.WHITE);
-                    //PlateauQuoridor.add(square);
-                    PlateauQuoridor.add(square,constraints);
+                    plateauQuoridor.add(square,constraints);
+                    //ajout à la map
                     casePosX += tailleCasePion ;
                     casePosY += tailleCaseMur ;
                     mapCoordPanelMur.put(new Coordonnees(i,j),square);
                 } else if (i % 2 == 1 && j % 2 == 0) {         // Case mur vertical
-                    JPanel square = new JPanel();
+                    JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCaseMur,tailleCasePion));
-                   // square.setMinimumSize(new Dimension(tailleCaseMur,tailleCasePion));
-                    //square.setMaximumSize(new Dimension(tailleCaseMur,tailleCasePion));
-                    //square.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 5));
-                    //constraints.ipadx = tailleCaseMur;
-                    //constraints.ipady = tailleCasePion;
                     square.setBackground(Color.WHITE);
-                    PlateauQuoridor.add(square,constraints);
-                    //PlateauQuoridor.add(square);
+                    plateauQuoridor.add(square,constraints);
+                    //ajout à la map
                     casePosX += tailleCaseMur ;
                     casePosY += tailleCasePion ;
                     mapCoordPanelMur.put(new Coordonnees(i,j),square);
                 } else if (i % 2 == 1 && j % 2 == 1) {         // petit truc vide
-                    JPanel square = new JPanel();
+                    JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCaseMur,tailleCaseMur));
-                    //square.setMinimumSize(new Dimension(tailleCaseMur,tailleCaseMur));
-                    //square.setMaximumSize(new Dimension(tailleCaseMur,tailleCaseMur));
-                    //square.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 5));
-                    //constraints.ipadx = tailleCaseMur;
-                    //constraints.ipady = tailleCaseMur;
                     square.setBackground(Color.WHITE);
-                    //PlateauQuoridor.add(square);
-                    PlateauQuoridor.add(square,constraints);
+                    plateauQuoridor.add(square,constraints);
+                    //ajout à la map
                     casePosX += tailleCaseMur ;
                     casePosY += tailleCaseMur ;
                     mapCoordPanelMur.put(new Coordonnees(i,j),square);
                 }
             }
         }
+        //placement pions initiale
+        for (int i=0;i<2;i++) {
 
-        //pack();
-        //System.out.println(mapCoordPanelMur.size()+" "+mapCoordPanelPion.size());
-        JPanel j = (JPanel)PlateauQuoridor.getComponent(0);
-        ImageIcon ic = new ImageIcon(new ImageIcon("C:\\Users\\Kevin\\IdeaProjects\\Quoridor_4IRC\\src\\images\\PionNoir.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
+            if (i == 0) {
+                JPanel j = (JPanel)plateauQuoridor.getComponent(8*17); // colone 8 , ligne 0
+                ImageIcon ic = new ImageIcon(new ImageIcon("src/images/PionNoir.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
+                JLabel piece = new JLabel(ic);
 
+                j.add(piece);
+            } else {
+                JPanel j = (JPanel)plateauQuoridor.getComponent((8*17)+16); // colone 8 , ligne 0
+                ImageIcon ic = new ImageIcon(new ImageIcon("src/images/PionRouge.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
+                JLabel piece = new JLabel(ic);
 
-        JLabel piece = new JLabel(ic);
+                j.add(piece);
+            }
 
-        j.add(piece);
-        System.out.println(ic.getIconHeight() +" "+ic.getIconWidth() + " " + j.getLayout().getClass());
-        PlateauQuoridor.revalidate();
+        }
+
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+
+        System.out.println(plateauQuoridor.getComponentAt(x,y));
         Object o = e.getSource();
         //System.out.println(o);
+        //update();
     }
 
     @Override
@@ -186,6 +178,65 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     @Override
     public void mouseMoved(MouseEvent e) {
 
+    }
+
+    public void update() { //voir les arguments à récupérer pour afficher
+        plateauQuoridor.removeAll();
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.weightx = 1;
+        constraints.weighty = 1;
+
+        for (int i = 0; i < (taille * 2 - 1); i++) {
+            constraints.gridx = i ;//décalage dans le grid bag layout
+
+            for (int j = 0; j < (taille * 2 - 1); j++) {
+
+                constraints.gridy = j ;//décalage dans le grid bag layout
+
+                if (i % 2 == 0 && j % 2 == 0) {         // Case pion
+                    JPanel square = new JPanel(new BorderLayout());
+                    square.setPreferredSize(new Dimension(tailleCasePion,tailleCasePion));
+                    square.setBackground(Color.LIGHT_GRAY);
+                    plateauQuoridor.add(square,constraints);
+                } else if (i % 2 == 0 && j % 2 == 1) {         // Case mur horizontal
+                    JPanel square = new JPanel(new BorderLayout());
+                    square.setPreferredSize(new Dimension(tailleCasePion,tailleCaseMur));
+                    square.setBackground(Color.WHITE);
+                    plateauQuoridor.add(square,constraints);
+                } else if (i % 2 == 1 && j % 2 == 0) {         // Case mur vertical
+                    JPanel square = new JPanel(new BorderLayout());
+                    square.setPreferredSize(new Dimension(tailleCaseMur,tailleCasePion));
+                    square.setBackground(Color.WHITE);
+                    plateauQuoridor.add(square,constraints);
+
+                } else if (i % 2 == 1 && j % 2 == 1) {         // petit truc vide
+                    JPanel square = new JPanel(new BorderLayout());
+                    square.setPreferredSize(new Dimension(tailleCaseMur,tailleCaseMur));
+                    square.setBackground(Color.WHITE);
+                    plateauQuoridor.add(square,constraints);
+                }
+            }
+        }
+        //placement pions initiale
+        for (int i=0;i<2;i++) {
+
+            if (i == 0) {
+                JPanel j = (JPanel)plateauQuoridor.getComponent(8*17); // colone 8 , ligne 0
+                ImageIcon ic = new ImageIcon(new ImageIcon("src/images/PionNoir.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
+                JLabel piece = new JLabel(ic);
+
+                j.add(piece);
+            } else {
+                JPanel j = (JPanel)plateauQuoridor.getComponent((8*17)+16); // colone 8 , ligne 0
+                ImageIcon ic = new ImageIcon(new ImageIcon("src/images/PionRouge.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
+                JLabel piece = new JLabel(ic);
+
+                j.add(piece);
+            }
+
+        }
+        revalidate();
+        repaint();
     }
 
     public HashMap<Coordonnees, JPanel> getMapCoordPanelPion() {
