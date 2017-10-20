@@ -7,18 +7,21 @@ public class Jeu {
 	private Plateau plateau;
 	private int nbJoueurs;
 	private int currentPlayer;
-	
+
 	public Jeu(int nbJoueurs) {
 		this.nbJoueurs = nbJoueurs;
 		this.plateau = new Plateau();
 		this.currentPlayer = 0;
-		this.joueurs = new Joueur[nbJoueurs];
+
 		switch (this.nbJoueurs) {
 		case 2:
+			this.joueurs = new Joueur[2];
 			this.joueurs[0] = new Joueur(10, Couleur.BLANC);
-			this.joueurs[0].setCoordonnees(new Coordonnees(8,0));
+			this.joueurs[0].setPionCoordonnees(new Coordonnees(0,8));
+			this.joueurs[0].setWinCoord(new Coordonnees(16,8));
 			this.joueurs[1] = new Joueur(10, Couleur.NOIR);
-			this.joueurs[1].setCoordonnees(new Coordonnees(8,16));
+			this.joueurs[1].setPionCoordonnees(new Coordonnees(16,8));
+			this.joueurs[1].setWinCoord(new Coordonnees(0,8));
 			break;
 
 		default:
@@ -35,7 +38,7 @@ public class Jeu {
 	}
 
 	public boolean moveIfAllow(Joueur j, Coordonnees coord) {
-		if(getCurrentPlayer().equals(j) && getAvailableMove(j).contains(coord)){
+		if(getCurrentPlayer().equals(j) && getAvailableMove(j).contains(coord) && !isPlayerHere(coord)){
 			j.move(coord);
 			this.currentPlayer = (this.currentPlayer + 1) % this.nbJoueurs;
 			return true;
@@ -52,5 +55,29 @@ public class Jeu {
 			}
 		}
 		return result;
+	}
+
+	public boolean isWin(){
+		boolean result = false;
+		for(int i = 0; i < joueurs.length; i++){
+			Joueur j = joueurs[i];
+			if(j.getCoordonnees().equals(j.getWinCoord())){
+				result = true;
+				break;
+			}
+		}
+		return result;
+	}
+
+
+	@Override
+	public String toString() {
+		String res = "";
+		res += "Nombre de joueurs : " + this.nbJoueurs + "\n";
+		for(int i = 0; i < this.joueurs.length; i++){
+			res += "Joueur " + i + ": " + this.joueurs[i].toString() + "\n";
+		}
+
+		return res;
 	}
 }
