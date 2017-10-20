@@ -10,7 +10,7 @@ public class Joueur {
 	private ArrayList<Mur> listMurs;
 	private int nbMaxMurs;
 	private Coordonnees winCoord;
-	
+
 	public Joueur(int nbMurs, Couleur c) {
 		this.pion = new Pion(c);
 		this.listMurs = new ArrayList<Mur>();
