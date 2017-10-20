@@ -1,6 +1,7 @@
 package launcher;
 
 import java.awt.Dimension;
+
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import vue.QuoridorGUI;
@@ -17,26 +18,23 @@ import Class.*;
  */
 public class LauncherGUI {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-        initGame();
-            JFrame frame;
-            Dimension dim;
-            dim = new Dimension(800,800);
-            frame = new QuoridorGUI("Quoridor",dim,9);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setLocation(600, 10);
-            frame.setResizable(true);
-            frame.pack();
-            frame.setVisible(true);
-            /*
-		ChessGame chessGame;	
-		ChessGameControlers chessGameControler;
-		JFrame frame;	
-		Dimension dim;
-	
+    public static void main(String[] args) {
+
+        JFrame frame;
+        Dimension dim;
+        dim = new Dimension(900, 900);
+        frame = new QuoridorGUI("Quoridor", dim ,9);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocation(600, 10);
+        frame.setResizable(false);
+        frame.pack();
+        frame.setVisible(true);
+        /*
+         ChessGame chessGame;
+         ChessGameControlers chessGameControler;
+         JFrame frame;
+         Dimension dim;
+
 		dim = new Dimension(700, 700);
 		
 		chessGame = new ChessGame();	
@@ -53,13 +51,4 @@ public class LauncherGUI {
                     
                 */
 	}
-
-	private static void initGame(){
-	    Jeu myGame = new Jeu(2);
-
-	    ArrayList<Coordonnees> result  = myGame.getAvailableMove(myGame.getCurrentPlayer());
-	    for(Coordonnees r: result){
-	        System.out.println("X : " + r.getX() + "  Y : " + r.getY() );
-        }
-    }
 }
