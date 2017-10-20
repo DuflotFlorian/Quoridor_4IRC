@@ -7,7 +7,7 @@ public class Jeu {
 	private Plateau plateau;
 	private int nbJoueurs;
 	private int currentPlayer;
-	
+
 	public Jeu(int nbJoueurs) {
 		this.nbJoueurs = nbJoueurs;
 		this.plateau = new Plateau();
