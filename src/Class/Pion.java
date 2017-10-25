@@ -5,31 +5,13 @@ import java.util.ArrayList;
 import static java.lang.Math.abs;
 
 public class Pion extends AbstractPiece{
-	private Coordonnees coordonnees;
-	private Couleur couleur;
 	
-	public Pion(Coordonnees coord, Couleur color) {
-		super(coord, color, true);
-	}
-
-	public Coordonnees getCoordonnees() {
-		return coordonnees;
-	}
-
-	public void setCoordonnees(Coordonnees coordonnees) {
-		this.coordonnees = coordonnees;
-	}
-
-	public Couleur getCouleur() {
-		return couleur;
-	}
-
-	public void setCouleur(Couleur couleur) {
-		this.couleur = couleur;
+	Pion(Coordonnees coord, Couleur color) {
+		super(coord, color);
 	}
 
 	public boolean isMoveOk(Coordonnees finalCoord){
-		return true;
+		return getAvailableMove().contains(finalCoord);
 	}
 
 	private ArrayList<Coordonnees> getAvailableMove() {

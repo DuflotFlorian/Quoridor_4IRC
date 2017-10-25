@@ -4,23 +4,33 @@ public abstract class AbstractPiece implements Piece{
 
     private Coordonnees coordonnees;
     private Couleur couleur;
-    private boolean isHorizontal;
     private String name;
 
     public static void main(String[] args) {
 
     }
 
-    public AbstractPiece(Coordonnees coord, Couleur color, boolean isHorizontal){
+    AbstractPiece(Coordonnees coord, Couleur color){
         super();
         this.coordonnees = coord;
         this.couleur = color;
-        this.isHorizontal = isHorizontal;
         this.name = this.getClass().getSimpleName();
+    }
+
+    public void setCoordonnees(Coordonnees coord){
+        this.coordonnees = coord;
     }
 
     public Coordonnees getCoordonnees(){
         return this.coordonnees;
+    }
+
+    Couleur getCouleur() {
+        return couleur;
+    }
+
+    public void setCouleur(Couleur couleur) {
+        this.couleur = couleur;
     }
 
     public String getName(){

@@ -1,7 +1,5 @@
 package Class;
 
-import java.util.ArrayList;
-
 public class Jeu {
 	private Joueur[] joueurs;
 	private Plateau plateau;
@@ -32,11 +30,11 @@ public class Jeu {
 	}
 
 	public boolean testMove(Coordonnees initCoord, Coordonnees finalCoord) {
-		if(getCurrentPlayer().equals(j) && getAvailableMove(j).contains(coord) && !isPlayerHere(coord)){
-			j.move(coord);
-			this.currentPlayer = (this.currentPlayer + 1) % this.nbJoueurs;
-			return true;
-		}
+//		if(getCurrentPlayer().equals(j) && getAvailableMove(j).contains(coord) && !isPlayerHere(coord)){
+//			j.move(coord);
+//			this.currentPlayer = (this.currentPlayer + 1) % this.nbJoueurs;
+//			return true;
+//		}
 		return false;
 	}
 
@@ -53,8 +51,7 @@ public class Jeu {
 
 	public boolean isWin(){
 		boolean result = false;
-		for(int i = 0; i < joueurs.length; i++){
-			Joueur j = joueurs[i];
+		for(Joueur j : joueurs){
 			if(j.getCoordonnees().equals(j.getWinCoord())){
 				result = true;
 				break;

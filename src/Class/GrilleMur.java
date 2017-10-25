@@ -1,10 +1,10 @@
 package Class;
 import java.util.ArrayList;
 
-public class GrilleMur extends Grille{
+class GrilleMur extends AbstractGrille{
 	private ArrayList<Mur> listMurs;
 	
-	public GrilleMur() {
-		this.listMurs = new ArrayList<Mur>();
+	GrilleMur() {
+		super(new ArrayList<Mur>());
 	}
 }

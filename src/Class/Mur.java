@@ -1,20 +1,19 @@
 package Class;
 
 public class Mur extends AbstractPiece{
-	private Coordonnees coordonnees;
 	private boolean isHorizontal;
-	private Couleur color;
 	
 	public Mur(Coordonnees coord, Couleur color, boolean isHorizontal) {
-		super(coord, color, isHorizontal);
+		super(coord, color);
+		this.isHorizontal = isHorizontal;
 	}
 
 	public Coordonnees getCoordonnees() {
-		return coordonnees;
+		return super.getCoordonnees();
 	}
 
 	public void setCoordonnees(Coordonnees coordonnees) {
-		this.coordonnees = coordonnees;
+		super.setCoordonnees(coordonnees);
 	}
 
 	public boolean getSens() {
@@ -28,6 +27,5 @@ public class Mur extends AbstractPiece{
 	public boolean isMoveOk(Coordonnees finalCoord){
 		return true;
 	}
-	
-	
+
 }
