@@ -28,4 +28,10 @@ public class Mur extends AbstractPiece{
 		return true;
 	}
 
+	public String toString(){
+		String res = "Mur : " + this.getCoordonnees().toString() + "  " + this.getCouleur().toString();
+		res += "   " + ((this.isHorizontal) ?  "horizontal" : "vertical");
+		return res;
+	}
+
 }
