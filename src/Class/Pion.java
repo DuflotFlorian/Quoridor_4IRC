@@ -6,7 +6,7 @@ import static java.lang.Math.abs;
 
 public class Pion extends AbstractPiece{
 	
-	Pion(Coordonnees coord, Couleur color) {
+	public Pion(Coordonnees coord, Couleur color) {
 		super(coord, color);
 	}
 
@@ -30,6 +30,11 @@ public class Pion extends AbstractPiece{
 			}
 		}
 		return result;
+	}
+
+	public String toString(){
+		String res = "Pion : " + this.getCoordonnees().toString() + "  " + this.getCouleur().toString();
+		return res;
 	}
 	
 }

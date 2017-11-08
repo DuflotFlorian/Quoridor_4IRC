@@ -16,6 +16,11 @@ public abstract class AbstractGrille {
         return elements;
     }
 
+    public boolean addElement(AbstractPiece elem){
+        this.elements.add(elem);
+        return true;
+    }
+
     public String getName(){
         return this.name;
     }

@@ -15,4 +15,17 @@ public class GrillePion extends AbstractGrille{
 
 		return validX && validY;
 	}
+
+	public void ajouterPion(Pion p){
+		this.addElement(p);
+	}
+
+	public String toString(){
+		String res = "Grille pion :\n";
+		for (AbstractPiece piece: this.getElements()) {
+			Pion p = (Pion) piece;
+			res += "\t" + p.toString() + "\n";
+		}
+		return res;
+	}
 }
