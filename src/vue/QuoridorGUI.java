@@ -48,7 +48,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         tailleIHM = taille * tailleCasePion + (taille-1)*tailleCaseMur ;
 
         this.dim = new Dimension(tailleIHM,tailleIHM);
-        System.out.println(taille+","+tailleCasePion +","+tailleCaseMur);
 
         //  LayeredPane pour ajouter DRAG_LAYER
         layeredPane = new JLayeredPane();
@@ -123,7 +122,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         for (int i=0;i<2;i++) {
 
             if (i == 0) {
-                JPanel j = (JPanel)plateauQuoridor.getComponent((8*17)+0); // colone 8 , ligne 0
+                JPanel j = (JPanel)plateauQuoridor.getComponent((8*17)); // colone 8 , ligne 0
                 ImageIcon ic = new ImageIcon(new ImageIcon("images/PionNoir.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
                 JLabel piece = new JLabel(ic);
 
@@ -142,21 +141,40 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     @Override
     public void mouseClicked(MouseEvent e) {
+
         int x = e.getX();
         int y = e.getY();
         String murOrPion = checkIfMurOrPion(x,y);
         int [] position = checkArrayPosition(x,y);
 
-        System.out.println(position[0]);
-        System.out.println(position[1]);
-        System.out.println(murOrPion);
-        System.out.println();
-
         if (murOrPion.equals("murHorizontal")) {
-            JPanel j = (JPanel)plateauQuoridor.getComponent((position[0] * position[1])-1);
-            System.out.println("j :" +j);
-            j.setBackground(Color.BLUE);
+            int pos = convertCoordToCell(position[0],position[1]);
+            if (position[0] <= 15) {
+                JPanel j = (JPanel) plateauQuoridor.getComponent(pos);
+                JPanel k = (JPanel) plateauQuoridor.getComponent(pos + 17);
+                JPanel l = (JPanel) plateauQuoridor.getComponent(pos + 34);
+                if (j.getBackground() != Color.BLUE && k.getBackground() != Color.BLUE && l.getBackground() !=Color.BLUE)
+                {
+                    j.setBackground(Color.BLUE);
+                    k.setBackground(Color.BLUE);
+                    l.setBackground(Color.BLUE);
+                }
+            }
+        }
 
+        if (murOrPion.equals("murVertical")) {
+            int pos = convertCoordToCell(position[0],position[1]);
+            if (position[1] <= 15) {
+                JPanel j = (JPanel) plateauQuoridor.getComponent(pos);
+                JPanel k = (JPanel) plateauQuoridor.getComponent(pos + 1);
+                JPanel l = (JPanel) plateauQuoridor.getComponent(pos + 2);
+                if (j.getBackground() != Color.BLUE && k.getBackground() != Color.BLUE && l.getBackground() !=Color.BLUE)
+                {
+                    j.setBackground(Color.BLUE);
+                    k.setBackground(Color.BLUE);
+                    l.setBackground(Color.BLUE);
+                }
+            }
         }
 
 
@@ -275,16 +293,12 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         j = boucleCheckPosition(y);
 
         if (i%2 == 1 && j%2 == 1 ) {
-//            System.out.println("pion ");
             return "pion";
         } else if (i%2 == 0 && j%2 == 0) {
-//            System.out.println("croisement");
             return "croisement";
         } else if (i%2 == 1 && j%2 == 0){
-//            System.out.println("murHorizontal");
             return "murHorizontal";
         }
-//        System.out.println("murVertical");
         return "murVertical";
     }
 
@@ -308,6 +322,22 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
         return i;
     }
+
+
+    /**
+     *
+     * @param x position en X
+     * @param y position en Y
+     * @return le numéro de cellule (0 en haut a gauche, 288 en bas a droite)
+     */
+    private int convertCoordToCell(int x,int y){
+        if (x == 1) {
+            return y-1;
+        }
+        return ((x*17)-17) + y-1;
+
+    }
+
     public HashMap<Coordonnees, JPanel> getMapCoordPanelPion() {
         return mapCoordPanelPion;
     }
