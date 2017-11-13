@@ -1,29 +1,38 @@
 package Class;
 
-public class Mur {
-	private Coordonnees coordonnees;
-	private int sens;
+public class Mur extends AbstractPiece{
+	private boolean isHorizontal;
 	
-	public Mur(int x, int y, int sens) {
-		this.coordonnees = new Coordonnees(x, y);
-		this.sens = sens;
+	public Mur(Coordonnees coord, Couleur color, boolean isHorizontal) {
+		super(coord, color);
+		this.isHorizontal = isHorizontal;
 	}
 
 	public Coordonnees getCoordonnees() {
-		return coordonnees;
+		return super.getCoordonnees();
 	}
 
 	public void setCoordonnees(Coordonnees coordonnees) {
-		this.coordonnees = coordonnees;
+		super.setCoordonnees(coordonnees);
 	}
 
-	public int getSens() {
-		return sens;
+	public boolean getSens() {
+		return isHorizontal;
 	}
 
-	public void setSens(int sens) {
-		this.sens = sens;
+	public void setSens(boolean isHorizontal) {
+		this.isHorizontal = isHorizontal;
 	}
-	
-	
+
+	//TODO
+	public boolean isMoveOk(Coordonnees finalCoord){
+		return true;
+	}
+
+	public String toString(){
+		String res = "Mur : " + this.getCoordonnees().toString() + "  " + this.getCouleur().toString();
+		res += "   " + ((this.isHorizontal) ?  "horizontal" : "vertical");
+		return res;
+	}
+
 }

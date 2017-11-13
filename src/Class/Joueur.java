@@ -11,14 +11,18 @@ public class Joueur {
 	private int nbMaxMurs;
 	private Coordonnees winCoord;
 
-	public Joueur(int nbMurs, Couleur c) {
-		this.pion = new Pion(c);
+	public Joueur(int nbMurs, Couleur c, Coordonnees coord) {
+		this.pion = new Pion(coord, c);
 		this.listMurs = new ArrayList<Mur>();
 		this.nbMaxMurs = nbMurs;
 	}
 
 	public Couleur getCouleurs() {
 		return pion.getCouleur();
+	}
+
+	public Pion getPion(){
+		return this.pion;
 	}
 	
 	public int nbMursPosee(){
@@ -45,26 +49,12 @@ public class Joueur {
 		this.pion.setCoordonnees(coord);
 	}
 
-	public ArrayList<Coordonnees> getAvailableMove() {
-		ArrayList<Coordonnees> result = new ArrayList<Coordonnees>();
-		boolean validX, validY;
-		for(int x = 0; x < 17; x++){
-			for(int y = 0; y < 17; y++){
-				int difX, difY;
-				difX = abs(this.getCoordonnees().getX() - x);
-				difY = abs(this.getCoordonnees().getY() - y);
-				validX = (difX == 2) || (difX == 0);
-				validY = (difY == 2) || (difY == 0);
-				if((validX && validY) && (difX + difY == 2)){
-					result.add(new Coordonnees(x,y));
-				}
-			}
-		}
-		return result;
-	}
-
 	public void move(Coordonnees coord){
 		this.pion.setCoordonnees(coord);
+	}
+
+	public boolean isMoveOk(Coordonnees c){
+		return this.pion.isMoveOk(c);
 	}
 
 	public String toString() {
