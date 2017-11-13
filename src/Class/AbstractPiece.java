@@ -40,8 +40,11 @@ public abstract class AbstractPiece implements Piece{
     public abstract boolean isMoveOk(Coordonnees finalCoord);
 
     public boolean move(Coordonnees coord){
-        this.coordonnees = coord;
-        return true;
+        if(isMoveOk(coord)){
+            this.coordonnees = coord;
+            return true;
+        }
+        return false;
     }
 
 }

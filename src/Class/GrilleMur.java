@@ -17,6 +17,11 @@ public class GrilleMur extends AbstractGrille{
 		return res;
 	}
 
+	//TODO
+	public boolean isAddOk(Coordonnees coord){
+		return true;
+	}
+
 	public void ajouterMur(Mur m){
 		this.addElement(m);
 	}

@@ -16,9 +16,14 @@ public abstract class AbstractGrille {
         return elements;
     }
 
+    public abstract boolean isAddOk(Coordonnees coord);
+
     public boolean addElement(AbstractPiece elem){
-        this.elements.add(elem);
-        return true;
+        if(isAddOk(elem.getCoordonnees())){
+            this.elements.add(elem);
+            return true;
+        }
+        return false;
     }
 
     public String getName(){

@@ -24,6 +24,7 @@ public class Mur extends AbstractPiece{
 		this.isHorizontal = isHorizontal;
 	}
 
+	//TODO
 	public boolean isMoveOk(Coordonnees finalCoord){
 		return true;
 	}
