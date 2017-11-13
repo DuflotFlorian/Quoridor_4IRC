@@ -4,19 +4,32 @@ import Class.*;
 public class testController {
 
     public static void main(String[] args){
-        GrillePion test = new GrillePion();
-        Pion p = new Pion(new Coordonnees(0,0), Couleur.BLANC);
-        Pion p1 = new Pion(new Coordonnees(8,0), Couleur.NOIR);
-        test.addElement(p);
-        test.addElement(p1);
-        System.out.println(test.toString());
 
-        GrilleMur mur = new GrilleMur();
-        Mur m = new Mur(new Coordonnees(0,0), Couleur.BLANC, true);
-        Mur m1 = new Mur(new Coordonnees(8,0), Couleur.NOIR, false);
-        mur.addElement(m);
-        mur.addElement(m1);
-        System.out.println(mur);
+        Jeu monJeu = new Jeu(2);
+        monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(2,8));
+        monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(16,6));
+
+        monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(4,8));
+        monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(14,6));
+
+        monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(6,8));
+        monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(12,6));
+
+        monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(8,8));
+        monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(10,6));
+
+        monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(10,8));
+        monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(8,6));
+
+        monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(12,8));
+        monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(6,6));
+
+        monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(14,8));
+        monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(4,6));
+
+        monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(16,8));
+        System.out.println(monJeu.toString());
+
     }
 
 }
