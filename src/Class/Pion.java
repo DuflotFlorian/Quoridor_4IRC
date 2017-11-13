@@ -1,27 +1,40 @@
 package Class;
 
-public class Pion {
-	private Coordonnees coordonnees;
-	private Couleur couleur;
+import java.util.ArrayList;
+
+import static java.lang.Math.abs;
+
+public class Pion extends AbstractPiece{
 	
-	public Pion(Couleur c) {
-		this.couleur = c;
+	public Pion(Coordonnees coord, Couleur color) {
+		super(coord, color);
 	}
 
-	public Coordonnees getCoordonnees() {
-		return coordonnees;
+	public boolean isMoveOk(Coordonnees finalCoord){
+		return getAvailableMove().contains(finalCoord);
 	}
 
-	public void setCoordonnees(Coordonnees coordonnees) {
-		this.coordonnees = coordonnees;
+	private ArrayList<Coordonnees> getAvailableMove() {
+		ArrayList<Coordonnees> result = new ArrayList<Coordonnees>();
+		boolean validX, validY;
+		for(int x = 0; x < 17; x++){
+			for(int y = 0; y < 17; y++){
+				int difX, difY;
+				difX = abs(this.getCoordonnees().getX() - x);
+				difY = abs(this.getCoordonnees().getY() - y);
+				validX = (difX == 2) || (difX == 0);
+				validY = (difY == 2) || (difY == 0);
+				if((validX && validY) && (difX + difY == 2)){
+					result.add(new Coordonnees(x,y));
+				}
+			}
+		}
+		return result;
 	}
 
-	public Couleur getCouleur() {
-		return couleur;
-	}
-
-	public void setCouleur(Couleur couleur) {
-		this.couleur = couleur;
+	public String toString(){
+		String res = "Pion : " + this.getCoordonnees().toString() + "  " + this.getCouleur().toString();
+		return res;
 	}
 	
 }
