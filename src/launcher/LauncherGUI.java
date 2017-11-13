@@ -3,7 +3,8 @@ package launcher;
 import java.awt.Dimension;
 
 import java.util.ArrayList;
-import javax.swing.JFrame;
+import javax.swing.*;
+
 import vue.QuoridorGUI;
 import Class.*;
 
@@ -24,8 +25,8 @@ public class LauncherGUI {
         Dimension dim;
         int coeffTaille = 100;
         frame = new QuoridorGUI("Quoridor", coeffTaille ,9);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocation(600, 10);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setLocation(350, 10);
         frame.setResizable(false);
         frame.pack();
         frame.setVisible(true);
