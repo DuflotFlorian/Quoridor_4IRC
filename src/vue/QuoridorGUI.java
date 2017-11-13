@@ -123,14 +123,14 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         for (int i=0;i<2;i++) {
 
             if (i == 0) {
-                JPanel j = (JPanel)plateauQuoridor.getComponent(8*17); // colone 8 , ligne 0
-                ImageIcon ic = new ImageIcon(new ImageIcon("src/images/PionNoir.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
+                JPanel j = (JPanel)plateauQuoridor.getComponent((8*17)+0); // colone 8 , ligne 0
+                ImageIcon ic = new ImageIcon(new ImageIcon("images/PionNoir.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
                 JLabel piece = new JLabel(ic);
 
                 j.add(piece);
             } else {
-                JPanel j = (JPanel)plateauQuoridor.getComponent((8*17)+16); // colone 8 , ligne 0
-                ImageIcon ic = new ImageIcon(new ImageIcon("src/images/PionRouge.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
+                JPanel j = (JPanel)plateauQuoridor.getComponent((8*17)+16); // colone 8 , ligne 16
+                ImageIcon ic = new ImageIcon(new ImageIcon("images/PionRouge.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
                 JLabel piece = new JLabel(ic);
 
                 j.add(piece);
@@ -142,12 +142,24 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        String murOrPion = checkIfMurOrPion(x,y);
+        int [] position = checkArrayPosition(x,y);
+
+        System.out.println(position[0]);
+        System.out.println(position[1]);
+        System.out.println(murOrPion);
+        System.out.println();
+
+        if (murOrPion.equals("murHorizontal")) {
+            JPanel j = (JPanel)plateauQuoridor.getComponent((position[0] * position[1])-1);
+            System.out.println("j :" +j);
+            j.setBackground(Color.BLUE);
+
+        }
 
 
-
-        Object o = e.getSource();
-        //System.out.println(o);
-        //update();
     }
 
     @Override
@@ -234,23 +246,68 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
             if (i == 0) {
                 JPanel j = (JPanel)plateauQuoridor.getComponent(8*17); // colone 8 , ligne 0
-                ImageIcon ic = new ImageIcon(new ImageIcon("src/images/PionNoir.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
+                ImageIcon ic = new ImageIcon(new ImageIcon("images/PionNoir.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
                 JLabel piece = new JLabel(ic);
 
                 j.add(piece);
             } else {
                 JPanel j = (JPanel)plateauQuoridor.getComponent((8*17)+16); // colone 8 , ligne 0
-                ImageIcon ic = new ImageIcon(new ImageIcon("src/images/PionRouge.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
+                ImageIcon ic = new ImageIcon(new ImageIcon("images/PionRouge.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
                 JLabel piece = new JLabel(ic);
 
                 j.add(piece);
             }
 
         }
-        revalidate();
+        validate();
         repaint();
     }
 
+    /**
+     *
+     * @param x position du click en X
+     * @param y position du click en Y
+     * @return pion, murHorizontal, murVertical croisement
+     */
+    private String checkIfMurOrPion(int x, int y) {
+        int i,j;
+        i = boucleCheckPosition(x);
+        j = boucleCheckPosition(y);
+
+        if (i%2 == 1 && j%2 == 1 ) {
+//            System.out.println("pion ");
+            return "pion";
+        } else if (i%2 == 0 && j%2 == 0) {
+//            System.out.println("croisement");
+            return "croisement";
+        } else if (i%2 == 1 && j%2 == 0){
+//            System.out.println("murHorizontal");
+            return "murHorizontal";
+        }
+//        System.out.println("murVertical");
+        return "murVertical";
+    }
+
+
+    private int[] checkArrayPosition(int x, int y) {
+        int values [] = {-1,-1};
+        values[0] = boucleCheckPosition(x);
+        values[1] = boucleCheckPosition(y);
+        return values;
+    }
+
+    private int boucleCheckPosition (int p) {
+        int i=0;
+        while (p>0 && p < tailleIHM) {
+            if (i%2 == 0) {
+                p = p - tailleCasePion;
+            } else {
+                p = p -tailleCaseMur;
+            }
+            i++;
+        }
+        return i;
+    }
     public HashMap<Coordonnees, JPanel> getMapCoordPanelPion() {
         return mapCoordPanelPion;
     }
@@ -258,4 +315,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     public HashMap<Coordonnees, JPanel> getMapCoordPanelMur() {
         return mapCoordPanelMur;
     }
+
+
 }
