@@ -16,8 +16,10 @@ public class Jeu {
 			this.joueurs = new Joueur[2];
 			this.joueurs[0] = new Joueur(10, Couleur.BLANC, new Coordonnees(0,8));
 			this.joueurs[0].setWinCoord(new Coordonnees(16,8));
+			this.plateau.addPion(this.joueurs[0].getPion());
 			this.joueurs[1] = new Joueur(10, Couleur.NOIR, new Coordonnees(16,8));
 			this.joueurs[1].setWinCoord(new Coordonnees(0,8));
+			this.plateau.addPion(this.joueurs[1].getPion());
 			break;
 
 		default:
@@ -29,13 +31,30 @@ public class Jeu {
 		return this.joueurs[currentPlayer];
 	}
 
-	public boolean testMove(Coordonnees initCoord, Coordonnees finalCoord) {
-//		if(getCurrentPlayer().equals(j) && getAvailableMove(j).contains(coord) && !isPlayerHere(coord)){
-//			j.move(coord);
-//			this.currentPlayer = (this.currentPlayer + 1) % this.nbJoueurs;
-//			return true;
-//		}
-		return false;
+	public void move(Joueur j, Coordonnees c){
+		if(j.equals(getCurrentPlayer())){
+			if(!isPlayerHere(c)){
+				if(j.isMoveOk(c)){
+					this.plateau.movePion(j.getCoordonnees(), c);
+					j.move(c);
+					changeJoueur();
+					if(isWin()){
+						System.out.println("Fin du jeu");
+					}
+				} else {
+					System.out.println("Ce deplacement n'est pas permis\n");
+				}
+			} else {
+				System.out.println("Il y a deja un joueur ici\n");
+			}
+		} else {
+			System.out.println("Ce n'est pas le joueur courant\n");
+		}
+	}
+
+	public void changeJoueur(){
+		this.currentPlayer += 1;
+		this.currentPlayer = this.currentPlayer % this.nbJoueurs;
 	}
 
 	public boolean isPlayerHere(Coordonnees coord){
@@ -64,10 +83,8 @@ public class Jeu {
 	@Override
 	public String toString() {
 		String res = "";
-		res += "Nombre de joueurs : " + this.nbJoueurs + "\n";
-		for(int i = 0; i < this.joueurs.length; i++){
-			res += "Joueur " + i + ": " + this.joueurs[i].toString() + "\n";
-		}
+
+		res += "Plateau : \n" + this.plateau.toString();
 
 		return res;
 	}

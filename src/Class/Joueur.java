@@ -20,6 +20,10 @@ public class Joueur {
 	public Couleur getCouleurs() {
 		return pion.getCouleur();
 	}
+
+	public Pion getPion(){
+		return this.pion;
+	}
 	
 	public int nbMursPosee(){
 		return this.listMurs.size();
@@ -47,6 +51,10 @@ public class Joueur {
 
 	public void move(Coordonnees coord){
 		this.pion.setCoordonnees(coord);
+	}
+
+	public boolean isMoveOk(Coordonnees c){
+		return this.pion.isMoveOk(c);
 	}
 
 	public String toString() {
