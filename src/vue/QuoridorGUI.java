@@ -174,11 +174,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     @Override
     public void mouseClicked(MouseEvent e) {
 
-
-
-
-
-        System.out.println(e.getX()+"," + e.getY());
+        //System.out.println(e.getX()+"," + e.getY());
         //JPanel jp = (JPanel) plateauQuoridor.getComponentAt(e.getX(),e.getY());
        //System.out.println(jp);
         //update();
@@ -186,17 +182,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     @Override
     public void mousePressed(MouseEvent e) {
-        Object o = e.getSource();
-        //System.out.println(o);
-        //Component cp = e.getComponentAt(e.getX(),e.getY());
-        //System.out.println(cp);
-/*
-        if (e.getX() >= tailleLargeurGarageMur && e.getX() < (tailleIHMLargeur-tailleLargeurGarageMur)) {
-            System.out.println(plateauQuoridor.getComponentAt(e.getX()-tailleLargeurGarageMur,e.getY()));
-        }
-        else {
-            System.out.println("Hors limites");
-        }*/
         int x = e.getX();
         int y = e.getY();
         coordInit = new Coordonnees(x,y);
@@ -205,28 +190,28 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
             Component cmp = layeredPane.getComponentAt(x, y).getComponentAt(x-tailleLargeurGarageMur,y);
             //JPanel jPanelGridBagLayout = JPane
-            System.out.println(cmp);
+            //System.out.println(cmp);
             JPanel jp = null;
 
             if (cmp instanceof JPanel) {
                 jp = (JPanel) cmp;
 
-                System.out.println("Panel ok");
+                //System.out.println("Panel ok");
                 if (jp.getComponents().length == 1) {
                     pion = (JLabel) jp.getComponent(0);
                     //pion.setLocation(e.getX(), e.getY());
                     //pion.setSize(pion.getWidth(), pion.getHeight());
                     Point parentLocation = pion.getParent().getLocation();
-                    System.out.println(parentLocation);
+                    //System.out.println(parentLocation);
                     xPionAdjustment = parentLocation.x - e.getX();
                     yPionAdjustment = parentLocation.y - e.getY();
-                    pion.setLocation(e.getX() + xPionAdjustment, e.getY() + yPionAdjustment);
-                    layeredPane.add(pion, JLayeredPane.DRAG_LAYER);
+                    pion.setLocation(e.getX() + xPionAdjustment + tailleLargeurGarageMur, e.getY() + yPionAdjustment);
+                    //layeredPane.add(pion, JLayeredPane.DRAG_LAYER); //inverser deux niveau de layout // Exception à debug mais marche quand même
                 }
             }
         }
         else {
-            System.out.println("Clique hors plateau de jeu");
+            System.out.println("Clique hors plateau de jeu"); //si deplacement foireux, on refresh
         }
 
     }
@@ -237,19 +222,30 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         if (pion == null) {
             return;
         }
-        pion.setVisible(false);
-        Component c = plateauQuoridor.findComponentAt(e.getX(), e.getY());
-        System.out.println(e.getX() +","+ e.getY());
 
-        //fonction de reajustement des coordonnées
-        //test de coordonnée autorisée
-        //fonction pour move dans le controleur
+        int x = e.getX();
+        int y = e.getY();
+        coordInit = new Coordonnees(x,y);
 
-        Container parent = (Container) c;
-        parent.add(pion);
+        if (x >= tailleLargeurGarageMur && x < (tailleIHMLargeur-tailleLargeurGarageMur)) { //cas ou on clique sur un piece , vérification cloque sur le plateau quoridor
+            pion.setVisible(false);
+            Component c = plateauQuoridor.findComponentAt(e.getX() - tailleLargeurGarageMur, e.getY());
+            System.out.println(e.getX() + "," + e.getY());
+
+            //fonction de reajustement des coordonnées
+            //test de coordonnée autorisée
+            //fonction pour move dans le controleur
+
+            Container parent = (Container) c;
+            parent.add(pion);
 
 
-        pion.setVisible(true);
+            pion.setVisible(true);
+        }
+        else {
+
+            System.out.println("non autorisé");
+        }
     }
 
     @Override
