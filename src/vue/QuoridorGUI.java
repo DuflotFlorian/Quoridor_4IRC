@@ -3,6 +3,7 @@ package vue;
 import java.awt.*;
 
 import static java.awt.GridBagConstraints.NORTHWEST;
+import static javax.swing.JLayeredPane.DRAG_LAYER;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
