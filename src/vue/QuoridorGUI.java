@@ -17,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 import Class.Coordonnees;
 import java.util.Map;
 
+
 /**
  *
  * @author Kevin
@@ -193,6 +194,12 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }*/
     }
 
+
+    public enum Case {
+        PION, MURHORIZONTAL, MURVERTICAL, CROISEMENT
+    }
+
+
     @Override
     public void mouseClicked(MouseEvent e) {
         int x = e.getX()-tailleLargeurGarageMur;
@@ -365,21 +372,21 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
      *
      * @param x position du click en X
      * @param y position du click en Y
-     * @return pion, murHorizontal, murVertical croisement
+     * @return case de type pion, murHorizontal, murVertical croisement
      */
-    private String checkIfMurOrPion(int x, int y) {
+    private Case checkIfMurOrPion(int x, int y) {
         int i,j;
         i = boucleCheckPosition(x);
         j = boucleCheckPosition(y);
 
         if (i%2 == 1 && j%2 == 1 ) {
-            return "pion";
+            return Case.PION;
         } else if (i%2 == 0 && j%2 == 0) {
-            return "croisement";
+            return Case.CROISEMENT;
         } else if (i%2 == 1 && j%2 == 0){
-            return "murHorizontal";
+            return Case.MURHORIZONTAL;
         }
-        return "murVertical";
+        return Case.MURVERTICAL;
     }
 
 
@@ -457,12 +464,12 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     }
 
     private void positionneUnMur(int x,int y) {
-        String murOrPion = checkIfMurOrPion(x,y);
+        Case murOrPion = checkIfMurOrPion(x,y);
         System.out.println(murOrPion);
 
         int [] position = checkArrayPosition(x,y);
 
-        if (murOrPion.equals("murHorizontal")) {
+        if (murOrPion.equals(Case.MURHORIZONTAL)) {
             int pos = convertCoordToCell(position[0],position[1]);
             if (position[0] <= 15) {
                 JPanel j = (JPanel) plateauQuoridor.getComponent(pos);
@@ -477,7 +484,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             }
         }
 
-        if (murOrPion.equals("murVertical")) {
+        if (murOrPion.equals(Case.MURVERTICAL)) {
             int pos = convertCoordToCell(position[0],position[1]);
             if (position[1] <= 15) {
                 JPanel j = (JPanel) plateauQuoridor.getComponent(pos);
