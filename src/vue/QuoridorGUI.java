@@ -12,6 +12,8 @@ import java.io.File;
 import java.util.HashMap;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+
 import Class.Coordonnees;
 import java.util.Map;
 
@@ -54,7 +56,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         tailleCasePion = (int) ((0.85 * coeffTaille));
         tailleCaseMur = (int) ((0.15 * coeffTaille));
         tailleLargeurGarageMur = (int) (2.5 * coeffTaille);
-
+        //ajouter une barre en haut avec les informations qui vont bien
         tailleIHMLargeur = taille * tailleCasePion + (taille-1)*tailleCaseMur + 2 * tailleLargeurGarageMur;
         tailleIHMHauteur = taille * tailleCasePion + (taille-1)*tailleCaseMur;
         taillePlateauQuoridor = taille*tailleCasePion + (taille -1)*tailleCaseMur;
@@ -168,6 +170,19 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
         }
 
+
+        //remplissage des garages
+        /*beta en dur degeulasse*/
+        /*GridLayout gl = new GridLayout(10,1);
+        garageMurGauche.setLayout(gl);
+        garageMurGauche.setBorder(new EmptyBorder(50,20,50,20));
+        gl.setVgap(70);
+        for(int i=0; i<10;i++){
+            JPanel square = new JPanel(new BorderLayout());
+            square.setPreferredSize(new Dimension(50,8));
+            square.setBackground(Color.orange);
+            garageMurGauche.add(square);
+        }*/
     }
 
     @Override
@@ -205,7 +220,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                     xPionAdjustment = parentLocation.x - e.getX();
                     yPionAdjustment = parentLocation.y - e.getY();
                     pion.setLocation(e.getX() + xPionAdjustment + tailleLargeurGarageMur, e.getY() + yPionAdjustment);
-                    //pion.setLocation(xPionAdjustment , yPionAdjustment);
+                    //pion.setLocation(e.getX() , e.getY());
                     layeredPane.add(pion, JLayeredPane.DRAG_LAYER); //inverser deux niveau de layout // Exception à debug mais marche quand même
                     //layeredPane.add(pion);
 
@@ -268,7 +283,8 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         if (pion == null) {
             return;
         }
-        pion.setLocation(e.getX(), e.getY());
+        //pion.setLocation(e.getX(), e.getY());
+        pion.setLocation(e.getX() + xPionAdjustment + tailleLargeurGarageMur, e.getY() + yPionAdjustment);
     }
 
     @Override
