@@ -24,6 +24,5 @@ public class Mur {
 	public void setSens(int sens) {
 		this.sens = sens;
 	}
-	
-	
+
 }

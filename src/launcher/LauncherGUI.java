@@ -22,7 +22,7 @@ public class LauncherGUI {
 
         JFrame frame;
         Dimension dim;
-        int coeffTaille = 100;
+        int coeffTaille = 80;
         frame = new QuoridorGUI("Quoridor", coeffTaille ,9);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocation(600, 10);
