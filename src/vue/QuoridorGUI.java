@@ -195,41 +195,11 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
-        int x = e.getX();
+        int x = e.getX()-tailleLargeurGarageMur;
         int y = e.getY();
-        String murOrPion = checkIfMurOrPion(x,y);
-        int [] position = checkArrayPosition(x,y);
 
-        if (murOrPion.equals("murHorizontal")) {
-            int pos = convertCoordToCell(position[0],position[1]);
-            if (position[0] <= 15) {
-                JPanel j = (JPanel) plateauQuoridor.getComponent(pos);
-                JPanel k = (JPanel) plateauQuoridor.getComponent(pos + 17);
-                JPanel l = (JPanel) plateauQuoridor.getComponent(pos + 34);
-                if (j.getBackground() != Color.BLUE && k.getBackground() != Color.BLUE && l.getBackground() !=Color.BLUE)
-                {
-                    j.setBackground(Color.BLUE);
-                    k.setBackground(Color.BLUE);
-                    l.setBackground(Color.BLUE);
-                }
-            }
-        }
+        positionneUnMur(x,y);
 
-        if (murOrPion.equals("murVertical")) {
-            int pos = convertCoordToCell(position[0],position[1]);
-            if (position[1] <= 15) {
-                JPanel j = (JPanel) plateauQuoridor.getComponent(pos);
-                JPanel k = (JPanel) plateauQuoridor.getComponent(pos + 1);
-                JPanel l = (JPanel) plateauQuoridor.getComponent(pos + 2);
-                if (j.getBackground() != Color.BLUE && k.getBackground() != Color.BLUE && l.getBackground() !=Color.BLUE)
-                {
-                    j.setBackground(Color.BLUE);
-                    k.setBackground(Color.BLUE);
-                    l.setBackground(Color.BLUE);
-                }
-            }
-        }
 
 
     }
@@ -240,12 +210,12 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int y = e.getY();
         coordInit = new Coordonnees(x,y);
 
-        if (x >= tailleLargeurGarageMur && x < (tailleIHMLargeur-tailleLargeurGarageMur)) { //cas ou on clique sur un piece , vérification clique sur le plateau quoridor
+        if (isInPlateau(x)) { //cas ou on clique sur un piece , vérification clique sur le plateau quoridor
 
             Component cmp = layeredPane.getComponentAt(x, y).getComponentAt(x-tailleLargeurGarageMur,y);
             //JPanel jPanelGridBagLayout = JPane
             //System.out.println(cmp);
-            JPanel jp = null;
+            JPanel jp;
 
             if (cmp instanceof JPanel) {
                 jp = (JPanel) cmp;
@@ -422,7 +392,8 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     private int boucleCheckPosition (int p) {
         int i=0;
-        while (p>tailleLargeurGarageMur && p < (tailleLargeurGarageMur + taillePlateauQuoridor) ) {
+
+        while (p>0 && p <  taillePlateauQuoridor ) {
             if (i%2 == 0) {
                 p = p - tailleCasePion;
             } else {
@@ -478,6 +449,48 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
         System.out.println(p);
         return p;
+    }
+
+
+    private Boolean isInPlateau(int x){
+        return (x >= tailleLargeurGarageMur && x < (tailleIHMLargeur-tailleLargeurGarageMur));
+    }
+
+    private void positionneUnMur(int x,int y) {
+        String murOrPion = checkIfMurOrPion(x,y);
+        System.out.println(murOrPion);
+
+        int [] position = checkArrayPosition(x,y);
+
+        if (murOrPion.equals("murHorizontal")) {
+            int pos = convertCoordToCell(position[0],position[1]);
+            if (position[0] <= 15) {
+                JPanel j = (JPanel) plateauQuoridor.getComponent(pos);
+                JPanel k = (JPanel) plateauQuoridor.getComponent(pos + 17);
+                JPanel l = (JPanel) plateauQuoridor.getComponent(pos + 34);
+                if (j.getBackground() != Color.BLUE && k.getBackground() != Color.BLUE && l.getBackground() !=Color.BLUE)
+                {
+                    j.setBackground(Color.BLUE);
+                    k.setBackground(Color.BLUE);
+                    l.setBackground(Color.BLUE);
+                }
+            }
+        }
+
+        if (murOrPion.equals("murVertical")) {
+            int pos = convertCoordToCell(position[0],position[1]);
+            if (position[1] <= 15) {
+                JPanel j = (JPanel) plateauQuoridor.getComponent(pos);
+                JPanel k = (JPanel) plateauQuoridor.getComponent(pos + 1);
+                JPanel l = (JPanel) plateauQuoridor.getComponent(pos + 2);
+                if (j.getBackground() != Color.BLUE && k.getBackground() != Color.BLUE && l.getBackground() !=Color.BLUE)
+                {
+                    j.setBackground(Color.BLUE);
+                    k.setBackground(Color.BLUE);
+                    l.setBackground(Color.BLUE);
+                }
+            }
+        }
     }
 
 }
