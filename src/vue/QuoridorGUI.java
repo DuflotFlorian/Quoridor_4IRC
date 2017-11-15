@@ -1,26 +1,18 @@
 package vue;
 
 import java.awt.*;
-
-import static java.awt.GridBagConstraints.NORTHWEST;
-import static javax.swing.JLayeredPane.DRAG_LAYER;
-
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.File;
 import java.util.HashMap;
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-
 import Class.Coordonnees;
-import java.util.Map;
+import Class.Couleur;
 
 
 /**
  *
- * @author Kevin
+ * @author Kevin & ludo
  */
 public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionListener {
 
@@ -47,6 +39,11 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     // Coordonnées de la position initiale de la pièce déplacée
     private Coordonnees coordInit;
 
+    /**
+     *
+     * @param title titre de la fenêtre
+     * @param taille nombre de case
+     */
     public QuoridorGUI(String title, int taille) {
         super(title);
         pion=null;
@@ -63,12 +60,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         tailleCasePion = (int) ((0.85 * coeffTaille));
         tailleCaseMur = (int) ((0.15 * coeffTaille));
         tailleLargeurGarageMur = (int) (2.5 * coeffTaille);
-        //ajouter une barre en haut avec les informations qui vont bien
+        //TODO ajouter une barre en haut avec les informations qui vont bien
         tailleIHMLargeur = taille * tailleCasePion + (taille-1)*tailleCaseMur + 2 * tailleLargeurGarageMur;
         tailleIHMHauteur = taille * tailleCasePion + (taille-1)*tailleCaseMur;
         taillePlateauQuoridor = (taille * tailleCasePion) + ((taille - 1) * tailleCaseMur);
-        //Definition du layout general
-        //this.setLayout(new BorderLayout());
 
         setLocation(definePositionInScreen());
 
@@ -99,12 +94,13 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         //Ajout du plateau de jeu
         plateauQuoridor = new JPanel();
         layeredPane.add(plateauQuoridor, JLayeredPane.DEFAULT_LAYER);
+
         //GridBagLayout pour grille personnalisée
         plateauQuoridor.setLayout(new GridBagLayout());
+
         //plateauQuoridor.setPreferredSize(dim);
         plateauQuoridor.setPreferredSize(new Dimension(taillePlateauQuoridor, taillePlateauQuoridor));
         plateauQuoridor.setBounds(tailleLargeurGarageMur, 0, taillePlateauQuoridor, taillePlateauQuoridor);
-        //System.out.println(taille+","+tailleCasePion +","+tailleCaseMur);
 
         int casePosX = 0; // Position sur le grille
         int casePosY = 0; // Position sur la grille
@@ -113,7 +109,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.weightx = 1;
         constraints.weighty = 1;
-        /*voir pour faire le remplissage des garages murs*/
         for (int i = 0; i < (taille * 2 - 1); i++) {
             constraints.gridx = i ;//décalage dans le grid bag layout
 
@@ -160,38 +155,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                 }
             }
         }
+
         //placement pions initiale
-        for (int i=0;i<2;i++) {
-
-            if (i == 0) {
-                JPanel j = (JPanel)plateauQuoridor.getComponent((8*17)); // colone 8 , ligne 0
-                ImageIcon ic = new ImageIcon(new ImageIcon("images/PionNoir.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
-                JLabel piece = new JLabel(ic);
-
-                j.add(piece);
-            } else {
-                JPanel j = (JPanel)plateauQuoridor.getComponent((8*17)+16); // colone 8 , ligne 16
-                ImageIcon ic = new ImageIcon(new ImageIcon("images/PionRouge.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
-                JLabel piece = new JLabel(ic);
-
-                j.add(piece);
-            }
-
-        }
-
-
-        //remplissage des garages
-        /*beta en dur degeulasse*/
-        /*GridLayout gl = new GridLayout(10,1);
-        garageMurGauche.setLayout(gl);
-        garageMurGauche.setBorder(new EmptyBorder(50,20,50,20));
-        gl.setVgap(70);
-        for(int i=0; i<10;i++){
-            JPanel square = new JPanel(new BorderLayout());
-            square.setPreferredSize(new Dimension(50,8));
-            square.setBackground(Color.orange);
-            garageMurGauche.add(square);
-        }*/
+        affichePion(new Coordonnees(0,8),Couleur.NOIR);
+        affichePion(new Coordonnees(16,8),Couleur.BLANC);
     }
 
 
@@ -233,13 +200,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                     //pion.setLocation(e.getX(), e.getY());
                     //pion.setSize(pion.getWidth(), pion.getHeight());
                     Point parentLocation = pion.getParent().getLocation();
-                    //System.out.println(parentLocation);
                     xPionAdjustment = parentLocation.x - e.getX();
                     yPionAdjustment = parentLocation.y - e.getY();
                     pion.setLocation(e.getX() + xPionAdjustment + tailleLargeurGarageMur, e.getY() + yPionAdjustment);
-                    //pion.setLocation(e.getX() , e.getY());
-                    layeredPane.add(pion, JLayeredPane.DRAG_LAYER); //inverser deux niveau de layout // Exception à debug mais marche quand même
-                    //layeredPane.add(pion);
+                    layeredPane.add(pion, JLayeredPane.DRAG_LAYER);
 
                 }
             }
@@ -252,36 +216,39 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        //pion= null;
         if (pion == null) {
             return;
         }
 
-        int x = e.getX();
+        int x = e.getX()-tailleLargeurGarageMur;
         int y = e.getY();
         coordInit = new Coordonnees(x,y);
 
         //ajout d'un is move OK
+        if (x > 0 && x < (taillePlateauQuoridor)) { //cas ou on clique sur un piece , vérification cloque sur le plateau quoridor
+            if (checkIfMurOrPion(x,y) == Case.PION) {
+                pion.setVisible(false);
+                Component c = plateauQuoridor.findComponentAt(e.getX() - tailleLargeurGarageMur, e.getY());
+                System.out.println(e.getX() + "," + e.getY());
 
-        if (x >= tailleLargeurGarageMur && x < (tailleIHMLargeur-tailleLargeurGarageMur)) { //cas ou on clique sur un piece , vérification cloque sur le plateau quoridor
-            pion.setVisible(false);
-            Component c = plateauQuoridor.findComponentAt(e.getX() - tailleLargeurGarageMur, e.getY());
-            System.out.println(e.getX() + "," + e.getY());
+                //fonction de reajustement des coordonnées
+                //test de coordonnée autorisée
+                //fonction pour move dans le controleur
 
-            //fonction de reajustement des coordonnées
-            //test de coordonnée autorisée
-            //fonction pour move dans le controleur
-
-            Container parent = (Container) c;
-            parent.add(pion);
+                Container parent = (Container) c;
+                parent.add(pion);
 
 
-            pion.setVisible(true);
+                pion.setVisible(true);
+            }
+            else {
+                layeredPane.remove(pion);
+                update();
+            }
         }
         else {
-
-            System.out.println("non autorisé");
-            //update();
+            layeredPane.remove(pion);
+            update();
         }
     }
 
@@ -347,23 +314,9 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             }
         }
         //placement pions initiale
-        for (int i=0;i<2;i++) {
+        affichePion(new Coordonnees(0,8),Couleur.NOIR);
+        affichePion(new Coordonnees(16,8),Couleur.BLANC);
 
-            if (i == 0) {
-                JPanel j = (JPanel)plateauQuoridor.getComponent(8*17); // colone 8 , ligne 0
-                ImageIcon ic = new ImageIcon(new ImageIcon("images/PionNoir.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
-                JLabel piece = new JLabel(ic);
-
-                j.add(piece);
-            } else {
-                JPanel j = (JPanel)plateauQuoridor.getComponent((8*17)+16); // colone 8 , ligne 0
-                ImageIcon ic = new ImageIcon(new ImageIcon("images/PionRouge.png").getImage().getScaledInstance(tailleCasePion,tailleCasePion,Image.SCALE_DEFAULT));
-                JLabel piece = new JLabel(ic);
-
-                j.add(piece);
-            }
-
-        }
         validate();
         repaint();
     }
@@ -441,7 +394,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
      */
     private int defineCoeffTaille () {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        return ((int) dim.getWidth() / 18);
+        return ((int) dim.getWidth() / 18); //18 est un rapport taille/ecran
     }
 
     /**
@@ -500,4 +453,15 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
     }
 
+    private void affichePion(Coordonnees coord, Couleur c) {
+        String s = "images/Pion"+c.toString()+".png";
+        System.out.println(s);
+
+        JPanel j = (JPanel) plateauQuoridor.getComponent((coord.getY() * 17)+coord.getX()); // colone 8 , ligne 0
+        //création et resize des images à la bonne taille
+        ImageIcon ic = new ImageIcon(new ImageIcon(s).getImage().getScaledInstance(tailleCasePion, tailleCasePion, Image.SCALE_DEFAULT));
+        JLabel piece = new JLabel(ic);
+        System.out.println(c.toString());
+        j.add(piece);
+    }
 }
