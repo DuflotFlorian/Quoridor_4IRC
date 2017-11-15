@@ -3,6 +3,7 @@ package vue;
 import java.awt.*;
 
 import static java.awt.GridBagConstraints.NORTHWEST;
+import static javax.swing.JLayeredPane.DRAG_LAYER;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -37,6 +38,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private HashMap<Coordonnees,JPanel> mapCoordPanelPion ;
     private HashMap<Coordonnees,JPanel> mapCoordPanelMur ;
     private JLabel pion;
+    private int taillePlateauQuoridor;
 
     // Coordonnées de la position initiale de la pièce déplacée
     private Coordonnees coordInit;
@@ -55,46 +57,43 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
         tailleIHMLargeur = taille * tailleCasePion + (taille-1)*tailleCaseMur + 2 * tailleLargeurGarageMur;
         tailleIHMHauteur = taille * tailleCasePion + (taille-1)*tailleCaseMur;
+        taillePlateauQuoridor = taille*tailleCasePion + (taille -1)*tailleCaseMur;
         //Definition du layout general
         //this.setLayout(new BorderLayout());
 
         //Definition de la taille general de la frame
-        this.dim = new Dimension(tailleIHMLargeur,tailleIHMHauteur);
-        System.out.println(taille+","+tailleCasePion +","+tailleCaseMur);
-
-        //Creation du gridLayer genral global pour la fenetre
-        //  LayeredPane pour ajouter DRAG_LAYER
+        dim = new Dimension(tailleIHMLargeur,tailleIHMHauteur);
+        getContentPane().setPreferredSize(dim);
+        //getContentPane().setLayout(new BorderLayout());
         layeredPane = new JLayeredPane();
         getContentPane().add(layeredPane);
         layeredPane.setPreferredSize(dim);
         layeredPane.addMouseListener(this);
         layeredPane.addMouseMotionListener(this);
 
-        //Creation d'un BorderLayout pour les 3 zones principales (stockage mur gauche , plateau , stockage mur droit)
-        layeredPane.setLayout(new BorderLayout());
-
         //Creation du stockage à murs gauche
         garageMurGauche = new JPanel();
-        layeredPane.add(garageMurGauche, BorderLayout.WEST ,JLayeredPane.DEFAULT_LAYER);
+        layeredPane.add(garageMurGauche, JLayeredPane.DEFAULT_LAYER);
         garageMurGauche.setPreferredSize(new Dimension(tailleLargeurGarageMur , tailleIHMHauteur));
-        //plateauQuoridor.setBounds(0, 0, dim.width, dim.height);
+        garageMurGauche.setBounds(0, 0, tailleLargeurGarageMur, tailleIHMHauteur);
         garageMurGauche.setBackground(Color.GREEN);
 
         //Creation du stockage à murs gauche
         garageMurDroit = new JPanel();
-        layeredPane.add(garageMurDroit, BorderLayout.EAST ,JLayeredPane.DEFAULT_LAYER);
+        layeredPane.add(garageMurDroit, JLayeredPane.DEFAULT_LAYER);
         garageMurDroit.setPreferredSize(new Dimension(tailleLargeurGarageMur , tailleIHMHauteur));
-        //plateauQuoridor.setBounds(0, 0, dim.width, dim.height);
+        garageMurDroit.setBounds(taillePlateauQuoridor+tailleLargeurGarageMur, 0, tailleLargeurGarageMur, tailleIHMHauteur);
         garageMurDroit.setBackground(Color.BLUE);
 
         //Ajout du plateau de jeu
         plateauQuoridor = new JPanel();
-        layeredPane.add(plateauQuoridor, BorderLayout.CENTER, JLayeredPane.DEFAULT_LAYER);
+        layeredPane.add(plateauQuoridor, JLayeredPane.DEFAULT_LAYER);
         //GridBagLayout pour grille personnalisée
         plateauQuoridor.setLayout(new GridBagLayout());
         //plateauQuoridor.setPreferredSize(dim);
-        plateauQuoridor.setPreferredSize(new Dimension(tailleIHMLargeur - 2* tailleLargeurGarageMur , tailleIHMHauteur));
-        //plateauQuoridor.setBounds(tailleLargeurGarageMur, 0, tailleIHMLargeur, tailleIHMHauteur);
+        plateauQuoridor.setPreferredSize(new Dimension(taillePlateauQuoridor, taillePlateauQuoridor));
+        plateauQuoridor.setBounds(tailleLargeurGarageMur, 0, taillePlateauQuoridor, taillePlateauQuoridor);
+        //System.out.println(taille+","+tailleCasePion +","+tailleCaseMur);
 
         int casePosX = 0; // Position sur le grille
         int casePosY = 0; // Position sur la grille
@@ -103,7 +102,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.weightx = 1;
         constraints.weighty = 1;
-
+        /*voir pour faire le remplissage des garages murs*/
         for (int i = 0; i < (taille * 2 - 1); i++) {
             constraints.gridx = i ;//décalage dans le grid bag layout
 
@@ -186,7 +185,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int y = e.getY();
         coordInit = new Coordonnees(x,y);
 
-        if (x >= tailleLargeurGarageMur && x < (tailleIHMLargeur-tailleLargeurGarageMur)) { //cas ou on clique sur un piece , vérification cloque sur le plateau quoridor
+        if (x >= tailleLargeurGarageMur && x < (tailleIHMLargeur-tailleLargeurGarageMur)) { //cas ou on clique sur un piece , vérification clique sur le plateau quoridor
 
             Component cmp = layeredPane.getComponentAt(x, y).getComponentAt(x-tailleLargeurGarageMur,y);
             //JPanel jPanelGridBagLayout = JPane
@@ -206,7 +205,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                     xPionAdjustment = parentLocation.x - e.getX();
                     yPionAdjustment = parentLocation.y - e.getY();
                     pion.setLocation(e.getX() + xPionAdjustment + tailleLargeurGarageMur, e.getY() + yPionAdjustment);
-                    //layeredPane.add(pion, JLayeredPane.DRAG_LAYER); //inverser deux niveau de layout // Exception à debug mais marche quand même
+                    //pion.setLocation(xPionAdjustment , yPionAdjustment);
+                    layeredPane.add(pion, JLayeredPane.DRAG_LAYER); //inverser deux niveau de layout // Exception à debug mais marche quand même
+                    //layeredPane.add(pion);
+
                 }
             }
         }
@@ -227,6 +229,8 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int y = e.getY();
         coordInit = new Coordonnees(x,y);
 
+        //ajout d'un is move OK
+
         if (x >= tailleLargeurGarageMur && x < (tailleIHMLargeur-tailleLargeurGarageMur)) { //cas ou on clique sur un piece , vérification cloque sur le plateau quoridor
             pion.setVisible(false);
             Component c = plateauQuoridor.findComponentAt(e.getX() - tailleLargeurGarageMur, e.getY());
@@ -245,6 +249,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         else {
 
             System.out.println("non autorisé");
+            //update();
         }
     }
 
