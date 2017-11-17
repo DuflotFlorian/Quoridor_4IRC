@@ -1,5 +1,6 @@
 package Class.observable;
 
+import java.util.List;
 import java.util.Observable;
 import Class.*;
 
@@ -10,6 +11,10 @@ public class QuoridorGame extends Observable implements BoardGames {
         super();
         this.jeu = new Jeu(2);
         this.notifyObservers(jeu.getPiecesIHM());
+    }
+
+    public boolean move(Coordonnees initCoord, Coordonnees finalCoord) {
+        return false;
     }
 
     @Override
@@ -32,8 +37,11 @@ public class QuoridorGame extends Observable implements BoardGames {
         return null;
     }
 
-    @Override
-    public Couleur getPieceColor(int x, int y) {
+    public Couleur getPieceColor(Coordonnees coord) {
+        return null;
+    }
+
+    public List<Coordonnees> getMovePossible(Coordonnees c){
         return null;
     }
 }
