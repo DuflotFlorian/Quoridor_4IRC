@@ -1,5 +1,7 @@
 package Class;
 
+import java.util.List;
+
 public class Jeu {
 	private Joueur[] joueurs;
 	private Plateau plateau;
