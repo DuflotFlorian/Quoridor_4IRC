@@ -35,6 +35,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private JLabel pion;
     private int taillePlateauQuoridor;
     private int coeffTaille;
+    private String urlImages = "";
 
     // Coordonnées de la position initiale de la pièce déplacée
     private Coordonnees coordInit;
@@ -454,14 +455,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     }
 
     private void affichePion(Coordonnees coord, Couleur c) {
-        String s = "images/Pion"+c.toString()+".png";
-        System.out.println(s);
+        String s = urlImages + "images/Pion" + c.toString() + ".png";
 
         JPanel j = (JPanel) plateauQuoridor.getComponent((coord.getY() * 17)+coord.getX()); // colone 8 , ligne 0
-        //création et resize des images à la bonne taille
-        ImageIcon ic = new ImageIcon(new ImageIcon(s).getImage().getScaledInstance(tailleCasePion, tailleCasePion, Image.SCALE_DEFAULT));
-        JLabel piece = new JLabel(ic);
-        System.out.println(c.toString());
+        JLabel piece = new JLabel(new ImageIcon(s));
         j.add(piece);
     }
 }
