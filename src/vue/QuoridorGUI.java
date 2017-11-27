@@ -362,7 +362,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     }
 
     private Coordonnees pixelToCoord(Coordonnees pixelCoord){
-
+        return null;
     }
 
     /**
