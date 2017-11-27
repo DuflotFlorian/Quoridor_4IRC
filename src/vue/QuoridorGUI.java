@@ -9,6 +9,7 @@ import java.util.HashMap;
 import javax.swing.*;
 import Class.Coordonnees;
 import Class.Couleur;
+import com.sun.xml.internal.bind.v2.TODO;
 
 
 /**
@@ -189,14 +190,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         if (isInPlateau(x)) { //cas ou on clique sur un piece , vérification clique sur le plateau quoridor
 
             Component cmp = layeredPane.getComponentAt(x, y).getComponentAt(x-tailleLargeurGarageMur,y);
-            //JPanel jPanelGridBagLayout = JPane
-            //System.out.println(cmp);
             JPanel jp;
 
             if (cmp instanceof JPanel) {
                 jp = (JPanel) cmp;
-
-                //System.out.println("Panel ok");
                 if (jp.getComponents().length == 1) {
                     pion = (JLabel) jp.getComponent(0);
                     //pion.setLocation(e.getX(), e.getY());
@@ -378,11 +375,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
             return y-1;
         }
-
-
-
-        System.out.println("y :" +y);
-        System.out.println("x :" +x);
+        //TODO probable origine du nullpointerException qd on click en dehors du plateau
         return ((x*17)-17) + y-1;
 
     }
@@ -459,12 +452,12 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     /**
      * Permet de passer au dessus des problématiques de PATH et de windows ou linux pour les séparateurs
+     * le File.separator permet dez choisir \ sous windows,  / sous nux
      * @param coord
      * @param c
      */
     private void affichePion(Coordonnees coord, Couleur c) {
         java.net.URL imageURL = QuoridorGUI.class.getResource("images" + File.separator+ "Pion" + c.toString() + ".png");
-        //File.separator;   // permet dez choisir \ sous windows,  / sous nux
         JPanel j = (JPanel) plateauQuoridor.getComponent((coord.getY() * 17)+coord.getX()); // colone 8 , ligne 0
         JLabel piece = new JLabel(new ImageIcon(imageURL));
         j.add(piece);
