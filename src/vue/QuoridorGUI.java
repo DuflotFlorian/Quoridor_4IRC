@@ -53,10 +53,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         mapCoordPanelMur = new HashMap<Coordonnees,JPanel>();
         this.coeffTaille = defineCoeffTaille();
 
-
-
-
-
         this.taille=taille;
         tailleCasePion = (int) ((0.85 * coeffTaille));
         tailleCaseMur = (int) ((0.15 * coeffTaille));
@@ -110,14 +106,14 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.weightx = 1;
         constraints.weighty = 1;
-        for (int i = 0; i < (taille * 2 - 1); i++) {
-            constraints.gridx = i ;//décalage dans le grid bag layout
+        for (int j = 0; j < (taille * 2 - 1); j++) {
+            constraints.gridx = j ;//décalage dans le grid bag layout
 
-            for (int j = 0; j < (taille * 2 - 1); j++) {
+            for (int i = 0; i < (taille * 2 - 1); i++) {
 
-                constraints.gridy = j ;//décalage dans le grid bag layout
+                constraints.gridy = i ;//décalage dans le grid bag layout
 
-                if (i % 2 == 0 && j % 2 == 0) {         // Case pion
+                if (j % 2 == 0 && i % 2 == 0) {         // Case pion
                     JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCasePion,tailleCasePion));
                     square.setBackground(Color.LIGHT_GRAY);
@@ -126,7 +122,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                     casePosX += tailleCasePion ;
                     casePosY += tailleCasePion ;
                     mapCoordPanelPion.put(new Coordonnees(i,j),square);
-                } else if (i % 2 == 0 && j % 2 == 1) {         // Case mur horizontal
+                } else if (j % 2 == 0 && i % 2 == 1) {         // Case mur horizontal
                     JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCasePion,tailleCaseMur));
                     square.setBackground(Color.WHITE);
@@ -135,7 +131,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                     casePosX += tailleCasePion ;
                     casePosY += tailleCaseMur ;
                     mapCoordPanelMur.put(new Coordonnees(i,j),square);
-                } else if (i % 2 == 1 && j % 2 == 0) {         // Case mur vertical
+                } else if (j % 2 == 1 && i % 2 == 0) {         // Case mur vertical
                     JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCaseMur,tailleCasePion));
                     square.setBackground(Color.WHITE);
@@ -144,7 +140,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                     casePosX += tailleCaseMur ;
                     casePosY += tailleCasePion ;
                     mapCoordPanelMur.put(new Coordonnees(i,j),square);
-                } else if (i % 2 == 1 && j % 2 == 1) {         // petit truc vide
+                } else if (j % 2 == 1 && i % 2 == 1) {         // petit truc vide
                     JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCaseMur,tailleCaseMur));
                     square.setBackground(Color.WHITE);
@@ -160,6 +156,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         //placement pions initiale
         affichePion(new Coordonnees(0,8),Couleur.NOIR);
         affichePion(new Coordonnees(16,8),Couleur.BLANC);
+
     }
 
 
@@ -173,7 +170,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int x = e.getX()-tailleLargeurGarageMur;
         int y = e.getY();
 
-        positionneUnMur(x,y);
+        //positionneUnMur(x,y);
 
 
 
@@ -183,31 +180,37 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     public void mousePressed(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
+        JPanel jp;
         coordInit = new Coordonnees(x,y);
+        //System.out.println(mapCoordPanelPion.containsValue(jp));
+        //if (isInPlateau(x)) { //cas ou on clique sur un piece , vérification clique sur le plateau quoridor
+        //getComponentAt(x,y).get
+        Component cmp =  layeredPane.findComponentAt(x,y);
+        //System.out.println(cmp2);
+        if (mapCoordPanelPion.containsValue(cmp)) {
+            //System.out.println("ok");
+            jp = (JPanel) cmp;
+        }
+        else if (mapCoordPanelPion.containsValue(cmp.getParent())) {
+            //cas d'une case avec un pion dessus
+            //System.out.println("case avec un pion");
+            jp = (JPanel) cmp.getParent();
+        } else {
+            //System.out.println("pas ok");
+            return;
+        }
 
-        if (isInPlateau(x)) { //cas ou on clique sur un piece , vérification clique sur le plateau quoridor
 
-            Component cmp = layeredPane.getComponentAt(x, y).getComponentAt(x-tailleLargeurGarageMur,y);
-            //JPanel jPanelGridBagLayout = JPane
-            //System.out.println(cmp);
-            JPanel jp;
+        if (jp.getComponents().length == 1) {
+            pion = (JLabel) jp.getComponent(0);
+            //pion.setLocation(e.getX(), e.getY());
+            //pion.setSize(pion.getWidth(), pion.getHeight());
+            Point parentLocation = pion.getParent().getLocation();
+            xPionAdjustment = parentLocation.x - e.getX();
+            yPionAdjustment = parentLocation.y - e.getY();
+            pion.setLocation(e.getX() + xPionAdjustment + plateauQuoridor.getX(), e.getY() + yPionAdjustment +plateauQuoridor.getY());
+            layeredPane.add(pion, JLayeredPane.DRAG_LAYER);
 
-            if (cmp instanceof JPanel) {
-                jp = (JPanel) cmp;
-
-                //System.out.println("Panel ok");
-                if (jp.getComponents().length == 1) {
-                    pion = (JLabel) jp.getComponent(0);
-                    //pion.setLocation(e.getX(), e.getY());
-                    //pion.setSize(pion.getWidth(), pion.getHeight());
-                    Point parentLocation = pion.getParent().getLocation();
-                    xPionAdjustment = parentLocation.x - e.getX();
-                    yPionAdjustment = parentLocation.y - e.getY();
-                    pion.setLocation(e.getX() + xPionAdjustment + tailleLargeurGarageMur, e.getY() + yPionAdjustment);
-                    layeredPane.add(pion, JLayeredPane.DRAG_LAYER);
-
-                }
-            }
         }
         else {
             System.out.println("Clique hors plateau de jeu"); //si deplacement foireux, on refresh
@@ -221,36 +224,26 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             return;
         }
 
-        int x = e.getX()-tailleLargeurGarageMur;
+
+        int x = e.getX();
         int y = e.getY();
         coordInit = new Coordonnees(x,y);
 
         //ajout d'un is move OK
-        if (x > 0 && x < (taillePlateauQuoridor)) { //cas ou on clique sur un piece , vérification cloque sur le plateau quoridor
-            if (checkIfMurOrPion(x,y) == Case.PION) {
+        //if (x > 0 && x < (taillePlateauQuoridor)) { //cas ou on clique sur un piece , vérification cloque sur le plateau quoridor
+            //if (checkIfMurOrPion(x,y) == Case.PION) {
                 pion.setVisible(false);
-                Component c = plateauQuoridor.findComponentAt(e.getX() - tailleLargeurGarageMur, e.getY());
-                System.out.println(e.getX() + "," + e.getY());
-
-                //fonction de reajustement des coordonnées
-                //test de coordonnée autorisée
-                //fonction pour move dans le controleur
-
-                Container parent = (Container) c;
-                parent.add(pion);
-
-
-                pion.setVisible(true);
-            }
-            else {
-                layeredPane.remove(pion);
-                update();
-            }
-        }
-        else {
-            layeredPane.remove(pion);
-            update();
-        }
+                Component cmp = findComponentAt(x , y);
+                if (mapCoordPanelPion.containsValue(cmp)) {
+                    Container parent = (Container) cmp;
+                    parent.add(pion);
+                    pion.setVisible(true);
+                    //update();  //TODO decommenter quand lien avec le Controleur effectué
+                }
+                else {
+                    //layeredPane.remove(pion);
+                    update();
+                }
     }
 
     @Override
@@ -269,7 +262,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             return;
         }
         //pion.setLocation(e.getX(), e.getY());
-        pion.setLocation(e.getX() + xPionAdjustment + tailleLargeurGarageMur, e.getY() + yPionAdjustment);
+        pion.setLocation(e.getX() + xPionAdjustment + plateauQuoridor.getX(), e.getY() + yPionAdjustment + plateauQuoridor.getY());
     }
 
     @Override
@@ -278,6 +271,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     }
 
     public void update() { //voir les arguments à récupérer pour afficher
+
         plateauQuoridor.removeAll();
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.weightx = 1;
@@ -454,11 +448,18 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
     }
 
+    /**
+     *
+     * @param coord Coordonnées dans la grille
+     * @param c Couleur du pion
+     */
     private void affichePion(Coordonnees coord, Couleur c) {
-        String s = urlImages + "images/Pion" + c.toString() + ".png";
-
-        JPanel j = (JPanel) plateauQuoridor.getComponent((coord.getY() * 17)+coord.getX()); // colone 8 , ligne 0
+        //String s = urlImages + "images/Pion" + c.toString() + ".png";
+        String s = "C:\\Users\\Kevin\\IdeaProjects\\Quoridor_4IRC\\src\\images\\Pion"+c.toString() +".png";
+        JPanel j = mapCoordPanelPion.get(coord);
         JLabel piece = new JLabel(new ImageIcon(s));
         j.add(piece);
     }
+
+
 }
