@@ -8,18 +8,17 @@ import java.util.HashMap;
 import javax.swing.*;
 import Class.Coordonnees;
 import Class.Couleur;
+import Controller.GameController;
 
 
-/**
- *
- * @author Kevin & ludo
- */
+
 public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionListener {
-
+    private GameController quoridorGameController;
     private JLayeredPane layeredPane;
     private JPanel plateauQuoridor;
     private JPanel garageMurGauche;
     private JPanel garageMurDroit;
+    private Coordonnees coordInit;
     // private JLabel chessPiece;
     private int xPionAdjustment;
     private int yPionAdjustment;
@@ -38,24 +37,21 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private String urlImages = "/fs03/share/users/florian.duflot/home/IdeaProjects/Quoridor_4IRC/src/";
 
     // Coordonnées de la position initiale de la pièce déplacée
-    private Coordonnees coordInit;
+    private Coordonnees coordFinal;
 
     /**
      *
      * @param title titre de la fenêtre
      * @param taille nombre de case
      */
-    public QuoridorGUI(String title, int taille) {
+    public QuoridorGUI(String title, GameController quoridorGameController, int taille) {
         super(title);
+        this.quoridorGameController = quoridorGameController;
         pion=null;
         //Creation des maps murs + pions
         mapCoordPanelPion = new HashMap<Coordonnees,JPanel>();
         mapCoordPanelMur = new HashMap<Coordonnees,JPanel>();
         this.coeffTaille = defineCoeffTaille();
-
-
-
-
 
         this.taille=taille;
         tailleCasePion = (int) ((0.85 * coeffTaille));
@@ -174,9 +170,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int y = e.getY();
 
         positionneUnMur(x,y);
-
-
-
     }
 
     @Override
@@ -223,33 +216,36 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
         int x = e.getX()-tailleLargeurGarageMur;
         int y = e.getY();
-        coordInit = new Coordonnees(x,y);
+        coordFinal = new Coordonnees(x,y);
 
-        //ajout d'un is move OK
-        if (x > 0 && x < (taillePlateauQuoridor)) { //cas ou on clique sur un piece , vérification cloque sur le plateau quoridor
-            if (checkIfMurOrPion(x,y) == Case.PION) {
-                pion.setVisible(false);
-                Component c = plateauQuoridor.findComponentAt(e.getX() - tailleLargeurGarageMur, e.getY());
-                System.out.println(e.getX() + "," + e.getY());
+        boolean b = quoridorGameController.move(coordInit, coordFinal);
+        if(b){
+            //ajout d'un is move OK
+            if (x > 0 && x < (taillePlateauQuoridor)) { //cas ou on clique sur un piece , vérification cloque sur le plateau quoridor
+                if (checkIfMurOrPion(x,y) == Case.PION) {
+                    pion.setVisible(false);
+                    Component c = plateauQuoridor.findComponentAt(e.getX() - tailleLargeurGarageMur, e.getY());
+                    System.out.println(e.getX() + "," + e.getY());
 
-                //fonction de reajustement des coordonnées
-                //test de coordonnée autorisée
-                //fonction pour move dans le controleur
+                    //fonction de reajustement des coordonnées
+                    //test de coordonnée autorisée
+                    //fonction pour move dans le controleur
 
-                Container parent = (Container) c;
-                parent.add(pion);
+                    Container parent = (Container) c;
+                    parent.add(pion);
 
 
-                pion.setVisible(true);
+                    pion.setVisible(true);
+                }
+                else {
+                    layeredPane.remove(pion);
+                    update();
+                }
             }
             else {
                 layeredPane.remove(pion);
                 update();
             }
-        }
-        else {
-            layeredPane.remove(pion);
-            update();
         }
     }
 
@@ -268,7 +264,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         if (pion == null) {
             return;
         }
-        //pion.setLocation(e.getX(), e.getY());
+
         pion.setLocation(e.getX() + xPionAdjustment + tailleLargeurGarageMur, e.getY() + yPionAdjustment);
     }
 
@@ -277,7 +273,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     }
 
-    public void update() { //voir les arguments à récupérer pour afficher
+    public void update() {
         plateauQuoridor.removeAll();
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.weightx = 1;
@@ -365,6 +361,9 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         return i;
     }
 
+    private Coordonnees pixelToCoord(Coordonnees pixelCoord){
+
+    }
 
     /**
      *

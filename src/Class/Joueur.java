@@ -1,5 +1,6 @@
 package Class;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ public class Joueur {
 
 	public Joueur(int nbMurs, Couleur c, Coordonnees coord, Coordonnees winCoord) {
 		Pion pion = new Pion(coord, c);
+		pieces = new ArrayList<Piece>();
 		pieces.add(pion);
 		for(int i = 0; i < nbMurs; i++){
 			Mur m = new Mur(new Coordonnees(-1, -1), c, true);
