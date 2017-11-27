@@ -9,8 +9,6 @@ import java.util.HashMap;
 import javax.swing.*;
 import Class.Coordonnees;
 import Class.Couleur;
-import com.sun.xml.internal.bind.v2.TODO;
-
 
 /**
  *
@@ -375,9 +373,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
             return y-1;
         }
-        //TODO probable origine du nullpointerException qd on click en dehors du plateau
         return ((x*17)-17) + y-1;
-
     }
 
     public HashMap<Coordonnees, JPanel> getMapCoordPanelPion() {
