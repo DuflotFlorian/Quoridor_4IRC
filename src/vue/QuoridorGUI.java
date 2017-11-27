@@ -328,13 +328,11 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int i,j;
         i = boucleCheckPosition(x);
         j = boucleCheckPosition(y);
-
-
-        if (i%2 == 1 && j%2 == 1 ) {
+        if (i%2 == 0 && j%2 == 0 ) {
             return Case.PION;
-        } else if (i%2 == 0 && j%2 == 0) {
+        } else if (i%2 == 1 && j%2 == 1) {
             return Case.CROISEMENT;
-        } else if (i%2 == 1 && j%2 == 0){
+        } else if (i%2 == 0 && j%2 == 1){
             return Case.MURHORIZONTAL;
         }
         return Case.MURVERTICAL;
@@ -350,7 +348,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     private int boucleCheckPosition (int p) {
         int i=0;
-        while (p>0 && p <  taillePlateauQuoridor ) {
+        while (p>0 && p < taillePlateauQuoridor ) {
             if (i%2 == 0) {
                 p = p - tailleCasePion;
             } else {
@@ -358,7 +356,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             }
             i++;
         }
-        return i;
+        return i-1;
     }
 
 
@@ -370,7 +368,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
      */
     private int convertCoordToCell(int x,int y){
         if (x == 1) {
-
             return y-1;
         }
         return ((x*17)-17) + y-1;
@@ -416,7 +413,15 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int [] position = checkArrayPosition(x,y);
 
         if (murOrPion.equals(Case.MURHORIZONTAL)) {
+
+            //TODO a reprendre avec les jpanel transformer
+            boucleCheckPosition(x);
+
+
+            System.out.println(mapCoordPanelMur.get(0));
             int pos = convertCoordToCell(position[0],position[1]);
+
+
             if (position[0] <= 15) {
                 JPanel j = (JPanel) plateauQuoridor.getComponent(pos);
                 JPanel k = (JPanel) plateauQuoridor.getComponent(pos + 17);
