@@ -439,8 +439,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
      * @param c Couleur du pion
      */
     private void affichePion(Coordonnees coord, Couleur c) {
-        //String s = urlImages + "images/Pion" + c.toString() + ".png";
-        String s = "C:\\Users\\Kevin\\IdeaProjects\\Quoridor_4IRC\\src\\images\\Pion"+c.toString() +".png";
+        String s = urlImages + "images/Pion" + c.toString() + ".png";
         JPanel j = mapCoordPanelPion.get(coord);
         JLabel piece = new JLabel(new ImageIcon(s));
         j.add(piece);
