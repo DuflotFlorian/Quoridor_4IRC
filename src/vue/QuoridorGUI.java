@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
 import java.util.HashMap;
 import javax.swing.*;
 import Class.Coordonnees;
@@ -333,6 +334,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         i = boucleCheckPosition(x);
         j = boucleCheckPosition(y);
 
+
         if (i%2 == 1 && j%2 == 1 ) {
             return Case.PION;
         } else if (i%2 == 0 && j%2 == 0) {
@@ -353,7 +355,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     private int boucleCheckPosition (int p) {
         int i=0;
-
         while (p>0 && p <  taillePlateauQuoridor ) {
             if (i%2 == 0) {
                 p = p - tailleCasePion;
@@ -374,8 +375,14 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
      */
     private int convertCoordToCell(int x,int y){
         if (x == 1) {
+
             return y-1;
         }
+
+
+
+        System.out.println("y :" +y);
+        System.out.println("x :" +x);
         return ((x*17)-17) + y-1;
 
     }
@@ -407,8 +414,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int largeur = (int)(dim.getWidth()-tailleIHMLargeur)/2;
         int hauteur = (int)(dim.getHeight()-tailleIHMHauteur)/2;
         Point p = new Point(largeur,hauteur);
-
-        System.out.println(p);
         return p;
     }
 
@@ -419,8 +424,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     private void positionneUnMur(int x,int y) {
         Case murOrPion = checkIfMurOrPion(x,y);
-        System.out.println(murOrPion);
-
         int [] position = checkArrayPosition(x,y);
 
         if (murOrPion.equals(Case.MURHORIZONTAL)) {
@@ -454,11 +457,16 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
     }
 
+    /**
+     * Permet de passer au dessus des problématiques de PATH et de windows ou linux pour les séparateurs
+     * @param coord
+     * @param c
+     */
     private void affichePion(Coordonnees coord, Couleur c) {
-        String s = urlImages + "images/Pion" + c.toString() + ".png";
-
+        java.net.URL imageURL = QuoridorGUI.class.getResource("images" + File.separator+ "Pion" + c.toString() + ".png");
+        //File.separator;   // permet dez choisir \ sous windows,  / sous nux
         JPanel j = (JPanel) plateauQuoridor.getComponent((coord.getY() * 17)+coord.getX()); // colone 8 , ligne 0
-        JLabel piece = new JLabel(new ImageIcon(s));
+        JLabel piece = new JLabel(new ImageIcon(imageURL));
         j.add(piece);
     }
 }
