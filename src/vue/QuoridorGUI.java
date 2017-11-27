@@ -170,7 +170,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int x = e.getX()-tailleLargeurGarageMur;
         int y = e.getY();
 
-        //positionneUnMur(x,y);
+        positionneUnMur(x,y);
 
 
 
@@ -182,29 +182,19 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int y = e.getY();
         JPanel jp;
         coordInit = new Coordonnees(x,y);
-        //System.out.println(mapCoordPanelPion.containsValue(jp));
-        //if (isInPlateau(x)) { //cas ou on clique sur un piece , vérification clique sur le plateau quoridor
-        //getComponentAt(x,y).get
         Component cmp =  layeredPane.findComponentAt(x,y);
-        //System.out.println(cmp2);
         if (mapCoordPanelPion.containsValue(cmp)) {
-            //System.out.println("ok");
             jp = (JPanel) cmp;
         }
         else if (mapCoordPanelPion.containsValue(cmp.getParent())) {
-            //cas d'une case avec un pion dessus
-            //System.out.println("case avec un pion");
             jp = (JPanel) cmp.getParent();
         } else {
-            //System.out.println("pas ok");
             return;
         }
 
 
         if (jp.getComponents().length == 1) {
             pion = (JLabel) jp.getComponent(0);
-            //pion.setLocation(e.getX(), e.getY());
-            //pion.setSize(pion.getWidth(), pion.getHeight());
             Point parentLocation = pion.getParent().getLocation();
             xPionAdjustment = parentLocation.x - e.getX();
             yPionAdjustment = parentLocation.y - e.getY();
@@ -213,7 +203,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
         }
         else {
-            System.out.println("Clique hors plateau de jeu"); //si deplacement foireux, on refresh
+            System.out.println("Clique hors plateau de jeu");
         }
 
     }
@@ -229,19 +219,15 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int y = e.getY();
         coordInit = new Coordonnees(x,y);
 
-        //ajout d'un is move OK
-        //if (x > 0 && x < (taillePlateauQuoridor)) { //cas ou on clique sur un piece , vérification cloque sur le plateau quoridor
-            //if (checkIfMurOrPion(x,y) == Case.PION) {
                 pion.setVisible(false);
                 Component cmp = findComponentAt(x , y);
                 if (mapCoordPanelPion.containsValue(cmp)) {
                     Container parent = (Container) cmp;
                     parent.add(pion);
                     pion.setVisible(true);
-                    //update();  //TODO decommenter quand lien avec le Controleur effectué
+                    update();
                 }
                 else {
-                    //layeredPane.remove(pion);
                     update();
                 }
     }
@@ -261,7 +247,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         if (pion == null) {
             return;
         }
-        //pion.setLocation(e.getX(), e.getY());
         pion.setLocation(e.getX() + xPionAdjustment + plateauQuoridor.getX(), e.getY() + yPionAdjustment + plateauQuoridor.getY());
     }
 
