@@ -28,9 +28,8 @@ public interface BoardGames {
     public Couleur getColorCurrentPlayer();
 
     /**
-     * @param x
-     * @param y
+     * @param c Coordonnees
      * @return la couleur de la pièce sélectionnée
      */
-    public Couleur getPieceColor(int x, int y);
+    public Couleur getPieceColor(Coordonnees c);
 }

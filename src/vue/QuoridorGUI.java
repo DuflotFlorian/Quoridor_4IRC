@@ -35,7 +35,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private JLabel pion;
     private int taillePlateauQuoridor;
     private int coeffTaille;
-    private String urlImages = "";
+    private String urlImages = "/fs03/share/users/florian.duflot/home/IdeaProjects/Quoridor_4IRC/src/";
 
     // Coordonnées de la position initiale de la pièce déplacée
     private Coordonnees coordInit;

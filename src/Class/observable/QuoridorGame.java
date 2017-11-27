@@ -38,7 +38,7 @@ public class QuoridorGame extends Observable implements BoardGames {
     }
 
     public Couleur getPieceColor(Coordonnees coord) {
-        return null;
+        return jeu.getPieceColor(coord);
     }
 
     public List<Coordonnees> getMovePossible(Coordonnees c){

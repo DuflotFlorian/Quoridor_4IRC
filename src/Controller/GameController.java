@@ -12,27 +12,27 @@ public class GameController extends AbstractGameController {
     }
 
     @Override
-    public boolean move(Coordonnees initCoord, Coordonnees finalCoord) {
-        return false;
-    }
-
-    @Override
     public String getMessage() {
-        return null;
+        return game.getMessage();
     }
 
     @Override
     public boolean isEnd() {
-        return false;
+        return game.isEnd();
     }
 
     @Override
     public List<Coordonnees> getMovePossible(Coordonnees c) {
-        return null;
+        return game.getMovePossible(c);
     }
 
     @Override
     public boolean isPlayerOK(Coordonnees initCoord) {
-        return false;
+        return game.getColorCurrentPlayer().equals(game.getPieceColor(initCoord));
+    }
+
+    @Override
+    protected void endMove(Coordonnees initCoord, Coordonnees finalCoord) {
+
     }
 }

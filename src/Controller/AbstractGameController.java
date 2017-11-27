@@ -15,7 +15,6 @@ public abstract class AbstractGameController implements GameControllers{
 
     final public boolean move(Coordonnees initCoord, Coordonnees finalCoord) {
         boolean ret = false;
-        String promotionType = null;
 
         // si c'est bien au tour du joueur courant de jouer
         if (this.isPlayerOK(initCoord)) {
@@ -25,7 +24,7 @@ public abstract class AbstractGameController implements GameControllers{
 
             // Actions différentes selon les types de controleur
             if (ret) {
-                this.endMove(initCoord, finalCoord, promotionType);
+                this.endMove(initCoord, finalCoord);
             }
 
         }else {
@@ -41,7 +40,7 @@ public abstract class AbstractGameController implements GameControllers{
         return game.move(initCoord, finalCoord);
     }
 
-    protected abstract void endMove(Coordonnees initCoord, Coordonnees finalCoord, String promotionType) ;
+    protected abstract void endMove(Coordonnees initCoord, Coordonnees finalCoord) ;
 
 
     public boolean isEnd(){

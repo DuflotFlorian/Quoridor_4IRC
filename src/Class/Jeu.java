@@ -6,11 +6,11 @@ import java.util.List;
 public class Jeu {
 	private Joueur[] joueurs;
 	private int nbJoueurs;
-	private int currentPlayer;
+	private int idCurrentPlayer;
 
 	public Jeu(int nbJoueurs) {
 		this.nbJoueurs = nbJoueurs;
-		this.currentPlayer = 0;
+		this.idCurrentPlayer = 0;
 
 		switch (this.nbJoueurs) {
 		case 2:
@@ -24,12 +24,12 @@ public class Jeu {
 		}
 	}
 
-	public Joueur getCurrentPlayer(){
-		return this.joueurs[currentPlayer];
+	public Joueur getIdCurrentPlayer(){
+		return this.joueurs[idCurrentPlayer];
 	}
 
 	public void move(Joueur j, Coordonnees finalCoord){
-		if(j.equals(getCurrentPlayer())){
+		if(j.equals(getIdCurrentPlayer())){
 			if(!isPlayerHere(finalCoord)){
 				if(j.isMoveOk(j.findPion().getCoordonnees(), finalCoord)){
 					j.move(j.findPion().getCoordonnees(),finalCoord);
@@ -49,8 +49,8 @@ public class Jeu {
 	}
 
 	public void changeJoueur(){
-		this.currentPlayer += 1;
-		this.currentPlayer = this.currentPlayer % this.nbJoueurs;
+		this.idCurrentPlayer += 1;
+		this.idCurrentPlayer = this.idCurrentPlayer % this.nbJoueurs;
 	}
 
 	public boolean isPlayerHere(Coordonnees coord){
@@ -82,5 +82,9 @@ public class Jeu {
         }
         return result;
     }
+
+    public Couleur getPieceColor(Coordonnees coord){
+		return joueurs[idCurrentPlayer].findPiece(coord).getCouleur();
+	}
 
 }
