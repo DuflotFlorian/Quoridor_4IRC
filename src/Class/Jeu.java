@@ -27,11 +27,11 @@ public class Jeu {
 		}
 	}
 
-	public Joueur getCurrentPlayer(){
+	public Joueur getCurrentPlayer(){ //TODO return numéro ou couleur. On return pas un objet en entier avec tous sont contenus accseeible direct en dessous
 		return this.joueurs[currentPlayer];
 	}
 
-	public void move(Joueur j, Coordonnees c){
+	public void move(Joueur j, Coordonnees c){ //TODO Utiliser couleur au lieu du joueur //Renommer en movePion
 		if(j.equals(getCurrentPlayer())){
 			if(!isPlayerHere(c)){
 				if(j.isMoveOk(c)){
@@ -88,4 +88,18 @@ public class Jeu {
 
 		return res;
 	}
+
+	//TODO isPlayerMoveOK()
+
+	//TODO isMurMoveOK()
+
+	//TODO int getMurDisponnibles(Couleur c)
+
+	//TODO List<Coordonnees> getPionsIhm() + la classe Piece IHM
+
+	//TODO List<Coordonnees> getMursIhM()
+
+	//TODO moveMur ou setMur , .....
+
+
 }
