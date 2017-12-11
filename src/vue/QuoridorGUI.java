@@ -156,8 +156,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
 
         //placement pions initiale
-        affichePion(new Coordonnees(0,8),Couleur.NOIR);
-        affichePion(new Coordonnees(16,8),Couleur.BLANC);
+        montrePion();
     }
 
 
@@ -272,23 +271,23 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
                 constraints.gridy = j ;//décalage dans le grid bag layout
 
-                if (i % 2 == 0 && j % 2 == 0) {         // Case pion
+                if (i % 2 == 0 && j % 2 == 0) {
                     JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCasePion,tailleCasePion));
                     square.setBackground(Color.LIGHT_GRAY);
                     plateauQuoridor.add(square,constraints);
-                } else if (i % 2 == 0 && j % 2 == 1) {         // Case mur horizontal
+                } else if (i % 2 == 0 && j % 2 == 1) {
                     JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCasePion,tailleCaseMur));
                     square.setBackground(Color.WHITE);
                     plateauQuoridor.add(square,constraints);
-                } else if (i % 2 == 1 && j % 2 == 0) {         // Case mur vertical
+                } else if (i % 2 == 1 && j % 2 == 0) {
                     JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCaseMur,tailleCasePion));
                     square.setBackground(Color.WHITE);
                     plateauQuoridor.add(square,constraints);
 
-                } else if (i % 2 == 1 && j % 2 == 1) {         // petit truc vide
+                } else if (i % 2 == 1 && j % 2 == 1) {
                     JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCaseMur,tailleCaseMur));
                     square.setBackground(Color.WHITE);
@@ -297,19 +296,13 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             }
         }
 
-        List<Joueur> joueurs = new ArrayList<Joueur>();
-        joueurs.addAll(quoridorGameController.listPlayer());
-
-        for (Joueur j : joueurs) {
-            affichePion(j.findPion().getCoordonnees(), j.findPion().getCouleur());
-        }
+        montrePion();
 
         validate();
         repaint();
     }
 
     /**
-     *
      * @param x position du click en X
      * @param y position du click en Y
      * @return case de type pion, murHorizontal, murVertical croisement
@@ -348,10 +341,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             i++;
         }
         return i;
-    }
-
-    private Coordonnees pixelToCoord(Coordonnees pixelCoord){
-        return null;
     }
 
     /**
@@ -471,6 +460,15 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
 
         return null;
+    }
+
+    private void montrePion () {
+        List<Joueur> joueurs = new ArrayList<Joueur>();
+        joueurs.addAll(quoridorGameController.listPlayer());
+
+        for (Joueur j : joueurs) {
+            affichePion(j.findPion().getCoordonnees(), j.findPion().getCouleur());
+        }
     }
 
 }
