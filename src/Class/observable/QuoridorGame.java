@@ -14,7 +14,16 @@ public class QuoridorGame extends Observable implements BoardGames {
     }
 
     public boolean move(Coordonnees initCoord, Coordonnees finalCoord) {
-        return false;
+        boolean ret = false;
+
+        ret = jeu.isMoveOk(initCoord, finalCoord);
+        if(ret){
+            jeu.move(jeu.getIdCurrentPlayer(), finalCoord);
+            jeu.changeJoueur();
+        }
+
+        this.notifyObservers(jeu.getPiecesIHM());
+        return ret;
     }
 
     @Override
@@ -34,7 +43,7 @@ public class QuoridorGame extends Observable implements BoardGames {
 
     @Override
     public Couleur getColorCurrentPlayer() {
-        return null;
+        return jeu.getIdCurrentPlayer().getCouleurs();
     }
 
     public Couleur getPieceColor(Coordonnees coord) {
@@ -43,5 +52,9 @@ public class QuoridorGame extends Observable implements BoardGames {
 
     public List<Coordonnees> getMovePossible(Coordonnees c){
         return null;
+    }
+
+    public List<Joueur> listPlayer(){
+        return jeu.listPlayer();
     }
 }

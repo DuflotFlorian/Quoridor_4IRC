@@ -28,6 +28,10 @@ public class Jeu {
 		return this.joueurs[idCurrentPlayer];
 	}
 
+	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord){
+		return true;
+	}
+
 	public void move(Joueur j, Coordonnees finalCoord){
 		if(j.equals(getIdCurrentPlayer())){
 			if(!isPlayerHere(finalCoord)){
@@ -85,6 +89,14 @@ public class Jeu {
 
     public Couleur getPieceColor(Coordonnees coord){
 		return joueurs[idCurrentPlayer].findPiece(coord).getCouleur();
+	}
+
+	public List<Joueur> listPlayer(){
+		List<Joueur> result = new ArrayList<Joueur>();
+		for (Joueur j : joueurs) {
+			result.add(j);
+		}
+		return result;
 	}
 
 }

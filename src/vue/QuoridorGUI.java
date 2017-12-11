@@ -4,12 +4,12 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.*;
-import Class.Coordonnees;
-import Class.Couleur;
+import Class.*;
 import Controller.GameController;
 
 
@@ -36,7 +36,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private JLabel pion;
     private int taillePlateauQuoridor;
     private int coeffTaille;
-    private String urlImages = "";
+    private String urlImages = "/fs03/share/users/florian.duflot/home/IdeaProjects/Quoridor_4IRC/src/vue/";
 
     // Coordonnées de la position initiale de la pièce déplacée
     private Coordonnees coordFinal;
@@ -182,8 +182,8 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int x = e.getX();
         int y = e.getY();
         JPanel jp;
-        coordInit = new Coordonnees(x,y);
         Component cmp =  layeredPane.findComponentAt(x,y);
+
         if (mapCoordPanelPion.containsValue(cmp)) {
             jp = (JPanel) cmp;
         }
@@ -193,7 +193,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             return;
         }
 
-
+        coordInit = pixelToCell(jp);
         if (jp.getComponents().length == 1) {
             pion = (JLabel) jp.getComponent(0);
             Point parentLocation = pion.getParent().getLocation();
@@ -214,32 +214,33 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         if (pion == null) {
             return;
         }
-
-
         int x = e.getX();
         int y = e.getY();
-        coordInit = new Coordonnees(x,y);
 
-                pion.setVisible(false);
-                Component cmp = findComponentAt(x , y);
-                if (mapCoordPanelPion.containsValue(cmp)) {
-                    Container parent = (Container) cmp;
-                    parent.add(pion);
-                    pion.setVisible(true);
-                    update();
-                }
-                else {
-                    update();
-                }
+        pion.setVisible(false);
+        Component cmp = findComponentAt(x , y);
+        if (mapCoordPanelPion.containsValue(cmp)) {
+            JPanel jp = (JPanel) cmp;
+            coordFinal = pixelToCell(jp);
+            boolean b;
+            b = quoridorGameController.move(coordInit, coordFinal);
+            Container parent = (Container) cmp;
+            parent.add(pion);
+            pion.setVisible(true);
+            update();
+        }
+        else {
+            update();
+        }
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(MouseEvent mouseEvent) {
 
     }
 
     @Override
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(MouseEvent mouseEvent) {
 
     }
 
@@ -252,9 +253,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void mouseMoved(MouseEvent mouseEvent) {
 
     }
+
 
     public void update() { //voir les arguments à récupérer pour afficher
 
@@ -294,9 +296,13 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                 }
             }
         }
-        //placement pions initiale
-        affichePion(new Coordonnees(0,8),Couleur.NOIR);
-        affichePion(new Coordonnees(16,8),Couleur.BLANC);
+
+        List<Joueur> joueurs = new ArrayList<Joueur>();
+        joueurs.addAll(quoridorGameController.listPlayer());
+
+        for (Joueur j : joueurs) {
+            affichePion(j.findPion().getCoordonnees(), j.findPion().getCouleur());
+        }
 
         validate();
         repaint();
@@ -451,17 +457,15 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         j.add(piece);
     }
 
-    private Coordonnees pixelToCell(Coordonnees coord){
-        JPanel panel = (JPanel)plateauQuoridor.getComponentAt(coord.getX(), coord.getY());
-
+    private Coordonnees pixelToCell(JPanel component){
         for(Map.Entry mapEntry : mapCoordPanelPion.entrySet()){
-            if(panel.equals(mapEntry.getValue())){
+            if(component.equals(mapEntry.getValue())){
                 return (Coordonnees)mapEntry.getKey();
             }
         }
 
         for(Map.Entry mapEntry : mapCoordPanelMur.entrySet()){
-            if(panel.equals(mapEntry.getValue())){
+            if(component.equals(mapEntry.getValue())){
                 return (Coordonnees)mapEntry.getKey();
             }
         }

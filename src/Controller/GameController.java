@@ -31,6 +31,10 @@ public class GameController extends AbstractGameController {
         return game.getColorCurrentPlayer().equals(game.getPieceColor(initCoord));
     }
 
+    public List<Joueur> listPlayer(){
+        return game.listPlayer();
+    }
+
     @Override
     protected void endMove(Coordonnees initCoord, Coordonnees finalCoord) {
 

@@ -11,6 +11,7 @@ public class Joueur {
 	private Coordonnees winCoord;
 
 	public Joueur(int nbMurs, Couleur c, Coordonnees coord, Coordonnees winCoord) {
+		this.couleur = c;
 		Pion pion = new Pion(coord, c);
 		pieces = new ArrayList<Piece>();
 		pieces.add(pion);
