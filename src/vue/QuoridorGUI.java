@@ -4,11 +4,11 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
 import java.util.HashMap;
 import javax.swing.*;
 import Class.Coordonnees;
 import Class.Couleur;
-
 
 /**
  *
@@ -156,7 +156,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         //placement pions initiale
         affichePion(new Coordonnees(0,8),Couleur.NOIR);
         affichePion(new Coordonnees(16,8),Couleur.BLANC);
-
     }
 
 
@@ -198,7 +197,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             Point parentLocation = pion.getParent().getLocation();
             xPionAdjustment = parentLocation.x - e.getX();
             yPionAdjustment = parentLocation.y - e.getY();
-            pion.setLocation(e.getX() + xPionAdjustment + plateauQuoridor.getX(), e.getY() + yPionAdjustment +plateauQuoridor.getY());
+            pion.setLocation(e.getX() + xPionAdjustment + plateauQuoridor.getX(), e.getY() + yPionAdjustment + plateauQuoridor.getY());
             layeredPane.add(pion, JLayeredPane.DRAG_LAYER);
 
         }
@@ -312,6 +311,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         i = boucleCheckPosition(x);
         j = boucleCheckPosition(y);
 
+
         if (i%2 == 1 && j%2 == 1 ) {
             return Case.PION;
         } else if (i%2 == 0 && j%2 == 0) {
@@ -332,7 +332,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     private int boucleCheckPosition (int p) {
         int i=0;
-
         while (p>0 && p <  taillePlateauQuoridor ) {
             if (i%2 == 0) {
                 p = p - tailleCasePion;
@@ -353,10 +352,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
      */
     private int convertCoordToCell(int x,int y){
         if (x == 1) {
+
             return y-1;
         }
         return ((x*17)-17) + y-1;
-
     }
 
     public HashMap<Coordonnees, JPanel> getMapCoordPanelPion() {
@@ -386,8 +385,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int largeur = (int)(dim.getWidth()-tailleIHMLargeur)/2;
         int hauteur = (int)(dim.getHeight()-tailleIHMHauteur)/2;
         Point p = new Point(largeur,hauteur);
-
-        System.out.println(p);
         return p;
     }
 
@@ -398,8 +395,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     private void positionneUnMur(int x,int y) {
         Case murOrPion = checkIfMurOrPion(x,y);
-        System.out.println(murOrPion);
-
         int [] position = checkArrayPosition(x,y);
 
         if (murOrPion.equals(Case.MURHORIZONTAL)) {
@@ -434,16 +429,15 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     }
 
     /**
-     *
-     * @param coord Coordonnées dans la grille
-     * @param c Couleur du pion
+     * Permet de passer au dessus des problématiques de PATH et de windows ou linux pour les séparateurs
+     * le File.separator permet dez choisir \ sous windows,  / sous nux
+     * @param coord
+     * @param c
      */
     private void affichePion(Coordonnees coord, Couleur c) {
-        String s = urlImages + "images/Pion" + c.toString() + ".png";
-        JPanel j = mapCoordPanelPion.get(coord);
-        JLabel piece = new JLabel(new ImageIcon(s));
+        java.net.URL imageURL = QuoridorGUI.class.getResource("images" + File.separator+ "Pion" + c.toString() + ".png");
+        JPanel j = (JPanel) plateauQuoridor.getComponent((coord.getY() * 17)+coord.getX()); // colone 8 , ligne 0
+        JLabel piece = new JLabel(new ImageIcon(imageURL));
         j.add(piece);
     }
-
-
 }
