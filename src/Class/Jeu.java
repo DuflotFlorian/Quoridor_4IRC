@@ -79,6 +79,10 @@ public class Jeu {
 		return result;
 	}
 
+	public void isThereAPath(){
+		this.plateau.isThereAPath();
+	}
+
 
 	@Override
 	public String toString() {
