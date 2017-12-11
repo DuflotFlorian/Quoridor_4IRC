@@ -4,6 +4,11 @@ import Class.*;
 public class testController {
 
     public static void main(String[] args){
+        Jeu monJeu = new Jeu(2);
+        monJeu.isThereAPath();
+
+    }
+    public static void test_movement(){
 
         Jeu monJeu = new Jeu(2);
         monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(2,8));
@@ -29,7 +34,6 @@ public class testController {
 
         monJeu.move(monJeu.getCurrentPlayer(), new Coordonnees(16,8));
         System.out.println(monJeu.toString());
-
     }
 
 }
