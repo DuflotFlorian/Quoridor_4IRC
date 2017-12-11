@@ -53,6 +53,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         mapCoordPanelMur = new HashMap<Coordonnees,JPanel>();
         this.coeffTaille = defineCoeffTaille();
 
+
+
+
+
         this.taille=taille;
         tailleCasePion = (int) ((0.85 * coeffTaille));
         tailleCaseMur = (int) ((0.15 * coeffTaille));
@@ -169,7 +173,11 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int x = e.getX()-tailleLargeurGarageMur;
         int y = e.getY();
 
-        positionneUnMur(x,y);
+        Coordonnees c = getArrayPosition(y,x); //création coord
+
+        if (c.getY()>=0) {  //si on est dans le plateau de jeu
+            positionneUnMur(c); //tente de positionner un mur si les conditions sont remplies
+        }
 
 
 
@@ -255,7 +263,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     }
 
     public void update() { //voir les arguments à récupérer pour afficher
-
         plateauQuoridor.removeAll();
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.weightx = 1;
@@ -302,61 +309,56 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     /**
      *
-     * @param x position du click en X
-     * @param y position du click en Y
+     * @param c coordonnées
      * @return case de type pion, murHorizontal, murVertical croisement
      */
-    private Case checkIfMurOrPion(int x, int y) {
-        int i,j;
-        i = boucleCheckPosition(x);
-        j = boucleCheckPosition(y);
+    private Case checkIfMurOrPion(Coordonnees c) {
+        int i=c.getX(), j=c.getY();
 
-
-        if (i%2 == 1 && j%2 == 1 ) {
+        if (i%2 == 0 && j%2 == 0 ) {
             return Case.PION;
-        } else if (i%2 == 0 && j%2 == 0) {
+        } else if (i%2 == 1 && j%2 == 1) {
             return Case.CROISEMENT;
-        } else if (i%2 == 1 && j%2 == 0){
-            return Case.MURHORIZONTAL;
+        } else if (i%2 == 0 && j%2 == 1){
+            return Case.MURVERTICAL;
         }
-        return Case.MURVERTICAL;
-    }
-
-
-    private int[] checkArrayPosition(int x, int y) {
-        int values [] = {-1,-1};
-        values[0] = boucleCheckPosition(x);
-        values[1] = boucleCheckPosition(y);
-        return values;
-    }
-
-    private int boucleCheckPosition (int p) {
-        int i=0;
-        while (p>0 && p <  taillePlateauQuoridor ) {
-            if (i%2 == 0) {
-                p = p - tailleCasePion;
-            } else {
-                p = p -tailleCaseMur;
-            }
-            i++;
-        }
-        return i;
+        return Case.MURHORIZONTAL;
     }
 
 
     /**
-     *
-     * @param x position en X
-     * @param y position en Y
-     * @return le numéro de cellule (0 en haut a gauche, 288 en bas a droite)
+     * retourne notre coordonnée sur le plateau
+     * @param x
+     * @param y
+     * @return
      */
-    private int convertCoordToCell(int x,int y){
-        if (x == 1) {
-
-            return y-1;
-        }
-        return ((x*17)-17) + y-1;
+    private Coordonnees getArrayPosition(int x, int y) {
+        Coordonnees c = new Coordonnees(boucleCheckPosition(x),boucleCheckPosition(y));
+        return c;
     }
+
+
+    /**
+     *  retourne une position dans le plateau
+     *  soit dans les X, soit dans les Y selon l'appel à cette fonction
+     *
+     * @param p  la position à trouver
+     * @return position
+     */
+    private int boucleCheckPosition (int p) {
+        int i=0;
+        while (p>0 && p < taillePlateauQuoridor ) {
+            if (i%2 == 0) {
+                p = p - tailleCasePion;
+            } else {
+                p = p - tailleCaseMur;
+            }
+            i++;
+        }
+        return i-1;
+    }
+
+
 
     public HashMap<Coordonnees, JPanel> getMapCoordPanelPion() {
         return mapCoordPanelPion;
@@ -393,39 +395,53 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         return (x >= tailleLargeurGarageMur && x < (tailleIHMLargeur-tailleLargeurGarageMur));
     }
 
-    private void positionneUnMur(int x,int y) {
-        Case murOrPion = checkIfMurOrPion(x,y);
-        int [] position = checkArrayPosition(x,y);
+
+    /**
+     * affiche un mur à l'emplacement des coordonnées passées
+     * horizontal, on part de la gauche puis les 3 cases à droites
+     * vertical : on part du haut ; puis les 3 cases dessous
+     *
+     * @param c Coordonnées
+     */
+    private void positionneUnMur(Coordonnees c) {
+
+System.out.println(c);
+        Case murOrPion = checkIfMurOrPion(c);// vérifie quel est le type du panel (pion, murH,murV, croisemnt)
+System.out.println("Mur ou pion :" +murOrPion);
+
+        Component cmp = mapCoordPanelMur.get(c);
+        Component cmp2, cmp3;
 
         if (murOrPion.equals(Case.MURHORIZONTAL)) {
-            int pos = convertCoordToCell(position[0],position[1]);
-            if (position[0] <= 15) {
-                JPanel j = (JPanel) plateauQuoridor.getComponent(pos);
-                JPanel k = (JPanel) plateauQuoridor.getComponent(pos + 17);
-                JPanel l = (JPanel) plateauQuoridor.getComponent(pos + 34);
-                if (j.getBackground() != Color.BLUE && k.getBackground() != Color.BLUE && l.getBackground() !=Color.BLUE)
+            if (c.getY() <= 14 && c.getY()>= 0) {
+                    // détermine les cases horizontale à côté du composant cliqué
+                    cmp2 = mapCoordPanelMur.get(new Coordonnees(c.getX(),c.getY()+1));
+                    cmp3 = mapCoordPanelMur.get(new Coordonnees(c.getX(),c.getY()+2));
+                if (cmp.getBackground() != Color.BLUE && cmp2.getBackground() != Color.BLUE && cmp3.getBackground() !=Color.BLUE)
                 {
-                    j.setBackground(Color.BLUE);
-                    k.setBackground(Color.BLUE);
-                    l.setBackground(Color.BLUE);
+                    cmp.setBackground(Color.BLUE); //colorise la case courante
+                    cmp2.setBackground(Color.BLUE);
+                    cmp3.setBackground(Color.BLUE);
                 }
             }
         }
 
         if (murOrPion.equals(Case.MURVERTICAL)) {
-            int pos = convertCoordToCell(position[0],position[1]);
-            if (position[1] <= 15) {
-                JPanel j = (JPanel) plateauQuoridor.getComponent(pos);
-                JPanel k = (JPanel) plateauQuoridor.getComponent(pos + 1);
-                JPanel l = (JPanel) plateauQuoridor.getComponent(pos + 2);
-                if (j.getBackground() != Color.BLUE && k.getBackground() != Color.BLUE && l.getBackground() !=Color.BLUE)
+            if (c.getX() <= 14 && c.getX()>= 0) {
+                // détermine les cases horizontale à côté du composant cliqué
+                cmp2 = mapCoordPanelMur.get(new Coordonnees(c.getX()+1,c.getY()));
+                cmp3 = mapCoordPanelMur.get(new Coordonnees(c.getX()+2,c.getY()));
+                if (cmp.getBackground() != Color.BLUE && cmp2.getBackground() != Color.BLUE && cmp3.getBackground() !=Color.BLUE)
                 {
-                    j.setBackground(Color.BLUE);
-                    k.setBackground(Color.BLUE);
-                    l.setBackground(Color.BLUE);
+                    cmp.setBackground(Color.BLUE); //colorise la case courante
+                    cmp2.setBackground(Color.BLUE);
+                    cmp3.setBackground(Color.BLUE);
                 }
             }
         }
+
+
+
     }
 
     /**
