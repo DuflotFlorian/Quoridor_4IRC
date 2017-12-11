@@ -36,6 +36,21 @@ public class AStar {
         return neighbors;
     }
 
+    private static void append_neighbors(Tile[][] grid,ArrayList<Coordonnees> open,ArrayList<Coordonnees> close,Coordonnees next,Coordonnees goal
+    ){
+        for (Coordonnees neigh:
+             getNeighbors(grid, next)) {
+            Tile neigh_tile = getTile(grid,neigh);
+            if(!neigh_tile.wall && !close.contains(neigh)){
+                neigh_tile.G = calcG(grid,neigh);
+                if(!open.contains(neigh)){
+                    neigh_tile.H = calcH(neigh,goal);
+                    open.add(neigh);
+                }
+            }
+        }
+    }
+
     private static Coordonnees getNext(Tile[][] grid, ArrayList<Coordonnees> open){
        Coordonnees next;
        next = open.get(0);
@@ -56,7 +71,7 @@ public class AStar {
                 coord.getX() < 17 &&
                 coord.getY() < 17 &&
                 coord.getX() >= 0 &&
-                coord.getX() >= 0;
+                coord.getY() >= 0;
     }
 
     private static boolean compareCoord(Coordonnees start, Coordonnees stop){
@@ -108,16 +123,25 @@ public class AStar {
             int y = wall.getCoordonnees().getY();
             grid[x][y].wall = true;
             if(wall.getSens()) {
-                grid[x][y+1].wall = true;
-                grid[x][y+2].wall = true;
-            }
-            else{
                 grid[x+1][y].wall = true;
                 grid[x+2][y].wall = true;
+            }
+            else{
+                grid[x][y+1].wall = true;
+                grid[x][y+2].wall = true;
              }
         }
 
         return grid;
+    }
+
+    private static Coordonnees turn(Tile[][] grid,ArrayList<Coordonnees> open,ArrayList<Coordonnees> close,Coordonnees goal){
+        Coordonnees next = getNext(grid, open);
+        popTile(open, next);
+        close.add(next);
+        if(next!=goal)
+            append_neighbors(grid,open,close,next,goal);
+        return next;
     }
 
     public static boolean findPath(GrilleMur listWall, Coordonnees start, Coordonnees goal){
@@ -129,12 +153,12 @@ public class AStar {
         getTile(grid,start).G = calcG(grid, start);
         open.add(start);
 
-        while (!compareCoord(current, goal) && open.size() >=0){
-
+        while (!compareCoord(current, goal) && open.size() >0) {
+            current = turn(grid, open, close, goal);
         }
-
-        printGrid(grid);
-        return true;
+        if(current.getX() == goal.getX() && current.getY() == goal.getY())
+            return true;
+        return false;
     }
 
     private static void printGrid(Tile[][] grid){
