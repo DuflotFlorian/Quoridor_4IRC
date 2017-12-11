@@ -1,7 +1,14 @@
 package Class;
 
 public class Coordonnees {
+
+	/**
+	 * lignes
+	 */
 	private int x;
+	/**
+	 * colonnes
+	 */
 	private int y;
 	
 	public Coordonnees(int x, int y) {
@@ -9,6 +16,10 @@ public class Coordonnees {
 		this.y = y;
 	}
 
+	/**
+	 *
+	 * @return la ligne
+	 */
 	public int getX() {
 		return x;
 	}
@@ -17,6 +28,10 @@ public class Coordonnees {
 		this.x = x;
 	}
 
+	/**
+	 *
+	 * @return la colonne
+	 */
 	public int getY() {
 		return y;
 	}
@@ -40,5 +55,13 @@ public class Coordonnees {
 		return ((this.x == coord.getX()) && (this.y == coord.getY()));
 
 	}
+
+	@Override
+	public int hashCode() {
+		int result = x;
+		result = 31 * result + y;
+		return result;
+	}
+
 
 }
