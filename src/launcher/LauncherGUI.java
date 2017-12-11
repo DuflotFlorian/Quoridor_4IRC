@@ -27,6 +27,4 @@ public class LauncherGUI {
         frame.pack();
         frame.setVisible(true);
 	}
-
-
 }
