@@ -5,6 +5,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.util.HashMap;
 import javax.swing.*;
 import Class.Coordonnees;
@@ -160,6 +162,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         //placement pions initiale
         affichePion(new Coordonnees(0,8),Couleur.NOIR);
         affichePion(new Coordonnees(16,8),Couleur.BLANC);
+
     }
 
 
@@ -308,7 +311,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     }
 
     /**
-     *
+     * nous donne le type de cellule sélectionnée
      * @param c coordonnées
      * @return case de type pion, murHorizontal, murVertical croisement
      */
@@ -328,24 +331,24 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     /**
      * retourne notre coordonnée sur le plateau
-     * @param x
-     * @param y
-     * @return
+     * @param x en offset
+     * @param y en offset
+     * @return Coordonnée
      */
     private Coordonnees getArrayPosition(int x, int y) {
-        Coordonnees c = new Coordonnees(boucleCheckPosition(x),boucleCheckPosition(y));
+        Coordonnees c = new Coordonnees(getOffsetFromPixel(x),getOffsetFromPixel(y));
         return c;
     }
 
 
     /**
-     *  retourne une position dans le plateau
-     *  soit dans les X, soit dans les Y selon l'appel à cette fonction
+     *  retourne une position offset dans le plateau
+     *  cette fonction est appelée une fois par Axe (abscisse ou ordonnée)
      *
-     * @param p  la position à trouver
-     * @return position
+     * @param p la position en pixel
+     * @return offset du tableau de jeu
      */
-    private int boucleCheckPosition (int p) {
+    private int getOffsetFromPixel (int p) {
         int i=0;
         while (p>0 && p < taillePlateauQuoridor ) {
             if (i%2 == 0) {
@@ -405,10 +408,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
      */
     private void positionneUnMur(Coordonnees c) {
 
-System.out.println(c);
         Case murOrPion = checkIfMurOrPion(c);// vérifie quel est le type du panel (pion, murH,murV, croisemnt)
-System.out.println("Mur ou pion :" +murOrPion);
-
         Component cmp = mapCoordPanelMur.get(c);
         Component cmp2, cmp3;
 
@@ -419,9 +419,14 @@ System.out.println("Mur ou pion :" +murOrPion);
                     cmp3 = mapCoordPanelMur.get(new Coordonnees(c.getX(),c.getY()+2));
                 if (cmp.getBackground() != Color.BLUE && cmp2.getBackground() != Color.BLUE && cmp3.getBackground() !=Color.BLUE)
                 {
-                    cmp.setBackground(Color.BLUE); //colorise la case courante
-                    cmp2.setBackground(Color.BLUE);
-                    cmp3.setBackground(Color.BLUE);
+
+                    JPanel j = (JPanel) cmp; //cast en Jpanel
+                    JPanel k = (JPanel) cmp2;
+                    JPanel l = (JPanel) cmp3;
+
+                    j.setBackground(Color.BLUE); //colorise la case courante
+                    k.setBackground(Color.BLUE);
+                    l.setBackground(Color.BLUE);
                 }
             }
         }
@@ -433,9 +438,13 @@ System.out.println("Mur ou pion :" +murOrPion);
                 cmp3 = mapCoordPanelMur.get(new Coordonnees(c.getX()+2,c.getY()));
                 if (cmp.getBackground() != Color.BLUE && cmp2.getBackground() != Color.BLUE && cmp3.getBackground() !=Color.BLUE)
                 {
-                    cmp.setBackground(Color.BLUE); //colorise la case courante
-                    cmp2.setBackground(Color.BLUE);
-                    cmp3.setBackground(Color.BLUE);
+                    JPanel j = (JPanel) cmp; //cast en Jpanel
+                    JPanel k = (JPanel) cmp2;
+                    JPanel l = (JPanel) cmp3;
+
+                    j.setBackground(Color.BLUE); //colorise la case courante
+                    k.setBackground(Color.BLUE);
+                    l.setBackground(Color.BLUE);
                 }
             }
         }
