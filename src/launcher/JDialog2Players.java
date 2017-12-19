@@ -1,58 +1,48 @@
 package launcher;
 
 import javax.swing.*;
-import java.awt.event.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 
 public class JDialog2Players extends JDialog {
-    private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
-    private JTextField joueur1TextField;
-    private JTextField joueur2TextField;
-    private JCheckBox ordinateurCheckBox1;
-    private JCheckBox ordinateurCheckBox2;
 
-    public JDialog2Players() {
-        setContentPane(contentPane);
-        setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
+    public JDialog2Players(Frame owner) {
+        super(owner);
+        this.setModal(true);
+        this.setLocationRelativeTo(null);
+        this.setSize(300,250);
+        this.setResizable(false);
+        this.setLayout(new BorderLayout());
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
+        /*Ajout des Panels*/
+        JPanel panelMain = new JPanel(new GridLayout(2,2));
+        panelMain.setBorder(new EmptyBorder(10,10,10,10));
+        JPanel panelButtons = new JPanel(new FlowLayout());
 
-        // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
+        /*Remplissage du panelMain*/
+        //TODO passer en flow layout sur les lignes
+        JLabel labelJoueur1 = new JLabel("Joueur 1:");
+        JLabel labelJoueur2 = new JLabel("Joueur 2:");
+        JTextField txtJoueur1 = new JTextField("Joueur 1");
+        JTextField txtJoueur2 = new JTextField("Joueur 2");
 
-        // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-    }
+        panelMain.add(labelJoueur1);
+        panelMain.add(txtJoueur1);
+        panelMain.add(labelJoueur2);
+        panelMain.add(txtJoueur2);
 
-    private void onOK() {
-        // add your code here
+        /*Ajout panelMain au JDialog*/
+        this.add(panelMain, BorderLayout.CENTER);
 
-        dispose();
-    }
+        /*Remplissage du panelBoutton*/
+        JButton buttonOK = new JButton("OK");
+        JButton buttonCancel = new JButton("Annuler");
 
-    private void onCancel() {
-        // add your code here if necessary
-        dispose();
+        panelButtons.add(buttonOK);
+        panelButtons.add(buttonCancel);
+
+        /*Ajout panelButton au JDialog*/
+        this.add(panelButtons, BorderLayout.PAGE_END);
     }
 }

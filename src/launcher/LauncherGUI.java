@@ -79,7 +79,7 @@ public class LauncherGUI extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e)
             {
 
-                JDialog2Players dialog2 = new JDialog2Players();
+                JDialog2Players dialog2 = new JDialog2Players(frameLauncher);
                 dialog2.setVisible(true);
                 //méthode appelée quand action sur le bouton
                 //QuoridorGUI mainFrame = new QuoridorGUI("Quoridor",9);
@@ -87,13 +87,19 @@ public class LauncherGUI extends javax.swing.JFrame {
                 //mainFrame.setVisible(true);
 
                 //
-                frameLauncher.setVisible(false);
+                //frameLauncher.setVisible(false);
 
             }
         });
         button4Joueurs.setEnabled(false);
         buttonScores.setEnabled(false);
-        //buttonQuitter;
+        buttonQuitter.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                dispose();
+            }
+        });
 
         this.pack();
         this.setVisible(true);
