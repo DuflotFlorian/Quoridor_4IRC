@@ -182,6 +182,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             yPionAdjustment = parentLocation.y - e.getY();
             pion.setLocation(e.getX() + xPionAdjustment + plateauQuoridor.getX(), e.getY() + yPionAdjustment + plateauQuoridor.getY());
             layeredPane.add(pion, JLayeredPane.DRAG_LAYER);
+
         }
         else {
             System.out.println("Clique hors plateau de jeu");
@@ -436,64 +437,47 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         tabPanelGauche = new JPanel[nbRowInColumn][1];
         for (int i =0 ; i<nbRowInColumn ; i++) {
             tabPanelGauche[i][0] = new JPanel();
+            tabPanelGauche[i][0].setBackground(new Color(404040));
             garageMurGauche.add(tabPanelGauche[i][0]);
         }
 
         tabPanelDroit = new JPanel[nbRowInColumn][1];
         for (int i =0 ; i<nbRowInColumn ; i++) {
             tabPanelDroit[i][0] = new JPanel();
+            tabPanelDroit[i][0].setBackground(new Color(404040));
             garageMurDroit.add(tabPanelDroit[i][0]);
         }
 
         if(nbPlayer==2) {
-            JPanel jpG = tabPanelGauche[1][0];
-            jpG.setBorder(BorderFactory.createLineBorder(Color.BLACK ,2));
-            jpG.setLayout(new GridLayout(2,1));
-            JLabel jl1G =  new JLabel("Joueur "+(1));
-            jpG.add(jl1G);
-            JLabel jl2G = new JLabel("Murs: "+8);
-            jpG.add(jl2G);
-
-            JPanel jpD = tabPanelDroit[1][0];
-            jpD.setBorder(BorderFactory.createLineBorder(Color.BLACK ,2));
-            jpD.setLayout(new GridLayout(2,1));
-            JLabel jl1D =  new JLabel("Joueur "+(2));
-            jpD.add(jl1D);
-            JLabel jl2D = new JLabel("Murs: "+8);
-            jpD.add(jl2D);
+            createLabelCote(tabPanelGauche[1][0],1);
+            createLabelCote(tabPanelDroit[1][0],2);
 
         } else if (nbPlayer == 4){
-            JPanel jpG1 = tabPanelGauche[1][0];
-            jpG1.setBorder(BorderFactory.createLineBorder(Color.BLACK ,2));
-            jpG1.setLayout(new GridLayout(2,1));
-            JLabel jl1G1 =  new JLabel("Joueur "+(1));
-            jpG1.add(jl1G1);
-            JLabel jl2G1 = new JLabel("Murs: "+8);
-            jpG1.add(jl2G1);
-
-            JPanel jpD1 = tabPanelDroit[1][0];
-            jpD1.setBorder(BorderFactory.createLineBorder(Color.BLACK ,2));
-            jpD1.setLayout(new GridLayout(2,1));
-            JLabel jl1D1 =  new JLabel("Joueur "+(2));
-            jpD1.add(jl1D1);
-            JLabel jl2D1 = new JLabel("Murs: "+8);
-            jpD1.add(jl2D1);
-
-            JPanel jpG2 = tabPanelGauche[3][0];
-            jpG2.setBorder(BorderFactory.createLineBorder(Color.BLACK ,2));
-            jpG2.setLayout(new GridLayout(2,1));
-            JLabel jl1G2 =  new JLabel("Joueur "+(3));
-            jpG2.add(jl1G2);
-            JLabel jl2G2 = new JLabel("Murs: "+8);
-            jpG2.add(jl2G2);
-
-            JPanel jpD2 = tabPanelDroit[3][0];
-            jpD2.setBorder(BorderFactory.createLineBorder(Color.BLACK ,2));
-            jpD2.setLayout(new GridLayout(2,1));
-            JLabel jl1D2 =  new JLabel("Joueur "+(4));
-            jpD2.add(jl1D2);
-            JLabel jl2D2 = new JLabel("Murs: "+8);
-            jpD2.add(jl2D2);
+            createLabelCote(tabPanelGauche[1][0],1);
+            createLabelCote(tabPanelDroit[1][0],2);
+            createLabelCote(tabPanelGauche[3][0],3);
+            createLabelCote(tabPanelDroit[3][0],4);
         }
+    }
+
+    private void createLabelCote (JPanel jp, int numJoueur) {
+        /*TODO GetCurrentPlayer*/
+        int numCurrentPlayer = 1;
+        if(numJoueur == numCurrentPlayer) {
+            jp.setBorder(BorderFactory.createLineBorder(Color.GREEN ,coeffTaille/12));
+        }
+
+        jp.setBackground(new Color(0x808080));
+        jp.setLayout(new GridLayout(2,1));
+        JLabel jl1 =  new JLabel("Joueur "+numJoueur);
+        jl1.setForeground(Color.WHITE);
+        jl1.setHorizontalAlignment(JLabel.CENTER);
+        jl1.setFont(new Font("Impact", Font.PLAIN, coeffTaille/3));
+        jp.add(jl1);
+        JLabel jl2 = new JLabel(""+8);
+        jl2.setForeground(Color.WHITE);
+        jl2.setHorizontalAlignment(JLabel.CENTER);
+        jl2.setFont(new Font("Impact", Font.PLAIN, coeffTaille/2));
+        jp.add(jl2);
     }
 }
