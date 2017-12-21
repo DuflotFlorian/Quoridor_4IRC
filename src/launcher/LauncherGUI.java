@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Observer;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import Class.observable.QuoridorGame;
 import Controller.GameController;
@@ -54,8 +55,13 @@ public class LauncherGUI extends javax.swing.JFrame {
         this.setPreferredSize(new Dimension(700, 350));
         this.setLocationRelativeTo(null);
         //Dimension dimLauncher = Toolkit.getDefaultToolkit().getScreenSize();
-        //this.setLocation(dimLauncher.width / 2 - this.getSize().width / 2, dimLauncher.height / 2 - this.getSize().height / 2);
+        //this.setLocation(5,);
+        this.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - this.getPreferredSize().width /2 , (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - this.getPreferredSize().height /2 );
+
+        //this.setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - this.getSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - this.getSize().height / 2);
         this.setTitle("Quoridor");
+
+
 
         /*Ajout des Bouttonsau panel*/
         JPanelButton.add(button2Joueurs);
@@ -79,15 +85,15 @@ public class LauncherGUI extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e)
             {
 
-                JDialog2Players dialog2 = new JDialog2Players(frameLauncher);
-                dialog2.setVisible(true);
+                //JDialog2Players dialog2 = new JDialog2Players(frameLauncher);
+                //dialog2.setVisible(true);
                 //méthode appelée quand action sur le bouton
-                //QuoridorGUI mainFrame = new QuoridorGUI("Quoridor",9);
-                //mainFrame.pack();
-                //mainFrame.setVisible(true);
+                QuoridorGUI mainFrame = new QuoridorGUI("Quoridor",9);
+                mainFrame.pack();
+                mainFrame.setVisible(true);
 
                 //
-                //frameLauncher.setVisible(false);
+                frameLauncher.setVisible(false);
 
             }
         });
@@ -107,7 +113,21 @@ public class LauncherGUI extends javax.swing.JFrame {
 
     public static void main(String[] args) {
 
+        /*Définition auto du theme en fonction du système*/
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
                 new LauncherGUI().setVisible(true);
             }
