@@ -5,8 +5,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+
 import Class.Coordonnees;
 import Class.Couleur;
 
@@ -36,6 +41,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private int taillePlateauQuoridor;
     private int coeffTaille;
     private String urlImages = "";
+    private ArrayList<JPanel> arrayPanelCote ;
 
     // Coordonnées de la position initiale de la pièce déplacée
     private Coordonnees coordInit;
@@ -47,10 +53,12 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
      */
     public QuoridorGUI(String title, int taille) {
         super(title);
+
         pion=null;
         //Creation des maps murs + pions
         mapCoordPanelPion = new HashMap<Coordonnees,JPanel>();
         mapCoordPanelMur = new HashMap<Coordonnees,JPanel>();
+        arrayPanelCote = new ArrayList<JPanel>();
         this.coeffTaille = defineCoeffTaille();
 
         this.taille=taille;
@@ -79,14 +87,16 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         layeredPane.add(garageMurGauche, JLayeredPane.DEFAULT_LAYER);
         garageMurGauche.setPreferredSize(new Dimension(tailleLargeurGarageMur , tailleIHMHauteur));
         garageMurGauche.setBounds(0, 0, tailleLargeurGarageMur, tailleIHMHauteur);
-        garageMurGauche.setBackground(Color.GREEN);
+        //garageMurGauche.setBackground(Color.GREEN);
+        garageMurGauche.setBackground(Color.GRAY);
 
         //Creation du stockage à murs gauche
         garageMurDroit = new JPanel();
         layeredPane.add(garageMurDroit, JLayeredPane.DEFAULT_LAYER);
         garageMurDroit.setPreferredSize(new Dimension(tailleLargeurGarageMur , tailleIHMHauteur));
         garageMurDroit.setBounds(taillePlateauQuoridor+tailleLargeurGarageMur, 0, tailleLargeurGarageMur, tailleIHMHauteur);
-        garageMurDroit.setBackground(Color.BLUE);
+        //garageMurDroit.setBackground(Color.BLUE);
+        garageMurDroit.setBackground(Color.GRAY);
 
         //Ajout du plateau de jeu
         plateauQuoridor = new JPanel();
@@ -153,9 +163,12 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             }
         }
 
+        //plateauQuoridor.setBorder(BorderFactory.createLineBorder(Color.BLACK ,2));
         //placement pions initiale
         affichePion(new Coordonnees(0,8),Couleur.NOIR);
         affichePion(new Coordonnees(16,8),Couleur.BLANC);
+
+        remplissagePanelCote();
     }
 
 
@@ -224,11 +237,12 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                     Container parent = (Container) cmp;
                     parent.add(pion);
                     pion.setVisible(true);
-                    update();
+                    //update();
                 }
                 else {
-                    update();
+                    //update();
                 }
+                pion=null;
     }
 
     @Override
@@ -439,5 +453,75 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         JPanel j = (JPanel) plateauQuoridor.getComponent((coord.getY() * 17)+coord.getX()); // colone 8 , ligne 0
         JLabel piece = new JLabel(new ImageIcon(imageURL));
         j.add(piece);
+    }
+
+
+    private void remplissagePanelCote (/*TODO passer la liste des joueurs IHM*/) {
+        /*TODO Count nombre de joueurs pour les afficher sur les cotés*/
+        int nbPlayer = 4 ; //Utiliser la liste des joueurs au lieu de la valmeur en dur
+        int nbRowInColumn = 0;
+
+
+        garageMurDroit.setBackground(Color.PINK);
+        garageMurGauche.setBackground(Color.ORANGE);
+
+        JPanel [][] tabPanelGauche = null;
+        JPanel [][] tabPanelDroit = null;
+
+        if (nbPlayer == 2) {
+            nbRowInColumn = 3;
+
+        } else if (nbPlayer == 4) {
+            nbRowInColumn = 5;
+        }
+
+        garageMurGauche.setLayout(new GridLayout(nbRowInColumn,1));
+        garageMurDroit.setLayout(new GridLayout(nbRowInColumn,1));
+
+        tabPanelGauche = new JPanel[nbRowInColumn][1];
+        for (int i =0 ; i<nbRowInColumn ; i++) {
+            tabPanelGauche[i][0] = new JPanel();
+            tabPanelGauche[i][0].setBackground(new Color(404040));
+            garageMurGauche.add(tabPanelGauche[i][0]);
+        }
+
+        tabPanelDroit = new JPanel[nbRowInColumn][1];
+        for (int i =0 ; i<nbRowInColumn ; i++) {
+            tabPanelDroit[i][0] = new JPanel();
+            tabPanelDroit[i][0].setBackground(new Color(404040));
+            garageMurDroit.add(tabPanelDroit[i][0]);
+        }
+
+        if(nbPlayer==2) {
+            createLabelCote(tabPanelGauche[1][0],1);
+            createLabelCote(tabPanelDroit[1][0],2);
+
+        } else if (nbPlayer == 4){
+            createLabelCote(tabPanelGauche[1][0],1);
+            createLabelCote(tabPanelDroit[1][0],2);
+            createLabelCote(tabPanelGauche[3][0],3);
+            createLabelCote(tabPanelDroit[3][0],4);
+        }
+    }
+
+    private void createLabelCote (JPanel jp, int numJoueur) {
+        /*TODO GetCurrentPlayer*/
+        int numCurrentPlayer = 1;
+        if(numJoueur == numCurrentPlayer) {
+            jp.setBorder(BorderFactory.createLineBorder(Color.GREEN ,coeffTaille/12));
+        }
+
+        jp.setBackground(new Color(0x808080));
+        jp.setLayout(new GridLayout(2,1));
+        JLabel jl1 =  new JLabel("Joueur "+numJoueur);
+        jl1.setForeground(Color.WHITE);
+        jl1.setHorizontalAlignment(JLabel.CENTER);
+        jl1.setFont(new Font("Impact", Font.PLAIN, coeffTaille/3));
+        jp.add(jl1);
+        JLabel jl2 = new JLabel(""+8);
+        jl2.setForeground(Color.WHITE);
+        jl2.setHorizontalAlignment(JLabel.CENTER);
+        jl2.setFont(new Font("Impact", Font.PLAIN, coeffTaille/2));
+        jp.add(jl2);
     }
 }
