@@ -35,6 +35,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private int taillePlateauQuoridor;
     private int coeffTaille;
     private String urlImages = "";
+    private ArrayList<JPanel> arrayPanelCote ;
 
     // Coordonnées de la position initiale de la pièce déplacée
     private Coordonnees coordFinal;
@@ -79,16 +80,14 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         layeredPane.add(garageMurGauche, JLayeredPane.DEFAULT_LAYER);
         garageMurGauche.setPreferredSize(new Dimension(tailleLargeurGarageMur , tailleIHMHauteur));
         garageMurGauche.setBounds(0, 0, tailleLargeurGarageMur, tailleIHMHauteur);
-        //garageMurGauche.setBackground(Color.GREEN);
-        garageMurGauche.setBackground(Color.GRAY);
+
 
         //Creation du stockage à murs gauche
         garageMurDroit = new JPanel();
         layeredPane.add(garageMurDroit, JLayeredPane.DEFAULT_LAYER);
         garageMurDroit.setPreferredSize(new Dimension(tailleLargeurGarageMur , tailleIHMHauteur));
         garageMurDroit.setBounds(taillePlateauQuoridor+tailleLargeurGarageMur, 0, tailleLargeurGarageMur, tailleIHMHauteur);
-        //garageMurDroit.setBackground(Color.BLUE);
-        garageMurDroit.setBackground(Color.GRAY);
+
 
         //Ajout du plateau de jeu
         plateauQuoridor = new JPanel();
@@ -334,7 +333,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private Point definePositionInScreen () {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         int largeur = (int)(dim.getWidth()-tailleIHMLargeur)/2;
-        int hauteur = (int)(dim.getHeight()-tailleIHMHauteur)/2;
+        int hauteur = (int)(dim.getHeight()-tailleIHMHauteur)/2 -coeffTaille/2;
         Point p = new Point(largeur,hauteur);
 
         System.out.println(p);
@@ -414,15 +413,15 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     }
 
 
-    private void remplissagePanelCote (/*TODO passer la liste des joueurs IHM*/) {
-        /*TODO Count nombre de joueurs pour les afficher sur les cotés*/
-        int nbPlayer = 4 ; //Utiliser la liste des joueurs au lieu de la valmeur en dur
-        int nbRowInColumn = 0;
-        garageMurDroit.setBackground(Color.PINK);
-        garageMurGauche.setBackground(Color.ORANGE);
+    private void remplissagePanelCote () {
+        int nbPlayer = 2 ; //Compter le nombre de joueurs au lieu de mettre une valeur en dur
+        int nbRowInColumn = 0; //Variable qui permet de savoir combien de panel sont mis dans les panels sur les cotés
+        //Pour 2 joueurs, 3 panel et on remplis celui du milieu
+        //Pour 4 joueurs,  panel et on remplis le 2ème et le 4ème
 
-        JPanel [][] tabPanelGauche = null;
-        JPanel [][] tabPanelDroit = null;
+
+        JPanel [][] tabPanelGauche ;
+        JPanel [][] tabPanelDroit ;
 
         if (nbPlayer == 2) {
             nbRowInColumn = 3;
@@ -437,14 +436,14 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         tabPanelGauche = new JPanel[nbRowInColumn][1];
         for (int i =0 ; i<nbRowInColumn ; i++) {
             tabPanelGauche[i][0] = new JPanel();
-            tabPanelGauche[i][0].setBackground(new Color(404040));
+            tabPanelGauche[i][0].setBackground(new Color(404040)); //Bleu-Nuit
             garageMurGauche.add(tabPanelGauche[i][0]);
         }
 
         tabPanelDroit = new JPanel[nbRowInColumn][1];
         for (int i =0 ; i<nbRowInColumn ; i++) {
             tabPanelDroit[i][0] = new JPanel();
-            tabPanelDroit[i][0].setBackground(new Color(404040));
+            tabPanelDroit[i][0].setBackground(new Color(404040)); //Bleu-Nuit
             garageMurDroit.add(tabPanelDroit[i][0]);
         }
 
@@ -461,13 +460,12 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     }
 
     private void createLabelCote (JPanel jp, int numJoueur) {
-        /*TODO GetCurrentPlayer*/
-        int numCurrentPlayer = 1;
+        int numCurrentPlayer = 1; //Numéro du joueur courant positioner en dur, a recupérer plus tard via le controller
         if(numJoueur == numCurrentPlayer) {
             jp.setBorder(BorderFactory.createLineBorder(Color.GREEN ,coeffTaille/12));
         }
 
-        jp.setBackground(new Color(0x808080));
+        jp.setBackground(new Color(0x808080)); //gris foncé
         jp.setLayout(new GridLayout(2,1));
         JLabel jl1 =  new JLabel("Joueur "+numJoueur);
         jl1.setForeground(Color.WHITE);
