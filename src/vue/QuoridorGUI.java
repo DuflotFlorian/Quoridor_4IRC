@@ -155,11 +155,9 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
     }
 
-
     public enum Case {
         PION, MURHORIZONTAL, MURVERTICAL, CROISEMENT
     }
-
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -228,28 +226,12 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     }
 
     @Override
-    public void mouseEntered(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
     public void mouseDragged(MouseEvent e) {
         if (pion == null) {
             return;
         }
         pion.setLocation(e.getX() + xPionAdjustment + plateauQuoridor.getX(), e.getY() + yPionAdjustment + plateauQuoridor.getY());
     }
-
-    @Override
-    public void mouseMoved(MouseEvent mouseEvent) {
-
-    }
-
 
     @Override
     public void update(Observable o, Object arg) {
@@ -264,47 +246,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             panel.removeAll();
             panel.add(piece);
         }
-    }
-
-    public void update() { //voir les arguments à récupérer pour afficher
-        plateauQuoridor.removeAll();
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.weightx = 1;
-        constraints.weighty = 1;
-
-        for (int i = 0; i < (taille * 2 - 1); i++) {
-            constraints.gridx = i ;//décalage dans le grid bag layout
-
-            for (int j = 0; j < (taille * 2 - 1); j++) {
-
-                constraints.gridy = j ;//décalage dans le grid bag layout
-
-                if (i % 2 == 0 && j % 2 == 0) {
-                    JPanel square = new JPanel(new BorderLayout());
-                    square.setPreferredSize(new Dimension(tailleCasePion,tailleCasePion));
-                    square.setBackground(Color.LIGHT_GRAY);
-                    plateauQuoridor.add(square,constraints);
-                } else if (i % 2 == 0 && j % 2 == 1) {
-                    JPanel square = new JPanel(new BorderLayout());
-                    square.setPreferredSize(new Dimension(tailleCasePion,tailleCaseMur));
-                    square.setBackground(Color.WHITE);
-                    plateauQuoridor.add(square,constraints);
-                } else if (i % 2 == 1 && j % 2 == 0) {
-                    JPanel square = new JPanel(new BorderLayout());
-                    square.setPreferredSize(new Dimension(tailleCaseMur,tailleCasePion));
-                    square.setBackground(Color.WHITE);
-                    plateauQuoridor.add(square,constraints);
-
-                } else if (i % 2 == 1 && j % 2 == 1) {
-                    JPanel square = new JPanel(new BorderLayout());
-                    square.setPreferredSize(new Dimension(tailleCaseMur,tailleCaseMur));
-                    square.setBackground(Color.WHITE);
-                    plateauQuoridor.add(square,constraints);
-                }
-            }
-        }
-        validate();
-        repaint();
     }
 
     /**
@@ -326,7 +267,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
         return Case.MURVERTICAL;
     }
-
 
     private int[] checkArrayPosition(int x, int y) {
         int values [] = {-1,-1};
@@ -449,5 +389,21 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
 
         return null;
+    }
+
+
+    @Override
+    public void mouseEntered(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent mouseEvent) {
+
     }
 }
