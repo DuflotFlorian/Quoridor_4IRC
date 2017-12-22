@@ -32,12 +32,14 @@ public class Jeu {
 		return true;
 	}
 
-	public void move(Joueur j, Coordonnees finalCoord){
+	public boolean move(Joueur j, Coordonnees finalCoord){
+		boolean ret = false;
 		if(j.equals(getIdCurrentPlayer())){
 			if(!isPlayerHere(finalCoord)){
-				if(j.isMoveOk(j.findPion().getCoordonnees(), finalCoord)){
-					j.move(j.findPion().getCoordonnees(),finalCoord);
+				if(j.isMoveOk(j.getActualCoord(), finalCoord)){
+					j.move(j.getActualCoord(),finalCoord);
 					changeJoueur();
+					ret = true;
 					if(isWin()){
 						System.out.println("Fin du jeu");
 					}
@@ -50,6 +52,8 @@ public class Jeu {
 		} else {
 			System.out.println("Ce n'est pas le joueur courant\n");
 		}
+
+		return ret;
 	}
 
 	public void changeJoueur(){
@@ -60,7 +64,7 @@ public class Jeu {
 	public boolean isPlayerHere(Coordonnees coord){
 		boolean result = false;
 		for(int i = 0; i < this.nbJoueurs; i++){
-			if(this.joueurs[i].findPion().getCoordonnees().equals(coord)){
+			if(this.joueurs[i].getActualCoord().equals(coord)){
 				result = true;
 				break;
 			}
@@ -71,7 +75,7 @@ public class Jeu {
 	public boolean isWin(){
 		boolean result = false;
 		for(Joueur j : joueurs){
-			if(j.findPion().getCoordonnees().equals(j.getWinCoord())){
+			if(j.getActualCoord().equals(j.getWinCoord())){
 				result = true;
 				break;
 			}
@@ -88,7 +92,7 @@ public class Jeu {
     }
 
     public Couleur getPieceColor(Coordonnees coord){
-		return joueurs[idCurrentPlayer].findPiece(coord).getCouleur();
+		return joueurs[idCurrentPlayer].getCouleurs();
 	}
 
 	public List<Joueur> listPlayer(){

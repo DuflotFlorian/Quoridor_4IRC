@@ -4,17 +4,15 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import javax.swing.*;
 import Class.*;
 import Controller.GameController;
 
 
 
-public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionListener {
+public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionListener, Observer {
     private GameController quoridorGameController;
     private JLayeredPane layeredPane;
     private JPanel plateauQuoridor;
@@ -33,10 +31,11 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private int taille;
     private HashMap<Coordonnees,JPanel> mapCoordPanelPion ;
     private HashMap<Coordonnees,JPanel> mapCoordPanelMur ;
+    private HashMap<JLabel, PieceIHM> mapPanelPiece;
     private JLabel pion;
     private int taillePlateauQuoridor;
     private int coeffTaille;
-    private String urlImages = "/fs03/share/users/florian.duflot/home/IdeaProjects/Quoridor_4IRC/src/vue/";
+    private String urlImages = "C:\\Users\\PC-Florian\\IdeaProjects\\Quoridor_4IRC\\src\\vue\\";
 
     // Coordonnées de la position initiale de la pièce déplacée
     private Coordonnees coordFinal;
@@ -154,9 +153,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                 }
             }
         }
-
-        //placement pions initiale
-        montrePion();
     }
 
 
@@ -171,9 +167,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int y = e.getY();
 
         positionneUnMur(x,y);
-
-
-
     }
 
     @Override
@@ -200,7 +193,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             yPionAdjustment = parentLocation.y - e.getY();
             pion.setLocation(e.getX() + xPionAdjustment + plateauQuoridor.getX(), e.getY() + yPionAdjustment + plateauQuoridor.getY());
             layeredPane.add(pion, JLayeredPane.DRAG_LAYER);
-
         }
         else {
             System.out.println("Clique hors plateau de jeu");
@@ -223,14 +215,16 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             coordFinal = pixelToCell(jp);
             boolean b;
             b = quoridorGameController.move(coordInit, coordFinal);
-            Container parent = (Container) cmp;
-            parent.add(pion);
-            pion.setVisible(true);
-            update();
+            if(b){
+                Container parent = (Container) cmp;
+                parent.add(pion);
+            } else {
+                pion.getParent().remove(pion);
+            }
         }
-        else {
-            update();
-        }
+
+
+        pion.setVisible(true);
     }
 
     @Override
@@ -257,8 +251,22 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     }
 
 
-    public void update() { //voir les arguments à récupérer pour afficher
+    @Override
+    public void update(Observable o, Object arg) {
+        List<PieceIHM> piecesIHM = (List<PieceIHM>) arg;
+        mapPanelPiece = new HashMap<JLabel, PieceIHM>();
 
+        for(PieceIHM pieceIHM : piecesIHM) {
+            String s = urlImages + "images/Pion" + pieceIHM.getCouleur().toString() + ".png";
+            JLabel piece = new JLabel(new ImageIcon(s));
+            JPanel panel = (JPanel) plateauQuoridor.getComponent((pieceIHM.getCoordonnees().getY() * 17)+pieceIHM.getCoordonnees().getX());
+            mapPanelPiece.put(piece, pieceIHM);
+            panel.removeAll();
+            panel.add(piece);
+        }
+    }
+
+    public void update() { //voir les arguments à récupérer pour afficher
         plateauQuoridor.removeAll();
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.weightx = 1;
@@ -295,9 +303,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                 }
             }
         }
-
-        montrePion();
-
         validate();
         repaint();
     }
@@ -366,7 +371,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         return mapCoordPanelMur;
     }
 
-
     /**
      * donne le coefficient de la taille du plateau en fonction de la résolution de l'écran
      * @return int
@@ -389,7 +393,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         System.out.println(p);
         return p;
     }
-
 
     private Boolean isInPlateau(int x){
         return (x >= tailleLargeurGarageMur && x < (tailleIHMLargeur-tailleLargeurGarageMur));
@@ -432,20 +435,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
     }
 
-    /**
-     * Permet de passer au dessus des problématiques de PATH et de windows ou linux pour les séparateurs
-     * le File.separator permet dez choisir \ sous windows,  / sous nux
-     * @param coord
-     * @param c
-     */
-    private void affichePion(Coordonnees coord, Couleur c) {
-        String s = urlImages + "images/Pion" + c.toString() + ".png";
-
-        JPanel j = (JPanel) plateauQuoridor.getComponent((coord.getY() * 17)+coord.getX());
-        JLabel piece = new JLabel(new ImageIcon(s));
-        j.add(piece);
-    }
-
     private Coordonnees pixelToCell(JPanel component){
         for(Map.Entry mapEntry : mapCoordPanelPion.entrySet()){
             if(component.equals(mapEntry.getValue())){
@@ -461,14 +450,4 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
         return null;
     }
-
-    private void montrePion () {
-        List<Joueur> joueurs = new ArrayList<Joueur>();
-        joueurs.addAll(quoridorGameController.listPlayer());
-
-        for (Joueur j : joueurs) {
-            affichePion(j.findPion().getCoordonnees(), j.findPion().getCouleur());
-        }
-    }
-
 }

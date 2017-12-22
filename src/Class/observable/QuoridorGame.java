@@ -2,6 +2,8 @@ package Class.observable;
 
 import java.util.List;
 import java.util.Observable;
+import java.util.Observer;
+
 import Class.*;
 
 public class QuoridorGame extends Observable implements BoardGames {
@@ -13,13 +15,13 @@ public class QuoridorGame extends Observable implements BoardGames {
         this.notifyObservers(jeu.getPiecesIHM());
     }
 
+    @Override
     public boolean move(Coordonnees initCoord, Coordonnees finalCoord) {
         boolean ret = false;
 
         ret = jeu.isMoveOk(initCoord, finalCoord);
         if(ret){
-            jeu.move(jeu.getIdCurrentPlayer(), finalCoord);
-            jeu.changeJoueur();
+            ret = jeu.move(jeu.getIdCurrentPlayer(), finalCoord);
         }
 
         this.notifyObservers(jeu.getPiecesIHM());
@@ -27,13 +29,8 @@ public class QuoridorGame extends Observable implements BoardGames {
     }
 
     @Override
-    public boolean move(int xInit, int yInit, int xFinal, int yFinal) {
-        return false;
-    }
-
-    @Override
     public boolean isEnd() {
-        return false;
+        return jeu.isWin();
     }
 
     @Override
@@ -56,5 +53,17 @@ public class QuoridorGame extends Observable implements BoardGames {
 
     public List<Joueur> listPlayer(){
         return jeu.listPlayer();
+    }
+
+    @Override
+    public void	notifyObservers(Object arg) {
+        super.setChanged();
+        super.notifyObservers(arg);
+    }
+
+    @Override
+    public void addObserver(Observer o){
+        super.addObserver(o);
+        this.notifyObservers(jeu.getPiecesIHM());
     }
 }

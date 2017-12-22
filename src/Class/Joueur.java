@@ -8,10 +8,12 @@ import java.util.List;
 public class Joueur {
 	private List<Piece> pieces;
 	private Couleur couleur;
+	private Coordonnees actualCoord;
 	private Coordonnees winCoord;
 
 	public Joueur(int nbMurs, Couleur c, Coordonnees coord, Coordonnees winCoord) {
 		this.couleur = c;
+		this.actualCoord = coord;
 		Pion pion = new Pion(coord, c);
 		pieces = new ArrayList<Piece>();
 		pieces.add(pion);
@@ -36,15 +38,6 @@ public class Joueur {
 		return null;
 	}
 
-	public Piece findPion(){
-		for(Piece p : pieces){
-			if(p.getName().equals("Pion")){
-				return p;
-			}
-		}
-		return null;
-	}
-
 	public Coordonnees getWinCoord() {
 		return winCoord;
 	}
@@ -52,6 +45,7 @@ public class Joueur {
 	public boolean move(Coordonnees initCoord, Coordonnees finalCoord){
 		Piece p = findPiece(initCoord);
 		p.move(finalCoord);
+		this.actualCoord = finalCoord;
 		pieces.set(pieces.indexOf(p),p);
 		return true;
 	}
@@ -71,6 +65,10 @@ public class Joueur {
 			}
 		}
 		return result;
+	}
+
+	public Coordonnees getActualCoord() {
+		return this.actualCoord;
 	}
 
 	public String toString() {
