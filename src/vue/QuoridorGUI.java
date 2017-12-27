@@ -161,10 +161,22 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int x = e.getX()-tailleLargeurGarageMur;
+        //int x = e.getX()-tailleLargeurGarageMur;
+        int x = e.getX();
         int y = e.getY();
 
-        positionneUnMur(x,y);
+        Component cmp = findComponentAt(x , y);
+        if(mapCoordPanelMur.containsValue(cmp)){
+            JPanel jp = (JPanel) cmp;
+            coordFinal = pixelToCell(jp);
+            boolean b;
+            b = quoridorGameController.putWall(coordFinal);
+            if(b){
+                positionneUnMur(x - tailleLargeurGarageMur, y);
+            }
+        }
+
+
     }
 
     @Override
@@ -220,9 +232,8 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                 pion.getParent().remove(pion);
             }
         }
-
-
         pion.setVisible(true);
+        pion = null;
     }
 
     @Override
@@ -340,7 +351,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     private void positionneUnMur(int x,int y) {
         Case murOrPion = checkIfMurOrPion(x,y);
-        System.out.println(murOrPion);
 
         int [] position = checkArrayPosition(x,y);
 

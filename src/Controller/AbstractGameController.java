@@ -20,7 +20,7 @@ public abstract class AbstractGameController implements GameControllers{
         if (this.isPlayerOK(initCoord)) {
 
             // Déplacement métier
-            ret = this.moveModel(initCoord, finalCoord);
+            ret = this.moveModel(initCoord, finalCoord, false);
 
             // Actions différentes selon les types de controleur
             if (ret) {
@@ -28,17 +28,26 @@ public abstract class AbstractGameController implements GameControllers{
             }
 
         }else {
-            this.moveModel(initCoord, initCoord);
+            //this.moveModel(initCoord, initCoord);
         }
+        return ret;
+    }
+
+    public boolean putWall(Coordonnees wallCoord){
+        boolean ret = false;
+
+        ret = this.moveModel(null, wallCoord, true);
+
         return ret;
     }
 
     public abstract boolean isPlayerOK(Coordonnees initCoord) ;
 
     // Déplacement métier
-    protected  boolean moveModel(Coordonnees initCoord, Coordonnees finalCoord)  {
-        return game.move(initCoord, finalCoord);
+    protected  boolean moveModel(Coordonnees initCoord, Coordonnees finalCoord, boolean isWall)  {
+        return game.move(initCoord, finalCoord, isWall);
     }
+
 
     protected abstract void endMove(Coordonnees initCoord, Coordonnees finalCoord) ;
 

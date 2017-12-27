@@ -16,14 +16,21 @@ public class QuoridorGame extends Observable implements BoardGames {
     }
 
     @Override
-    public boolean move(Coordonnees initCoord, Coordonnees finalCoord) {
+    public boolean move(Coordonnees initCoord, Coordonnees finalCoord, boolean isWall) {
         boolean ret = false;
 
         ret = jeu.isMoveOk(initCoord, finalCoord);
         if(ret){
-            ret = jeu.move(jeu.getIdCurrentPlayer(), finalCoord);
+            if(isWall){
+                ret = jeu.putWall(finalCoord);
+            } else {
+                for(Joueur j : jeu.listPlayer()){
+                    if(j.getActualCoord().equals(initCoord)){
+                        ret = jeu.move(j, finalCoord);
+                    }
+                }
+            }
         }
-
         this.notifyObservers(jeu.getPiecesIHM());
         return ret;
     }

@@ -56,6 +56,11 @@ public class Jeu {
 		return ret;
 	}
 
+	public boolean putWall(Coordonnees wallCoord){
+		changeJoueur();
+		return true;
+	}
+
 	public void changeJoueur(){
 		this.idCurrentPlayer += 1;
 		this.idCurrentPlayer = this.idCurrentPlayer % this.nbJoueurs;

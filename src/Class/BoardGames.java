@@ -8,7 +8,7 @@ public interface BoardGames {
      * @param finalCoord coord final
      * @return OK si deplacement OK
      */
-    public boolean move (Coordonnees initCoord, Coordonnees finalCoord);
+    public boolean move (Coordonnees initCoord, Coordonnees finalCoord, boolean isWall);
 
     /**
      * @return true si c'est la fin du jeu
