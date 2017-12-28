@@ -2,6 +2,7 @@ package vue;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
@@ -205,8 +206,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                 parent.add(pion);
                 pion.setVisible(true);
                 pion = null;
-            } else {
-                pion.getParent().remove(pion);
             }
         }
 
@@ -249,7 +248,8 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         mapPanelPiece = new HashMap<JLabel, PieceIHM>();
 
         for(PieceIHM pieceIHM : piecesIHM) {
-            String s = urlImages + "images/Pion" + pieceIHM.getCouleur().toString() + ".png";
+            String url = "images" + File.separator + "Pion" + pieceIHM.getCouleur().toString() + ".png";
+            java.net.URL s = QuoridorGUI.class.getResource(url);
             JLabel piece = new JLabel(new ImageIcon(s));
             JPanel panel = (JPanel) plateauQuoridor.getComponent((pieceIHM.getCoordonnees().getY() * 17)+pieceIHM.getCoordonnees().getX());
             mapPanelPiece.put(piece, pieceIHM);
