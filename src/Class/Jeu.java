@@ -108,4 +108,8 @@ public class Jeu {
 		return result;
 	}
 
+	public int getIntIdCurrentPlayer() {
+		return idCurrentPlayer;
+	}
+
 }

@@ -78,4 +78,8 @@ public abstract class AbstractGameController implements GameControllers{
     public List<Coordonnees> getMovePossible(Coordonnees c){
         return this.game.getMovePossible(c);
     }
+
+    public int getIdCurrentPlayer() {
+        return game.getIdCurrentPlayer();
+    }
 }
