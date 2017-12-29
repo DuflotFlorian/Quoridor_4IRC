@@ -418,8 +418,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private void remplissagePanelCote (List<PieceIHM> pieceIHMList) {
         garageMurDroit.removeAll();
         garageMurGauche.removeAll();
-
-        //int nbPlayer = quoridorGameController.getNumberOfPlayers();
         int nbPlayer = pieceIHMList.size();
         int nbRowInColumn = 0; //Variable qui permet de savoir combien de panel sont mis dans les panels sur les cotés
         //Pour 2 joueurs, 3 panel et on remplis celui du milieu
@@ -482,7 +480,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
         jp.setBackground(new Color(0x808080)); //gris foncé
         jp.setLayout(new GridLayout(2,1));
-        //JLabel jl1 =  new JLabel("Joueur "+numJoueur);
         JLabel jl1 =  new JLabel("Joueur "+pieceIHM.getCouleur());
         jl1.setForeground(c);
         jl1.setHorizontalAlignment(JLabel.CENTER);
