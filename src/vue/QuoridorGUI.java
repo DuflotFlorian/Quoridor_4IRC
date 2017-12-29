@@ -1,25 +1,23 @@
 package vue;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.io.File;
-import java.util.HashMap;
+import java.util.*;
+import java.util.List;
 import javax.swing.*;
-import Class.Coordonnees;
-import Class.Couleur;
+import Class.*;
+import Controller.GameController;
 
-/**
- *
- * @author Kevin & ludo
- */
-public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionListener {
 
+
+public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionListener, Observer {
+    private GameController quoridorGameController;
     private JLayeredPane layeredPane;
     private JPanel plateauQuoridor;
     private JPanel garageMurGauche;
     private JPanel garageMurDroit;
+    private Coordonnees coordInit;
     // private JLabel chessPiece;
     private int xPionAdjustment;
     private int yPionAdjustment;
@@ -32,21 +30,23 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private int taille;
     private HashMap<Coordonnees,JPanel> mapCoordPanelPion ;
     private HashMap<Coordonnees,JPanel> mapCoordPanelMur ;
+    private HashMap<JLabel, PieceIHM> mapPanelPiece;
     private JLabel pion;
     private int taillePlateauQuoridor;
     private int coeffTaille;
-    private String urlImages = "";
+    private String urlImages = "C:\\Users\\PC-Florian\\IdeaProjects\\Quoridor_4IRC\\src\\vue\\";
 
     // Coordonnées de la position initiale de la pièce déplacée
-    private Coordonnees coordInit;
+    private Coordonnees coordFinal;
 
     /**
      *
      * @param title titre de la fenêtre
      * @param taille nombre de case
      */
-    public QuoridorGUI(String title, int taille) {
+    public QuoridorGUI(String title, GameController quoridorGameController, int taille) {
         super(title);
+        this.quoridorGameController = quoridorGameController;
         pion=null;
         //Creation des maps murs + pions
         mapCoordPanelPion = new HashMap<Coordonnees,JPanel>();
@@ -57,7 +57,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         tailleCasePion = (int) ((0.85 * coeffTaille));
         tailleCaseMur = (int) ((0.15 * coeffTaille));
         tailleLargeurGarageMur = (int) (2.5 * coeffTaille);
-        //TODO ajouter une barre en haut avec les informations qui vont bien
         tailleIHMLargeur = taille * tailleCasePion + (taille-1)*tailleCaseMur + 2 * tailleLargeurGarageMur;
         tailleIHMHauteur = taille * tailleCasePion + (taille-1)*tailleCaseMur;
         taillePlateauQuoridor = (taille * tailleCasePion) + ((taille - 1) * tailleCaseMur);
@@ -95,84 +94,65 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         //GridBagLayout pour grille personnalisée
         plateauQuoridor.setLayout(new GridBagLayout());
 
-        //plateauQuoridor.setPreferredSize(dim);
         plateauQuoridor.setPreferredSize(new Dimension(taillePlateauQuoridor, taillePlateauQuoridor));
         plateauQuoridor.setBounds(tailleLargeurGarageMur, 0, taillePlateauQuoridor, taillePlateauQuoridor);
-
-        int casePosX = 0; // Position sur le grille
-        int casePosY = 0; // Position sur la grille
-
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.weightx = 1;
         constraints.weighty = 1;
         for (int j = 0; j < (taille * 2 - 1); j++) {
             constraints.gridx = j ;//décalage dans le grid bag layout
-
             for (int i = 0; i < (taille * 2 - 1); i++) {
-
                 constraints.gridy = i ;//décalage dans le grid bag layout
-
                 if (j % 2 == 0 && i % 2 == 0) {         // Case pion
                     JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCasePion,tailleCasePion));
                     square.setBackground(Color.LIGHT_GRAY);
                     plateauQuoridor.add(square,constraints);
-                    //ajout à la map
-                    casePosX += tailleCasePion ;
-                    casePosY += tailleCasePion ;
                     mapCoordPanelPion.put(new Coordonnees(i,j),square);
                 } else if (j % 2 == 0 && i % 2 == 1) {         // Case mur horizontal
                     JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCasePion,tailleCaseMur));
                     square.setBackground(Color.WHITE);
                     plateauQuoridor.add(square,constraints);
-                    //ajout à la map
-                    casePosX += tailleCasePion ;
-                    casePosY += tailleCaseMur ;
                     mapCoordPanelMur.put(new Coordonnees(i,j),square);
                 } else if (j % 2 == 1 && i % 2 == 0) {         // Case mur vertical
                     JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCaseMur,tailleCasePion));
                     square.setBackground(Color.WHITE);
                     plateauQuoridor.add(square,constraints);
-                    //ajout à la map
-                    casePosX += tailleCaseMur ;
-                    casePosY += tailleCasePion ;
                     mapCoordPanelMur.put(new Coordonnees(i,j),square);
                 } else if (j % 2 == 1 && i % 2 == 1) {         // petit truc vide
                     JPanel square = new JPanel(new BorderLayout());
                     square.setPreferredSize(new Dimension(tailleCaseMur,tailleCaseMur));
                     square.setBackground(Color.WHITE);
                     plateauQuoridor.add(square,constraints);
-                    //ajout à la map
-                    casePosX += tailleCaseMur ;
-                    casePosY += tailleCaseMur ;
                     mapCoordPanelMur.put(new Coordonnees(i,j),square);
                 }
             }
         }
-
-        //placement pions initiale
-        affichePion(new Coordonnees(0,8),Couleur.NOIR);
-        affichePion(new Coordonnees(16,8),Couleur.BLANC);
     }
-
 
     public enum Case {
         PION, MURHORIZONTAL, MURVERTICAL, CROISEMENT
     }
 
-
     @Override
     public void mouseClicked(MouseEvent e) {
-        int x = e.getX()-tailleLargeurGarageMur;
+        //int x = e.getX()-tailleLargeurGarageMur;
+        int x = e.getX();
         int y = e.getY();
 
-        positionneUnMur(x,y);
-
-
-
+        Component cmp = layeredPane.findComponentAt(x, y);
+        if(mapCoordPanelMur.containsValue(cmp)){
+            JPanel jp = (JPanel) cmp;
+            coordFinal = pixelToCell(jp);
+            boolean b;
+            b = quoridorGameController.putWall(coordFinal);
+            if(b){
+                positionneUnMur(x - tailleLargeurGarageMur, y);
+            }
+        }
     }
 
     @Override
@@ -180,8 +160,8 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int x = e.getX();
         int y = e.getY();
         JPanel jp;
-        coordInit = new Coordonnees(x,y);
         Component cmp =  layeredPane.findComponentAt(x,y);
+
         if (mapCoordPanelPion.containsValue(cmp)) {
             jp = (JPanel) cmp;
         }
@@ -191,7 +171,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             return;
         }
 
-
+        coordInit = pixelToCell(jp);
         if (jp.getComponents().length == 1) {
             pion = (JLabel) jp.getComponent(0);
             Point parentLocation = pion.getParent().getLocation();
@@ -199,7 +179,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             yPionAdjustment = parentLocation.y - e.getY();
             pion.setLocation(e.getX() + xPionAdjustment + plateauQuoridor.getX(), e.getY() + yPionAdjustment + plateauQuoridor.getY());
             layeredPane.add(pion, JLayeredPane.DRAG_LAYER);
-
         }
         else {
             System.out.println("Clique hors plateau de jeu");
@@ -212,33 +191,47 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         if (pion == null) {
             return;
         }
-
-
         int x = e.getX();
         int y = e.getY();
-        coordInit = new Coordonnees(x,y);
 
-                pion.setVisible(false);
-                Component cmp = findComponentAt(x , y);
-                if (mapCoordPanelPion.containsValue(cmp)) {
-                    Container parent = (Container) cmp;
-                    parent.add(pion);
-                    pion.setVisible(true);
-                    update();
+        pion.setVisible(false);
+        Component cmp = findComponentAt(x , y);
+        if (mapCoordPanelPion.containsValue(cmp)) {
+            JPanel jp = (JPanel) cmp;
+            coordFinal = pixelToCell(jp);
+            boolean b;
+            b = quoridorGameController.move(coordInit, coordFinal);
+            if(b){
+                Container parent = (Container) cmp;
+                parent.add(pion);
+                pion.setVisible(true);
+                pion = null;
+            }
+        }
+
+        if(quoridorGameController.isEnd()){
+            class EndWindow extends JFrame{
+                private JButton button = new JButton("FIN DE LA PARTIE");
+
+                public EndWindow(){
+                    this.setTitle("INFORMATION");
+                    this.setSize(300, 100);
+                    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    this.setLocationRelativeTo(null);
+                    this.getContentPane().setLayout(new FlowLayout());
+                    this.getContentPane().add(button);
+                    button.addActionListener(new ActionListener(){
+                        public void actionPerformed(ActionEvent arg0) {
+                            System.exit(0);
+                        }
+                    });
+
+                    this.setVisible(true);
                 }
-                else {
-                    update();
-                }
-    }
+            }
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
+            EndWindow fin = new EndWindow();
+        }
     }
 
     @Override
@@ -250,58 +243,22 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void update(Observable o, Object arg) {
+        List<PieceIHM> piecesIHM = (List<PieceIHM>) arg;
+        mapPanelPiece = new HashMap<JLabel, PieceIHM>();
 
-    }
-
-    public void update() { //voir les arguments à récupérer pour afficher
-
-        plateauQuoridor.removeAll();
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.weightx = 1;
-        constraints.weighty = 1;
-
-        for (int i = 0; i < (taille * 2 - 1); i++) {
-            constraints.gridx = i ;//décalage dans le grid bag layout
-
-            for (int j = 0; j < (taille * 2 - 1); j++) {
-
-                constraints.gridy = j ;//décalage dans le grid bag layout
-
-                if (i % 2 == 0 && j % 2 == 0) {         // Case pion
-                    JPanel square = new JPanel(new BorderLayout());
-                    square.setPreferredSize(new Dimension(tailleCasePion,tailleCasePion));
-                    square.setBackground(Color.LIGHT_GRAY);
-                    plateauQuoridor.add(square,constraints);
-                } else if (i % 2 == 0 && j % 2 == 1) {         // Case mur horizontal
-                    JPanel square = new JPanel(new BorderLayout());
-                    square.setPreferredSize(new Dimension(tailleCasePion,tailleCaseMur));
-                    square.setBackground(Color.WHITE);
-                    plateauQuoridor.add(square,constraints);
-                } else if (i % 2 == 1 && j % 2 == 0) {         // Case mur vertical
-                    JPanel square = new JPanel(new BorderLayout());
-                    square.setPreferredSize(new Dimension(tailleCaseMur,tailleCasePion));
-                    square.setBackground(Color.WHITE);
-                    plateauQuoridor.add(square,constraints);
-
-                } else if (i % 2 == 1 && j % 2 == 1) {         // petit truc vide
-                    JPanel square = new JPanel(new BorderLayout());
-                    square.setPreferredSize(new Dimension(tailleCaseMur,tailleCaseMur));
-                    square.setBackground(Color.WHITE);
-                    plateauQuoridor.add(square,constraints);
-                }
-            }
+        for(PieceIHM pieceIHM : piecesIHM) {
+            String url = "images" + File.separator + "Pion" + pieceIHM.getCouleur().toString() + ".png";
+            java.net.URL s = QuoridorGUI.class.getResource(url);
+            JLabel piece = new JLabel(new ImageIcon(s));
+            JPanel panel = (JPanel) plateauQuoridor.getComponent((pieceIHM.getCoordonnees().getY() * 17)+pieceIHM.getCoordonnees().getX());
+            mapPanelPiece.put(piece, pieceIHM);
+            panel.removeAll();
+            panel.add(piece);
         }
-        //placement pions initiale
-        affichePion(new Coordonnees(0,8),Couleur.NOIR);
-        affichePion(new Coordonnees(16,8),Couleur.BLANC);
-
-        validate();
-        repaint();
     }
 
     /**
-     *
      * @param x position du click en X
      * @param y position du click en Y
      * @return case de type pion, murHorizontal, murVertical croisement
@@ -310,7 +267,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int i,j;
         i = boucleCheckPosition(x);
         j = boucleCheckPosition(y);
-
 
         if (i%2 == 1 && j%2 == 1 ) {
             return Case.PION;
@@ -321,7 +277,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
         return Case.MURVERTICAL;
     }
-
 
     private int[] checkArrayPosition(int x, int y) {
         int values [] = {-1,-1};
@@ -343,7 +298,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         return i;
     }
 
-
     /**
      *
      * @param x position en X
@@ -356,14 +310,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             return y-1;
         }
         return ((x*17)-17) + y-1;
-    }
 
-    public HashMap<Coordonnees, JPanel> getMapCoordPanelPion() {
-        return mapCoordPanelPion;
-    }
-
-    public HashMap<Coordonnees, JPanel> getMapCoordPanelMur() {
-        return mapCoordPanelMur;
     }
 
 
@@ -385,9 +332,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int largeur = (int)(dim.getWidth()-tailleIHMLargeur)/2;
         int hauteur = (int)(dim.getHeight()-tailleIHMHauteur)/2;
         Point p = new Point(largeur,hauteur);
+
+        System.out.println(p);
         return p;
     }
-
 
     private Boolean isInPlateau(int x){
         return (x >= tailleLargeurGarageMur && x < (tailleIHMLargeur-tailleLargeurGarageMur));
@@ -395,6 +343,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     private void positionneUnMur(int x,int y) {
         Case murOrPion = checkIfMurOrPion(x,y);
+
         int [] position = checkArrayPosition(x,y);
 
         if (murOrPion.equals(Case.MURHORIZONTAL)) {
@@ -428,16 +377,35 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
     }
 
-    /**
-     * Permet de passer au dessus des problématiques de PATH et de windows ou linux pour les séparateurs
-     * le File.separator permet dez choisir \ sous windows,  / sous nux
-     * @param coord
-     * @param c
-     */
-    private void affichePion(Coordonnees coord, Couleur c) {
-        java.net.URL imageURL = QuoridorGUI.class.getResource("images" + File.separator+ "Pion" + c.toString() + ".png");
-        JPanel j = (JPanel) plateauQuoridor.getComponent((coord.getY() * 17)+coord.getX()); // colone 8 , ligne 0
-        JLabel piece = new JLabel(new ImageIcon(imageURL));
-        j.add(piece);
+    private Coordonnees pixelToCell(JPanel component){
+        for(Map.Entry mapEntry : mapCoordPanelPion.entrySet()){
+            if(component.equals(mapEntry.getValue())){
+                return (Coordonnees)mapEntry.getKey();
+            }
+        }
+
+        for(Map.Entry mapEntry : mapCoordPanelMur.entrySet()){
+            if(component.equals(mapEntry.getValue())){
+                return (Coordonnees)mapEntry.getKey();
+            }
+        }
+
+        return null;
+    }
+
+
+    @Override
+    public void mouseEntered(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent mouseEvent) {
+
     }
 }
