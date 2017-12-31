@@ -37,7 +37,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private JLabel pion;
     private int taillePlateauQuoridor;
     private int coeffTaille;
-    private String urlImages = "";
+    private Color couleurMur;
 
     // Coordonnées de la position initiale de la pièce déplacée
     private Coordonnees coordInit;
@@ -54,12 +54,8 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         mapCoordPanelPion = new HashMap<Coordonnees,JPanel>();
         mapCoordPanelMur = new HashMap<Coordonnees,JPanel>();
         this.coeffTaille = defineCoeffTaille();
-
-
-
-
-
         this.taille=taille;
+        this.couleurMur = new Color(404040);
         tailleCasePion = (int) ((0.85 * coeffTaille));
         tailleCaseMur = (int) ((0.15 * coeffTaille));
         tailleLargeurGarageMur = (int) (2.5 * coeffTaille);
@@ -417,16 +413,9 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                     // détermine les cases horizontale à côté du composant cliqué
                 celluleCentre = mapCoordPanelMur.get(new Coordonnees(c.getX(),c.getY()+1));
                 celluleDroiteOuBas = mapCoordPanelMur.get(new Coordonnees(c.getX(),c.getY()+2));
-                if (celluleGaucheOuHaut.getBackground() != Color.BLUE && celluleCentre.getBackground() != Color.BLUE && celluleDroiteOuBas.getBackground() !=Color.BLUE)
+                if (celluleGaucheOuHaut.getBackground() != couleurMur && celluleCentre.getBackground() != couleurMur && celluleDroiteOuBas.getBackground() !=couleurMur)
                 {
-
-                    JPanel j = (JPanel) celluleGaucheOuHaut; //cast en Jpanel
-                    JPanel k = (JPanel) celluleCentre;
-                    JPanel l = (JPanel) celluleDroiteOuBas;
-
-                    j.setBackground(Color.BLUE); //colorise la case courante
-                    k.setBackground(Color.BLUE);
-                    l.setBackground(Color.BLUE);
+                    colorisePanelMur(celluleGaucheOuHaut, celluleCentre, celluleDroiteOuBas);
                 }
             }
         }
@@ -436,21 +425,28 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                 // détermine les cases horizontale à côté du composant cliqué
                 celluleCentre = mapCoordPanelMur.get(new Coordonnees(c.getX()+1,c.getY()));
                 celluleDroiteOuBas = mapCoordPanelMur.get(new Coordonnees(c.getX()+2,c.getY()));
-                if (celluleGaucheOuHaut.getBackground() != Color.BLUE && celluleCentre.getBackground() != Color.BLUE && celluleDroiteOuBas.getBackground() !=Color.BLUE)
+                if (celluleGaucheOuHaut.getBackground() != couleurMur && celluleCentre.getBackground() != couleurMur && celluleDroiteOuBas.getBackground() !=couleurMur)
                 {
-                    JPanel j = (JPanel) celluleGaucheOuHaut; //cast en Jpanel
-                    JPanel k = (JPanel) celluleCentre;
-                    JPanel l = (JPanel) celluleDroiteOuBas;
-
-                    j.setBackground(Color.BLUE); //colorise la case courante
-                    k.setBackground(Color.BLUE);
-                    l.setBackground(Color.BLUE);
+                    colorisePanelMur(celluleGaucheOuHaut, celluleCentre, celluleDroiteOuBas);
                 }
             }
         }
+    }
 
+    /**
+     * fonction colorisant les Jpanel des cellules recevant un mur
+     * @param celluleGaucheOuHaut
+     * @param celluleCentre
+     * @param celluleDroiteOuBas
+     */
+    private void colorisePanelMur(Component celluleGaucheOuHaut, Component celluleCentre, Component celluleDroiteOuBas) {
+        JPanel j = (JPanel) celluleGaucheOuHaut; //cast en Jpanel
+        JPanel k = (JPanel) celluleCentre;
+        JPanel l = (JPanel) celluleDroiteOuBas;
 
-
+        j.setBackground(couleurMur); //colorise la case courante
+        k.setBackground(couleurMur);
+        l.setBackground(couleurMur);
     }
 
     /**
