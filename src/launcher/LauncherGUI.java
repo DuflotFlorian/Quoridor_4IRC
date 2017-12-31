@@ -5,10 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Observer;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 import Class.observable.QuoridorGame;
 import Controller.GameController;
@@ -114,9 +112,6 @@ public class LauncherGUI extends javax.swing.JFrame {
 
 
     }
-
-
-
 
     public static void main(String[] args) {
 
