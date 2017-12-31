@@ -50,10 +50,10 @@ public class Joueur {
 		return true;
 	}
 
-	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord){
+	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord, boolean isJumping){
 		Piece p = null;
 		p = findPiece(initCoord);
-		return p.isMoveOk(finalCoord);
+		return p.isMoveOk(finalCoord, isJumping);
 	}
 
 	public List<PieceIHMs> getPiecesIHM(){

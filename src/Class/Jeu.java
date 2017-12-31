@@ -29,6 +29,7 @@ public class Jeu {
 	}
 
 	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord){
+
 		return true;
 	}
 
@@ -36,7 +37,20 @@ public class Jeu {
 		boolean ret = false;
 		if(j.equals(getIdCurrentPlayer())){
 			if(!isPlayerHere(finalCoord)){
-				if(j.isMoveOk(j.getActualCoord(), finalCoord)){
+				//START verif saut de pion
+				boolean isJumping = false;
+				int diff = 0;
+				Coordonnees currentCoord = j.getActualCoord();
+				if(Math.abs(currentCoord.getX()-finalCoord.getX()) == 4 && currentCoord.getY()-finalCoord.getY() == 0) {
+					diff = currentCoord.getX()-finalCoord.getX();
+					isJumping = isPlayerHere(new Coordonnees(currentCoord.getX()-(diff/2) ,currentCoord.getY()));
+				} else if (Math.abs(currentCoord.getY()-finalCoord.getY()) == 4 && currentCoord.getX()-finalCoord.getX() == 0) {
+					diff = currentCoord.getY()-finalCoord.getY();
+					isJumping = isPlayerHere(new Coordonnees(currentCoord.getX() ,currentCoord.getY()-(diff/2)));
+				}
+				//END verif saut de pion
+
+				if(j.isMoveOk(j.getActualCoord(), finalCoord, isJumping)){
 					j.move(j.getActualCoord(),finalCoord);
 					changeJoueur();
 					ret = true;
