@@ -42,28 +42,15 @@ public class LauncherGUI extends javax.swing.JFrame {
         buttonScores = new JButton("Scores");
         buttonQuitter = new JButton("Quitter");
 
-
-        //frame = new QuoridorGUI("Quoridor", 9);
-        //frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        //frame.setResizable(false);
-        //frame.pack();
-        //frame.setVisible(true);
-
         /*Settings JFrame*/
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setPreferredSize(new Dimension(700, 350));
         this.setLocationRelativeTo(null);
-        //Dimension dimLauncher = Toolkit.getDefaultToolkit().getScreenSize();
-        //this.setLocation(5,);
         this.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - this.getPreferredSize().width /2 , (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - this.getPreferredSize().height /2 );
-
-        //this.setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - this.getSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - this.getSize().height / 2);
         this.setTitle("Quoridor");
 
-
-
-        /*Ajout des Bouttonsau panel*/
+        /*Ajout des Bouttons au panel*/
         JPanelButton.add(button2Joueurs);
         JPanelButton.add(button4Joueurs);
         JPanelButton.add(buttonScores);
@@ -72,6 +59,11 @@ public class LauncherGUI extends javax.swing.JFrame {
         /*chargement de l'image*/
         java.net.URL imageURL = LauncherGUI.class.getResource("images" + File.separator + "imgLauncher.jpg");
         JLabel imgMain = new JLabel(new ImageIcon(imageURL));
+
+        /*Chargement de l'icone du programme*/
+        java.net.URL iconeURL = LauncherGUI.class.getResource(".." + File.separator + "SharedFiles"+ File.separator + "iconQuoridor.jpg");
+        ImageIcon imgIcon = new ImageIcon(iconeURL);
+        frameLauncher.setIconImage(imgIcon.getImage());
 
         /*Ajout de l'image*/
         main.add(imgMain, BorderLayout.CENTER);
@@ -85,14 +77,20 @@ public class LauncherGUI extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e)
             {
 
-                //JDialog2Players dialog2 = new JDialog2Players(frameLauncher);
-                //dialog2.setVisible(true);
-                //méthode appelée quand action sur le bouton
-                QuoridorGUI mainFrame = new QuoridorGUI("Quoridor",9);
-                mainFrame.pack();
-                mainFrame.setVisible(true);
+                JFrame quoridorFrame;
+                QuoridorGame quoridorGame;
+                GameController quoridorGameController;
 
-                //
+                quoridorGame = new QuoridorGame();
+                quoridorGameController = new GameController(quoridorGame);
+
+                quoridorFrame = new QuoridorGUI("Quoridor", quoridorGameController,  9);
+                quoridorGame.addObserver((Observer) quoridorFrame);
+                quoridorFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                quoridorFrame.pack();
+                quoridorFrame.setVisible(true);
+
+                //On cache le launcher
                 frameLauncher.setVisible(false);
 
             }
@@ -107,9 +105,18 @@ public class LauncherGUI extends javax.swing.JFrame {
             }
         });
 
+        //On cache les bouttons non utilisés
+        button4Joueurs.setVisible(false);
+        buttonScores.setVisible(false);
+
         this.pack();
         this.setVisible(true);
+
+
     }
+
+
+
 
     public static void main(String[] args) {
 
@@ -126,6 +133,7 @@ public class LauncherGUI extends javax.swing.JFrame {
             e.printStackTrace();
         }
 
+        //Lancement de la fenêtre de jeu
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
@@ -135,20 +143,4 @@ public class LauncherGUI extends javax.swing.JFrame {
 
 
     }
-
-
-        JFrame frame;
-        QuoridorGame quoridorGame;
-        GameController quoridorGameController;
-
-        quoridorGame = new QuoridorGame();
-        quoridorGameController = new GameController(quoridorGame);
-
-        frame = new QuoridorGUI("Quoridor", quoridorGameController,  9);
-        quoridorGame.addObserver((Observer) frame);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.pack();
-        frame.setVisible(true);
-	}
 }
