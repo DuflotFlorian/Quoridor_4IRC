@@ -61,7 +61,7 @@ public class LauncherGUI extends javax.swing.JFrame {
         JLabel imgMain = new JLabel(new ImageIcon(imageURL));
 
         /*Chargement de l'icone du programme*/
-        java.net.URL iconeURL = LauncherGUI.class.getResource(".." + File.separator + "SharedFiles"+ File.separator + "iconQuoridor.jpg");
+        java.net.URL iconeURL = LauncherGUI.class.getResource(".." + File.separator + "SharedFiles"+ File.separator + "iconQuoridor.png");
         ImageIcon imgIcon = new ImageIcon(iconeURL);
         frameLauncher.setIconImage(imgIcon.getImage());
 
