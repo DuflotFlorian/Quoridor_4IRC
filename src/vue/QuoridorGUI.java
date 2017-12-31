@@ -330,10 +330,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
 
     /**
-     * retourne notre coordonnée sur le plateau
-     * @param x en offset
-     * @param y en offset
-     * @return Coordonnée
+     * permet de retourner une coordonnée sur un clic dans le plateau
+     * @param x en Pixels
+     * @param y en Pixels
+     * @return Coordonnée offset  (numéro de ligne, numéro de colonne)
      */
     private Coordonnees getArrayPosition(int x, int y) {
         Coordonnees c = new Coordonnees(getOffsetFromPixel(x),getOffsetFromPixel(y));
@@ -343,9 +343,9 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     /**
      *  retourne une position offset dans le plateau
-     *  cette fonction est appelée une fois par Axe (abscisse ou ordonnée)
+     *  cette fonction est appelée une fois par Axe (ligne ou colonne)
      *
-     * @param p la position en pixel
+     * @param p la position en pixel (soit un X soit un Y)
      * @return offset du tableau de jeu
      */
     private int getOffsetFromPixel (int p) {
@@ -378,7 +378,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
      */
     private int defineCoeffTaille () {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        return ((int) dim.getWidth() / 18); //18 est un rapport taille/ecran
+        return ((int) dim.getWidth() / 18 /2); //18 est un rapport taille/ecran    /!\ attention, /2 pour face de test sur double écran ludo, à virer en prod
     }
 
     /**
@@ -409,20 +409,20 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private void positionneUnMur(Coordonnees c) {
 
         Case murOrPion = checkIfMurOrPion(c);// vérifie quel est le type du panel (pion, murH,murV, croisemnt)
-        Component cmp = mapCoordPanelMur.get(c);
-        Component cmp2, cmp3;
+        Component celluleGaucheOuHaut = mapCoordPanelMur.get(c); // cellule à horizontale ou verticale à coloriser
+        Component celluleCentre, celluleDroiteOuBas; // cellules adjacentes
 
         if (murOrPion.equals(Case.MURHORIZONTAL)) {
             if (c.getY() <= 14 && c.getY()>= 0) {
                     // détermine les cases horizontale à côté du composant cliqué
-                    cmp2 = mapCoordPanelMur.get(new Coordonnees(c.getX(),c.getY()+1));
-                    cmp3 = mapCoordPanelMur.get(new Coordonnees(c.getX(),c.getY()+2));
-                if (cmp.getBackground() != Color.BLUE && cmp2.getBackground() != Color.BLUE && cmp3.getBackground() !=Color.BLUE)
+                celluleCentre = mapCoordPanelMur.get(new Coordonnees(c.getX(),c.getY()+1));
+                celluleDroiteOuBas = mapCoordPanelMur.get(new Coordonnees(c.getX(),c.getY()+2));
+                if (celluleGaucheOuHaut.getBackground() != Color.BLUE && celluleCentre.getBackground() != Color.BLUE && celluleDroiteOuBas.getBackground() !=Color.BLUE)
                 {
 
-                    JPanel j = (JPanel) cmp; //cast en Jpanel
-                    JPanel k = (JPanel) cmp2;
-                    JPanel l = (JPanel) cmp3;
+                    JPanel j = (JPanel) celluleGaucheOuHaut; //cast en Jpanel
+                    JPanel k = (JPanel) celluleCentre;
+                    JPanel l = (JPanel) celluleDroiteOuBas;
 
                     j.setBackground(Color.BLUE); //colorise la case courante
                     k.setBackground(Color.BLUE);
@@ -434,13 +434,13 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         if (murOrPion.equals(Case.MURVERTICAL)) {
             if (c.getX() <= 14 && c.getX()>= 0) {
                 // détermine les cases horizontale à côté du composant cliqué
-                cmp2 = mapCoordPanelMur.get(new Coordonnees(c.getX()+1,c.getY()));
-                cmp3 = mapCoordPanelMur.get(new Coordonnees(c.getX()+2,c.getY()));
-                if (cmp.getBackground() != Color.BLUE && cmp2.getBackground() != Color.BLUE && cmp3.getBackground() !=Color.BLUE)
+                celluleCentre = mapCoordPanelMur.get(new Coordonnees(c.getX()+1,c.getY()));
+                celluleDroiteOuBas = mapCoordPanelMur.get(new Coordonnees(c.getX()+2,c.getY()));
+                if (celluleGaucheOuHaut.getBackground() != Color.BLUE && celluleCentre.getBackground() != Color.BLUE && celluleDroiteOuBas.getBackground() !=Color.BLUE)
                 {
-                    JPanel j = (JPanel) cmp; //cast en Jpanel
-                    JPanel k = (JPanel) cmp2;
-                    JPanel l = (JPanel) cmp3;
+                    JPanel j = (JPanel) celluleGaucheOuHaut; //cast en Jpanel
+                    JPanel k = (JPanel) celluleCentre;
+                    JPanel l = (JPanel) celluleDroiteOuBas;
 
                     j.setBackground(Color.BLUE); //colorise la case courante
                     k.setBackground(Color.BLUE);
