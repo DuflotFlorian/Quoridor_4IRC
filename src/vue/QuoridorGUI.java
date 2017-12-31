@@ -61,6 +61,11 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         tailleIHMHauteur = taille * tailleCasePion + (taille-1)*tailleCaseMur;
         taillePlateauQuoridor = (taille * tailleCasePion) + ((taille - 1) * tailleCaseMur);
 
+        /*Chargement de l'icone du programme*/
+        java.net.URL iconeURL = QuoridorGUI.class.getResource(".." + File.separator + "SharedFiles"+ File.separator + "iconQuoridor.png");
+        ImageIcon imgIcon = new ImageIcon(iconeURL);
+        this.setIconImage(imgIcon.getImage());
+
         setLocation(definePositionInScreen());
 
         //Definition de la taille general de la frame
