@@ -156,8 +156,8 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
 
         //placement pions initiale
-        affichePion(new Coordonnees(0,8),Couleur.NOIR);
-        affichePion(new Coordonnees(16,8),Couleur.BLANC);
+        affichePion(new Coordonnees(0,8),Couleur.BLEU);
+        affichePion(new Coordonnees(16,8),Couleur.ROUGE);
 
     }
 
@@ -374,10 +374,11 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
      */
     private int defineCoeffTaille () {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        return ((int) dim.getWidth() / 18 /2); //18 est un rapport taille/ecran    /!\ attention, /2 pour face de test sur double écran ludo, à virer en prod
+        return ((int) dim.getWidth() / 18); //18 est un rapport taille/ecran    /!\ attention, /2 pour face de test sur double écran ludo, à virer en prod
     }
 
     /**
+     *
      * donne la position du plateau en fonction de la résolution du plateau
      * @return Point
      */
