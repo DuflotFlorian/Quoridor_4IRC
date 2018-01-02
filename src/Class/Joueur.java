@@ -53,12 +53,7 @@ public class Joueur {
 	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord){
 		Piece p = null;
 		p = findPiece(initCoord);
-
-		if (!(p.getName().equals("Mur"))) { //Vérification que la case n'est pas remplis avec un mur //TODO check que cette condition est utile
-			return p.isMoveOk(finalCoord);
-		} else {
-			return false;
-		}
+		return p.isMoveOk(finalCoord);
 
 	}
 
@@ -72,7 +67,6 @@ public class Joueur {
 		}
 	}
 
-	//TODO
 	public boolean putWall(Coordonnees wallCoord) {
 		Piece p = getFirstWallUnsued();
 		if (p == null){ //Quand le joueur n'as plus de mur dispo

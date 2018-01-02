@@ -58,9 +58,7 @@ public class Jeu {
 
 	public boolean putWall(Joueur j,Coordonnees wallCoord){
 		if (j.isWallOk(wallCoord)) {
-			System.out.println("isWallOk true");
 			//Le placement du mur de base est valide
-			//TODO add toutes les verifs de non colision
 			Coordonnees[] tabCoordWall = new Coordonnees[3];
 
 			//Obtention de la coordonnées complète du futur mur
@@ -80,14 +78,11 @@ public class Jeu {
 					return false;
 				}
 			}
-			System.out.println("Jeu test de croisement OK"); //TODO debug todo here
 
-			//TODO add tests de non enfermement
 			j.putWall(wallCoord);
 			changeJoueur();
 			return true;
 		} else {
-			System.out.println("isWallOk false");
 			return false;
 		}
 	}
@@ -144,10 +139,10 @@ public class Jeu {
 		for(Joueur jou : joueurs) {
 			p = jou.findPiece(coord);
 			if(p != null) {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 }
