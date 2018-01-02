@@ -25,7 +25,6 @@ public class Mur extends AbstractPiece{
 	}
 
 	public boolean isMoveOk(Coordonnees finalCoord){
-		System.out.println(finalCoord);
 		if (finalCoord.getX() % 2 == 1 && finalCoord.getX()> 0 && finalCoord.getX()< 16 && finalCoord.getY() % 2 == 0 && finalCoord.getY()>= 0 && finalCoord.getY()< 15) { //Verif que la case est une case horizontale
 			return true;
 		} else if (finalCoord.getX() % 2 == 0 && finalCoord.getX()>= 0 && finalCoord.getX()< 15 && finalCoord.getY() % 2 == 1 && finalCoord.getY()> 0 && finalCoord.getY()< 16){
