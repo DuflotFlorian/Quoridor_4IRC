@@ -149,6 +149,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             coordFinal = pixelToCell(jp);
             boolean b;
             b = quoridorGameController.putWall(coordFinal);
+            System.out.println("Position mur fini in QuoridorGUI");
             if(b){
                 positionneUnMur(x - tailleLargeurGarageMur, y);
             }

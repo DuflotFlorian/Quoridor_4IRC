@@ -53,7 +53,33 @@ public class Joueur {
 	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord){
 		Piece p = null;
 		p = findPiece(initCoord);
-		return p.isMoveOk(finalCoord);
+
+		if (!(p.getName().equals("Mur"))) { //Vérification que la case n'est pas remplis avec un mur //TODO check que cette condition est utile
+			return p.isMoveOk(finalCoord);
+		} else {
+			return false;
+		}
+
+	}
+
+
+	public boolean isWallOk(Coordonnees wallCoord) {
+		Piece p = getFirstWallUnsued();
+		if (p != null){ //Quand le joueur n'as plus de mur dispo
+			return p.isMoveOk(wallCoord);
+		} else {
+			return false;
+		}
+	}
+
+	//TODO
+	public boolean putWall(Coordonnees wallCoord) {
+		Piece p = getFirstWallUnsued();
+		if (p == null){ //Quand le joueur n'as plus de mur dispo
+			return p.move(wallCoord);
+		} else {
+			return false;
+		}
 	}
 
 	public List<PieceIHMs> getPiecesIHM(){
@@ -87,6 +113,15 @@ public class Joueur {
 		Joueur j = (Joueur) obj;
 
 		return j.getCouleurs().equals(this.getCouleurs());
+	}
+
+	private Piece getFirstWallUnsued(){
+		for (Piece p : pieces) {
+			if(p.getCoordonnees().equals(new Coordonnees(-1,-1)) && p.getName().equals("Mur")) {
+				return p;
+			}
+		}
+		return null;
 	}
 }
 

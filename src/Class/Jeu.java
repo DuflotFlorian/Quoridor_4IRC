@@ -56,9 +56,40 @@ public class Jeu {
 		return ret;
 	}
 
-	public boolean putWall(Coordonnees wallCoord){
-		changeJoueur();
-		return true;
+	public boolean putWall(Joueur j,Coordonnees wallCoord){
+		if (j.isWallOk(wallCoord)) {
+			System.out.println("isWallOk true");
+			//Le placement du mur de base est valide
+			//TODO add toutes les verifs de non colision
+			Coordonnees[] tabCoordWall = new Coordonnees[3];
+
+			//Obtention de la coordonnées complète du futur mur
+			if (Mur.isWallBeHorizontal(wallCoord)) {
+				tabCoordWall[0]= wallCoord;
+				tabCoordWall[1]= new Coordonnees(wallCoord.getX()+1 , wallCoord.getY());
+				tabCoordWall[2]= new Coordonnees(wallCoord.getX()+2 , wallCoord.getY());
+			} else if (Mur.isWallBeVertical(wallCoord)) {
+				tabCoordWall[0]= wallCoord;
+				tabCoordWall[1]= new Coordonnees(wallCoord.getX() , wallCoord.getY()+2);
+				tabCoordWall[2]= new Coordonnees(wallCoord.getX(), wallCoord.getY()+2);
+			}
+
+			//Vérification de non croisement
+			for (Coordonnees coord : tabCoordWall) {
+				if(isWallHere(coord)) {
+					return false;
+				}
+			}
+			System.out.println("Jeu test de croisement OK"); //TODO debug todo here
+
+			//TODO add tests de non enfermement
+			j.putWall(wallCoord);
+			changeJoueur();
+			return true;
+		} else {
+			System.out.println("isWallOk false");
+			return false;
+		}
 	}
 
 	public void changeJoueur(){
@@ -106,6 +137,17 @@ public class Jeu {
 			result.add(j);
 		}
 		return result;
+	}
+
+	public boolean isWallHere(Coordonnees coord) {
+		Piece p;
+		for(Joueur jou : joueurs) {
+			p = jou.findPiece(coord);
+			if(p != null) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

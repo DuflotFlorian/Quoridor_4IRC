@@ -22,7 +22,9 @@ public class QuoridorGame extends Observable implements BoardGames {
         ret = jeu.isMoveOk(initCoord, finalCoord);
         if(ret){
             if(isWall){
-                ret = jeu.putWall(finalCoord);
+                System.out.println("QuoridorGame, passage dans putWall");
+                ret = jeu.putWall(jeu.getIdCurrentPlayer(),finalCoord);
+                System.out.println("QuoridorGame, ret putWall: "+ret);
             } else {
                 for(Joueur j : jeu.listPlayer()){
                     if(j.getActualCoord().equals(initCoord)){
