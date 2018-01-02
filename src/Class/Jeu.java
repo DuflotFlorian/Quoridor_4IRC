@@ -39,8 +39,6 @@ public class Jeu {
 
 				/*Vérification présence mur pendant le deplacement*/
 				if(canPionPass(j.getActualCoord() , finalCoord)){
-					//TODO move le test dans un if
-					System.out.println("Pion passe");
 
 					if(j.isMoveOk(j.getActualCoord(), finalCoord)){
 						j.move(j.getActualCoord(),finalCoord);
@@ -164,16 +162,15 @@ public class Jeu {
 		int diffX = finalCoord.getX() - initCoord.getX();
 		int diffY = finalCoord.getY() - initCoord.getY();
 
-		if(diffX > 0 && diffY == 0){
+		if(diffX > 0 && diffY == 0){ //Pion de haut en bas
 			for(int i=0;i < diffX ; i++){
-				System.out.println(i);
 				if(i% 2 == 1) {
 					if (isCoordCoverByWall(new Coordonnees(initCoord.getX() + i, initCoord.getY()))) {
 						return false;
 					}
 				}
 			}
-		}else if(diffX < 0 && diffY == 0){
+		}else if(diffX < 0 && diffY == 0){ //Pion de bas en haut
 			for(int i=0;i > diffX ; i--){
 				if(i% 2 == -1) {
 					if (isCoordCoverByWall(new Coordonnees(initCoord.getX() + i, initCoord.getY()))) {
@@ -181,7 +178,7 @@ public class Jeu {
 					}
 				}
 			}
-		}else if(diffX == 0 && diffY > 0){
+		}else if(diffX == 0 && diffY > 0){ //Pion de gauche à droite
 			for(int i=0;i < diffY ; i++){
 				if(i% 2 == 1) {
 					if (isCoordCoverByWall(new Coordonnees(initCoord.getX(), initCoord.getY() + i))) {
@@ -189,7 +186,7 @@ public class Jeu {
 					}
 				}
 			}
-		}else if(diffX == 0 && diffY <0) {
+		}else if(diffX == 0 && diffY <0) { //Pion de droite à gauche
 			for(int i=0;i > diffY ; i--){
 				if(i% 2 == -1) {
 					if (isCoordCoverByWall(new Coordonnees(initCoord.getX() + i, initCoord.getY() + i))) {
@@ -210,9 +207,9 @@ public class Jeu {
 	private  boolean isCoordCoverByWall(Coordonnees coord){
 		if(isWallHere(coord)){ //Partie gauche d'un mur horizontal ou partie haute d'un mur vertical
 			return true;
-		} else if(isWallHere(new Coordonnees(coord.getX()-2,coord.getY())) && Mur.isWallBeHorizontal(new Coordonnees(coord.getX()-2,coord.getY()))){// Partie droite d'un mur horizontal
+		} else if(isWallHere(new Coordonnees(coord.getX(),coord.getY()-2)) && Mur.isWallBeHorizontal(new Coordonnees(coord.getX(),coord.getY()-2))){// Partie droite d'un mur horizontal
 			return true;
-		} else if(isWallHere(new Coordonnees(coord.getX(),coord.getY()-2)) && Mur.isWallBeVertical(new Coordonnees(coord.getX(),coord.getY()-2))){// Partie basse d'un mur horizontal
+		} else if(isWallHere(new Coordonnees(coord.getX()-2,coord.getY())) && Mur.isWallBeVertical(new Coordonnees(coord.getX()-2,coord.getY()))){// Partie basse d'un mur horizontal
 			return true;
 		}
 		return false;
