@@ -31,7 +31,7 @@ public class Mur extends AbstractPiece{
 		} else if (finalCoord.getX() % 2 == 0 && finalCoord.getX()>= 0 && finalCoord.getX()< 15 && finalCoord.getY() % 2 == 1 && finalCoord.getY()> 0 && finalCoord.getY()< 16){
 			return true;
 		}
-
+		System.out.println("return false isMoveOk Mur");
 		return false;
 	}
 
@@ -46,7 +46,6 @@ public class Mur extends AbstractPiece{
 	 * Le isMoveOK doit être testé avant
 	 */
 	public boolean move(Coordonnees finalCoord){
-
 		//Set wall vertical ou horizontal
 		if(isWallBeHorizontal(finalCoord)) {
 			this.isHorizontal = true;

@@ -36,15 +36,24 @@ public class Jeu {
 		boolean ret = false;
 		if(j.equals(getIdCurrentPlayer())){
 			if(!isPlayerHere(finalCoord)){
-				if(j.isMoveOk(j.getActualCoord(), finalCoord)){
-					j.move(j.getActualCoord(),finalCoord);
-					changeJoueur();
-					ret = true;
-					if(isWin()){
-						System.out.println("Fin du jeu");
+
+				/*Vérification présence mur pendant le deplacement*/
+				if(canPionPass(j.getActualCoord() , finalCoord)){
+					//TODO move le test dans un if
+					System.out.println("Pion passe");
+
+					if(j.isMoveOk(j.getActualCoord(), finalCoord)){
+						j.move(j.getActualCoord(),finalCoord);
+						changeJoueur();
+						ret = true;
+						if(isWin()){
+							System.out.println("Fin du jeu");
+						}
+					} else {
+						System.out.println("Ce deplacement n'est pas permis\n");
 					}
 				} else {
-					System.out.println("Ce deplacement n'est pas permis\n");
+					System.out.println("Pion ne passe pas");
 				}
 			} else {
 				System.out.println("Il y a deja un joueur ici\n");
@@ -72,7 +81,7 @@ public class Jeu {
 				tabCoordWall[2]= new Coordonnees(wallCoord.getX(), wallCoord.getY()+2);
 			}
 
-			//Vérification de non croisement
+			//Vérification de non croisement et tentative poser un mur deja existant
 			for (Coordonnees coord : tabCoordWall) {
 				if(isWallHere(coord)) {
 					return false;
@@ -134,6 +143,11 @@ public class Jeu {
 		return result;
 	}
 
+	/**
+	 * Permet de savoir si une piece de type mur à cette coord
+	 * @param coord
+	 * @return
+	 */
 	public boolean isWallHere(Coordonnees coord) {
 		Piece p;
 		for(Joueur jou : joueurs) {
@@ -141,6 +155,65 @@ public class Jeu {
 			if(p != null) {
 				return true;
 			}
+		}
+		return false;
+	}
+
+	private boolean canPionPass(Coordonnees initCoord , Coordonnees finalCoord){
+
+		int diffX = finalCoord.getX() - initCoord.getX();
+		int diffY = finalCoord.getY() - initCoord.getY();
+
+		if(diffX > 0 && diffY == 0){
+			for(int i=0;i < diffX ; i++){
+				System.out.println(i);
+				if(i% 2 == 1) {
+					if (isCoordCoverByWall(new Coordonnees(initCoord.getX() + i, initCoord.getY()))) {
+						return false;
+					}
+				}
+			}
+		}else if(diffX < 0 && diffY == 0){
+			for(int i=0;i > diffX ; i--){
+				if(i% 2 == -1) {
+					if (isCoordCoverByWall(new Coordonnees(initCoord.getX() + i, initCoord.getY()))) {
+						return false;
+					}
+				}
+			}
+		}else if(diffX == 0 && diffY > 0){
+			for(int i=0;i < diffY ; i++){
+				if(i% 2 == 1) {
+					if (isCoordCoverByWall(new Coordonnees(initCoord.getX(), initCoord.getY() + i))) {
+						return false;
+					}
+				}
+			}
+		}else if(diffX == 0 && diffY <0) {
+			for(int i=0;i > diffY ; i--){
+				if(i% 2 == -1) {
+					if (isCoordCoverByWall(new Coordonnees(initCoord.getX() + i, initCoord.getY() + i))) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Permet de savoir si la case est couverte par un mur.
+	 * Soit la case posède un pièce avec un mur.
+	 * Soit on test qu'il n'y ait pas un mur horizontal ou vertical sur la case à gauche ou en haut qui s'etdne sur la case actuelle
+	 * @return
+	 */
+	private  boolean isCoordCoverByWall(Coordonnees coord){
+		if(isWallHere(coord)){ //Partie gauche d'un mur horizontal ou partie haute d'un mur vertical
+			return true;
+		} else if(isWallHere(new Coordonnees(coord.getX()-2,coord.getY())) && Mur.isWallBeHorizontal(new Coordonnees(coord.getX()-2,coord.getY()))){// Partie droite d'un mur horizontal
+			return true;
+		} else if(isWallHere(new Coordonnees(coord.getX(),coord.getY()-2)) && Mur.isWallBeVertical(new Coordonnees(coord.getX(),coord.getY()-2))){// Partie basse d'un mur horizontal
+			return true;
 		}
 		return false;
 	}

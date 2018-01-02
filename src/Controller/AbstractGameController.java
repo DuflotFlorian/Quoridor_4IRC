@@ -35,9 +35,7 @@ public abstract class AbstractGameController implements GameControllers{
 
     public boolean putWall(Coordonnees wallCoord){
         boolean ret = false;
-
         ret = this.moveModel(null, wallCoord, true);
-        System.out.println("QuoridorGameController retour:"+ret);
         return ret;
     }
 
@@ -45,7 +43,6 @@ public abstract class AbstractGameController implements GameControllers{
 
     // Déplacement métier
     protected  boolean moveModel(Coordonnees initCoord, Coordonnees finalCoord, boolean isWall)  {
-        System.out.println("Passage dans moveModel, paramètres: "+initCoord+","+finalCoord+","+isWall);
         return game.move(initCoord, finalCoord, isWall);
     }
 

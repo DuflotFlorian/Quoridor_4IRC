@@ -47,4 +47,12 @@ public abstract class AbstractPiece implements Piece{
         return false;
     }
 
+    @Override
+    public String toString() {
+        return "AbstractPiece{" +
+                "coordonnees=" + coordonnees +
+                ", couleur=" + couleur +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

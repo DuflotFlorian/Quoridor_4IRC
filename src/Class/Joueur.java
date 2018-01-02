@@ -69,7 +69,7 @@ public class Joueur {
 
 	public boolean putWall(Coordonnees wallCoord) {
 		Piece p = getFirstWallUnsued();
-		if (p == null){ //Quand le joueur n'as plus de mur dispo
+		if (p != null){ //Quand le joueur n'as plus de mur dispo
 			return p.move(wallCoord);
 		} else {
 			return false;
