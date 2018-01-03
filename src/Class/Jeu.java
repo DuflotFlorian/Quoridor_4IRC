@@ -70,12 +70,12 @@ public class Jeu {
 			//Obtention de la coordonnées complète du futur mur
 			if (Mur.isWallBeHorizontal(wallCoord)) {
 				tabCoordWall[0]= wallCoord;
-				tabCoordWall[1]= new Coordonnees(wallCoord.getX()+1 , wallCoord.getY());
-				tabCoordWall[2]= new Coordonnees(wallCoord.getX()+2 , wallCoord.getY());
+				tabCoordWall[1]= new Coordonnees(wallCoord.getX() , wallCoord.getY()+ 1);
+				tabCoordWall[2]= new Coordonnees(wallCoord.getX() , wallCoord.getY()+ 2);
 			} else if (Mur.isWallBeVertical(wallCoord)) {
 				tabCoordWall[0]= wallCoord;
-				tabCoordWall[1]= new Coordonnees(wallCoord.getX() , wallCoord.getY()+2);
-				tabCoordWall[2]= new Coordonnees(wallCoord.getX(), wallCoord.getY()+2);
+				tabCoordWall[1]= new Coordonnees(wallCoord.getX()+1 , wallCoord.getY());
+				tabCoordWall[2]= new Coordonnees(wallCoord.getX()+2 , wallCoord.getY());
 			}
 
 			//Vérification de non croisement et tentative poser un mur deja existant
