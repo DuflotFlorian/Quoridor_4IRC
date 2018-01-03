@@ -37,7 +37,7 @@ public class Jeu {
 		boolean ret = false;
 		if(j.equals(getIdCurrentPlayer())){
 			if(!isPlayerHere(finalCoord)){
-				//START verif saut de pion
+				
 				boolean isJumping = false;
 				int diff = 0;
 				Coordonnees currentCoord = j.getActualCoord();
@@ -48,7 +48,6 @@ public class Jeu {
 					diff = currentCoord.getY()-finalCoord.getY();
 					isJumping = isPlayerHere(new Coordonnees(currentCoord.getX() ,currentCoord.getY()-(diff/2)));
 				}
-				//END verif saut de pion
 
 				if(j.isMoveOk(j.getActualCoord(), finalCoord, isJumping)){
 					j.move(j.getActualCoord(),finalCoord);
