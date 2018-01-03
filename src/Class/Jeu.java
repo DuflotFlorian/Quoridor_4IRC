@@ -37,9 +37,8 @@ public class Jeu {
 		if(j.equals(getIdCurrentPlayer())){
 			if(!isPlayerHere(finalCoord)){
 
-				/*Vérification présence mur pendant le deplacement*/
+				//Vérification présence mur pendant le deplacement
 				if(canPionPass(j.getActualCoord() , finalCoord)){
-
 					if(j.isMoveOk(j.getActualCoord(), finalCoord)){
 						j.move(j.getActualCoord(),finalCoord);
 						changeJoueur();

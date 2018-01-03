@@ -59,7 +59,7 @@ public class Joueur {
 
 
 	public boolean isWallOk(Coordonnees wallCoord) {
-		Piece p = getFirstWallUnsued();
+		Piece p = getWallUnsued();
 		if (p != null){ //Quand le joueur n'as plus de mur dispo
 			return p.isMoveOk(wallCoord);
 		} else {
@@ -68,7 +68,7 @@ public class Joueur {
 	}
 
 	public boolean putWall(Coordonnees wallCoord) {
-		Piece p = getFirstWallUnsued();
+		Piece p = getWallUnsued();
 		if (p != null){ //Quand le joueur n'as plus de mur dispo
 			return p.move(wallCoord);
 		} else {
@@ -109,7 +109,11 @@ public class Joueur {
 		return j.getCouleurs().equals(this.getCouleurs());
 	}
 
-	private Piece getFirstWallUnsued(){
+    /**
+     * Renvoi un mur non utilisé. Si il ne reste plus de mur non utilisés la fonction renvoi null.
+     * @return
+     */
+	private Piece getWallUnsued(){
 		for (Piece p : pieces) {
 			if(p.getCoordonnees().equals(new Coordonnees(-1,-1)) && p.getName().equals("Mur")) {
 				return p;

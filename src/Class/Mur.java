@@ -25,10 +25,10 @@ public class Mur extends AbstractPiece{
 	}
 
 	public boolean isMoveOk(Coordonnees finalCoord){
-		if (finalCoord.getX() % 2 == 1 && finalCoord.getX()> 0 && finalCoord.getX()< 16 && finalCoord.getY() % 2 == 0 && finalCoord.getY()>= 0 && finalCoord.getY()< 15) { //Verif que la case est une case horizontale
-			return true;
-		} else if (finalCoord.getX() % 2 == 0 && finalCoord.getX()>= 0 && finalCoord.getX()< 15 && finalCoord.getY() % 2 == 1 && finalCoord.getY()> 0 && finalCoord.getY()< 16){
-			return true;
+		if (finalCoord.getX() % 2 == 1 && finalCoord.getY() % 2 == 0 ) { //Verif que la case est une case mur horizontale
+				return true;
+		} else if (finalCoord.getX() % 2 == 0 && finalCoord.getY() % 2 == 1){ //Vérif que la case est une case mur verticale
+				return true;
 		}
 		return false;
 	}
