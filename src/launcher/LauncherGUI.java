@@ -1,21 +1,25 @@
 package launcher;
 
-import java.awt.Dimension;
+import java.util.Observer;
+import javax.swing.*;
 
-import java.util.ArrayList;
-import javax.swing.JFrame;
+import Class.observable.QuoridorGame;
+import Controller.GameController;
 import vue.QuoridorGUI;
-import Class.*;
 
 public class LauncherGUI {
 
     public static void main(String[] args) {
         JFrame frame;
-        Dimension dim;
-        dim = new Dimension(900, 900);
-        frame = new QuoridorGUI("Quoridor", dim ,9);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocation(600, 10);
+        QuoridorGame quoridorGame;
+        GameController quoridorGameController;
+
+        quoridorGame = new QuoridorGame();
+        quoridorGameController = new GameController(quoridorGame);
+
+        frame = new QuoridorGUI("Quoridor", quoridorGameController,  9);
+        quoridorGame.addObserver((Observer) frame);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.pack();
         frame.setVisible(true);
