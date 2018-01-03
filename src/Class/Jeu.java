@@ -156,42 +156,26 @@ public class Jeu {
 		return false;
 	}
 
+	/**
+	 * Renvoi true si il n'y a pas de mur entre l'ancienne et la nouvelle position du pion. Renvoi false dans le cas contraire
+	 * @param initCoord
+	 * @param finalCoord
+	 * @return
+	 */
 	private boolean canPionPass(Coordonnees initCoord , Coordonnees finalCoord){
 
+		//Si diffX != 0 diffY ==0 et inverssement
+		//L'ecart est de 2 normalement et 4 en cas de saut de pion
 		int diffX = finalCoord.getX() - initCoord.getX();
 		int diffY = finalCoord.getY() - initCoord.getY();
 
-		if(diffX > 0 && diffY == 0){ //Pion de haut en bas
-			for(int i=0;i < diffX ; i++){
-				if(i% 2 == 1) {
-					if (isCoordCoverByWall(new Coordonnees(initCoord.getX() + i, initCoord.getY()))) {
-						return false;
-					}
-				}
-			}
-		}else if(diffX < 0 && diffY == 0){ //Pion de bas en haut
-			for(int i=0;i > diffX ; i--){
-				if(i% 2 == -1) {
-					if (isCoordCoverByWall(new Coordonnees(initCoord.getX() + i, initCoord.getY()))) {
-						return false;
-					}
-				}
-			}
-		}else if(diffX == 0 && diffY > 0){ //Pion de gauche à droite
-			for(int i=0;i < diffY ; i++){
-				if(i% 2 == 1) {
-					if (isCoordCoverByWall(new Coordonnees(initCoord.getX(), initCoord.getY() + i))) {
-						return false;
-					}
-				}
-			}
-		}else if(diffX == 0 && diffY <0) { //Pion de droite à gauche
-			for(int i=0;i > diffY ; i--){
-				if(i% 2 == -1) {
-					if (isCoordCoverByWall(new Coordonnees(initCoord.getX() + i, initCoord.getY() + i))) {
-						return false;
-					}
-				}
+		if(isCoordCoverByWall(new Coordonnees(initCoord.getX() + diffX/2, initCoord.getY() + diffY/2))){ //Deplacement normal, vérification de la non présence d'un mur entre ancienne et nouvelle position
+			return false;
+		}
+
+		if(diffX == 4 || diffY == 4) { //Saut sur l'axe X ou Y
+			if (isCoordCoverByWall(new Coordonnees(initCoord.getX() + diffX - (diffX / 4), initCoord.getY() + diffY - (diffY / 4)))) { //Test de la case juste avant la case destination
+				return false;
 			}
 		}
 		return true;
@@ -200,7 +184,7 @@ public class Jeu {
 	/**
 	 * Permet de savoir si la case est couverte par un mur.
 	 * Soit la case posède un pièce avec un mur.
-	 * Soit on test qu'il n'y ait pas un mur horizontal ou vertical sur la case à gauche ou en haut qui s'etdne sur la case actuelle
+	 * Soit on test qu'il n'y ait pas un mur horizontal ou vertical sur la case à gauche ou en haut qui s'etend sur la case actuelle
 	 * @return
 	 */
 	private  boolean isCoordCoverByWall(Coordonnees coord){
