@@ -1,67 +1,79 @@
 package Class;
 
 import java.util.ArrayList;
-
-import static java.lang.Math.abs;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class Joueur {
-	private Pion pion;
-	private ArrayList<Mur> listMurs;
-	private int nbMaxMurs;
+	private List<Piece> pieces;
+	private Couleur couleur;
+	private Coordonnees actualCoord;
 	private Coordonnees winCoord;
 
-	public Joueur(int nbMurs, Couleur c, Coordonnees coord) {
-		this.pion = new Pion(coord, c);
-		this.listMurs = new ArrayList<Mur>();
-		this.nbMaxMurs = nbMurs;
+	public Joueur(int nbMurs, Couleur c, Coordonnees coord, Coordonnees winCoord) {
+		this.couleur = c;
+		this.actualCoord = coord;
+		Pion pion = new Pion(coord, c);
+		pieces = new ArrayList<Piece>();
+		pieces.add(pion);
+		for(int i = 0; i < nbMurs; i++){
+			Mur m = new Mur(new Coordonnees(-1, -1), c, true);
+			pieces.add(m);
+		}
+
+		this.winCoord = winCoord;
 	}
 
 	public Couleur getCouleurs() {
-		return pion.getCouleur();
+		return this.couleur;
 	}
 
-	public Pion getPion(){
-		return this.pion;
-	}
-	
-	public int nbMursPosee(){
-		return this.listMurs.size();
-	}
-
-	public int getNbMaxMurs() {
-		return nbMaxMurs;
-	}
-
-	public Coordonnees getCoordonnees() {
-		return this.pion.getCoordonnees();
+	public Piece findPiece(Coordonnees coord){
+		for(Piece p : pieces){
+			if(p.getCoordonnees().equals(coord)){
+				return p;
+			}
+		}
+		return null;
 	}
 
 	public Coordonnees getWinCoord() {
 		return winCoord;
 	}
 
-	public void setWinCoord(Coordonnees coord){
-		this.winCoord = coord;
+	public boolean move(Coordonnees initCoord, Coordonnees finalCoord){
+		Piece p = findPiece(initCoord);
+		p.move(finalCoord);
+		this.actualCoord = finalCoord;
+		pieces.set(pieces.indexOf(p),p);
+		return true;
 	}
 
-	public void setPionCoordonnees(Coordonnees coord){
-		this.pion.setCoordonnees(coord);
+	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord){
+		Piece p = null;
+		p = findPiece(initCoord);
+		return p.isMoveOk(finalCoord);
 	}
 
-	public void move(Coordonnees coord){
-		this.pion.setCoordonnees(coord);
+	public List<PieceIHMs> getPiecesIHM(){
+		List<PieceIHMs> result = new LinkedList<PieceIHMs>();
+		for (Piece p : pieces) {
+			if(!p.getCoordonnees().equals(new Coordonnees(-1,-1))){
+				PieceIHM pIhm = new PieceIHM(p);
+				result.add(pIhm);
+			}
+		}
+		return result;
 	}
 
-	public boolean isMoveOk(Coordonnees c){
-		return this.pion.isMoveOk(c);
+	public Coordonnees getActualCoord() {
+		return this.actualCoord;
 	}
 
 	public String toString() {
 		String res = "";
 		res += "\tCouleur : " + this.getCouleurs() + "\n";
-		res += "\tNombre max de murs : " + this.nbMaxMurs + "\n";
-		res += "\tPosition pion : " + this.pion.getCoordonnees().toString() + "\n";
 		return res;
 	}
 
