@@ -25,7 +25,7 @@ public abstract class AbstractPiece implements Piece{
         return this.coordonnees;
     }
 
-    Couleur getCouleur() {
+    public Couleur getCouleur() {
         return couleur;
     }
 
