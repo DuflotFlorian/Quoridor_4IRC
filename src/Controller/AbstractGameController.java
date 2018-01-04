@@ -35,9 +35,8 @@ public abstract class AbstractGameController implements GameControllers{
 
     public boolean putWall(Coordonnees wallCoord){
         boolean ret = false;
-
+        System.out.println(wallCoord);
         ret = this.moveModel(null, wallCoord, true);
-
         return ret;
     }
 
