@@ -268,7 +268,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             }
         }
 
-        remplissagePanelCote(piecesIHM);
+        remplissagePanelCote();
     }
 
     /**
@@ -368,7 +368,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
      * horizontal, on part de la gauche puis les 3 cases à droites
      * vertical : on part du haut ; puis les 3 cases dessous
      * Avant d'appeler cette méthode la vérification et le placement coté model/controller doivennt être faites
-     * @param c Coordonnées
+     * @param cJeu, cInterface
      */
     private void positionneUnMur(Coordonnees cJeu, Coordonnees cInterface) {
         if(Mur.isWallBeHorizontal(cJeu)) {
@@ -419,7 +419,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     }
 
-    private void remplissagePanelCote (List<PieceIHM> pieceIHMList) {
+    private void remplissagePanelCote () {
         garageMurDroit.removeAll();
         garageMurGauche.removeAll();
         int nbPlayer = quoridorGameController.listPlayer().size();
@@ -456,35 +456,34 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
 
         if(nbPlayer==2) {
-            createLabelCote(tabPanelGauche[1][0],pieceIHMList.get(0),1); //Joueur 1
-            createLabelCote(tabPanelDroit[1][0],pieceIHMList.get(1),2); //Joueur 2
+            createLabelCote(tabPanelGauche[1][0],1); //Joueur 1
+            createLabelCote(tabPanelDroit[1][0],2); //Joueur 2
 
         } else if (nbPlayer == 4){
-            createLabelCote(tabPanelGauche[1][0],pieceIHMList.get(0),1); //Joueur 1
-            createLabelCote(tabPanelDroit[1][0],pieceIHMList.get(0),2); //Joueur 2
-            createLabelCote(tabPanelGauche[3][0],pieceIHMList.get(0),3); //Joueur 3
-            createLabelCote(tabPanelDroit[3][0],pieceIHMList.get(0),4); //Joueur 4
+            createLabelCote(tabPanelGauche[1][0],1); //Joueur 1
+            createLabelCote(tabPanelDroit[1][0],2); //Joueur 2
+            createLabelCote(tabPanelGauche[3][0],3); //Joueur 3
+            createLabelCote(tabPanelDroit[3][0],4); //Joueur 4
         }
     }
 
-    private void createLabelCote (JPanel jp, PieceIHM pieceIHM, int numJoueur) {
+    private void createLabelCote (JPanel jp, int numJoueur) {
         int numCurrentPlayer =  quoridorGameController.getIdCurrentPlayer(); //Numéro du joueur courant
-
 
         if(numJoueur == numCurrentPlayer+1) {
             jp.setBorder(BorderFactory.createLineBorder(Color.GREEN ,coeffTaille/12));
         }
         Color c = null;
         //Adapté pour 2 joueurs, rajouter les conditions lors du passage à 4 joueurs
-        if(pieceIHM.getCouleur().equals(Couleur.BLEU)) {
-            c = Color.WHITE;
-        } else if (pieceIHM.getCouleur().equals(Couleur.ROUGE)) {
-            c = Color.BLACK;
+        if(quoridorGameController.getPlayerColor(numJoueur-1).equals(Couleur.BLEU)) {
+            c = new Color(0x8CC6D7); //Bleu pale
+        } else if (quoridorGameController.getPlayerColor(numJoueur-1).equals(Couleur.ROUGE)) {
+            c = new Color(0xDB0B32);
         }
 
         jp.setBackground(new Color(0x808080)); //gris foncé
         jp.setLayout(new GridLayout(2,1));
-        JLabel jl1 =  new JLabel("Joueur "+pieceIHM.getCouleur());
+        JLabel jl1 =  new JLabel("Joueur "+quoridorGameController.getPlayerColor(numJoueur-1));
         jl1.setForeground(c);
         jl1.setHorizontalAlignment(JLabel.CENTER);
         jl1.setFont(new Font("Impact", Font.PLAIN, coeffTaille/3));

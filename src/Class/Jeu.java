@@ -75,25 +75,10 @@ public class Jeu {
 	public boolean putWall(Joueur j,Coordonnees wallCoord){
 		if (j.isWallOk(wallCoord)) {
 			//Le placement du mur de base est valide
-			Coordonnees[] tabCoordWall = new Coordonnees[3];
-
-			//Obtention de la coordonnées complète du futur mur
-			if (Mur.isWallBeHorizontal(wallCoord)) {
-				tabCoordWall[0]= wallCoord;
-				tabCoordWall[1]= new Coordonnees(wallCoord.getX() , wallCoord.getY()+ 1);
-				tabCoordWall[2]= new Coordonnees(wallCoord.getX() , wallCoord.getY()+ 2);
-			} else if (Mur.isWallBeVertical(wallCoord)) {
-				tabCoordWall[0]= wallCoord;
-				tabCoordWall[1]= new Coordonnees(wallCoord.getX()+1 , wallCoord.getY());
-				tabCoordWall[2]= new Coordonnees(wallCoord.getX()+2 , wallCoord.getY());
-			}
-
 			//Vérification de non croisement et tentative poser un mur deja existant
-			for (Coordonnees coord : tabCoordWall) {
-				if(isWallHere(coord)) {
+				if(isCoordCoverByWallForPutWall(wallCoord)) {
 					return false;
 				}
-			}
 
 			j.putWall(wallCoord);
 			changeJoueur();
@@ -183,12 +168,12 @@ public class Jeu {
 		int diffX = finalCoord.getX() - initCoord.getX();
 		int diffY = finalCoord.getY() - initCoord.getY();
 
-		if(isCoordCoverByWall(new Coordonnees(initCoord.getX() + diffX/2, initCoord.getY() + diffY/2))){ //Deplacement normal, vérification de la non présence d'un mur entre ancienne et nouvelle position
+		if(isCoordCoverByWallForMovePion(new Coordonnees(initCoord.getX() + diffX/2, initCoord.getY() + diffY/2))){ //Deplacement normal, vérification de la non présence d'un mur entre ancienne et nouvelle position
 			return false;
 		}
 
 		if(diffX == 4 || diffY == 4) { //Saut sur l'axe X ou Y
-			if (isCoordCoverByWall(new Coordonnees(initCoord.getX() + diffX - (diffX / 4), initCoord.getY() + diffY - (diffY / 4)))) { //Test de la case juste avant la case destination
+			if (isCoordCoverByWallForMovePion(new Coordonnees(initCoord.getX() + diffX - (diffX / 4), initCoord.getY() + diffY - (diffY / 4)))) { //Test de la case juste avant la case destination
 				return false;
 			}
 		}
@@ -201,7 +186,7 @@ public class Jeu {
 	 * Soit on test qu'il n'y ait pas un mur horizontal ou vertical sur la case à gauche ou en haut qui s'etend sur la case actuelle
 	 * @return
 	 */
-	private  boolean isCoordCoverByWall(Coordonnees coord){
+	private  boolean isCoordCoverByWallForMovePion(Coordonnees coord){
 		if(isWallHere(coord)){ //Partie gauche d'un mur horizontal ou partie haute d'un mur vertical
 			return true;
 		} else if(isWallHere(new Coordonnees(coord.getX(),coord.getY()-2))){// Partie droite d'un mur horizontal
@@ -210,6 +195,29 @@ public class Jeu {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Permet de savoir si la case est couverte par un mur.
+	 * Soit la case posède un pièce avec un mur.
+	 * Soit on test qu'il n'y ait pas un mur horizontal ou vertical sur la case à gauche ou en haut qui s'etend sur la case actuelle
+	 * @return
+	 */
+	private  boolean isCoordCoverByWallForPutWall(Coordonnees coord){
+		if(Mur.isWallBeHorizontal(coord)){
+			if(isWallHere(coord) || isWallHere(new Coordonnees(coord.getX(),coord.getY()+2)) || isWallHere(new Coordonnees(coord.getX(),coord.getY()-2)) || isWallHere(new Coordonnees(coord.getX()-1,coord.getY()+1))){
+				return true;
+			}
+		} else {
+			if(isWallHere(coord) || isWallHere(new Coordonnees(coord.getX()+2,coord.getY())) || isWallHere(new Coordonnees(coord.getX()-2,coord.getY())) || isWallHere(new Coordonnees(coord.getX()+1,coord.getY()-1))){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Couleur getPlayerColor(int numPlayer){
+		return joueurs[numPlayer].getCouleurs();
 	}
 
 }

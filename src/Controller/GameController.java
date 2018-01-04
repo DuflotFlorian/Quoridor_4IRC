@@ -35,6 +35,10 @@ public class GameController extends AbstractGameController {
         return game.listPlayer();
     }
 
+    public Couleur getPlayerColor(int numPlayer){
+        return game.getPlayerColor(numPlayer);
+    }
+
     @Override
     protected void endMove(Coordonnees initCoord, Coordonnees finalCoord) {
 

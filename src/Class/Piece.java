@@ -11,4 +11,6 @@ public interface Piece {
     public boolean isMoveOk(Coordonnees finalCoord, boolean isJumping);
 
     public boolean move(Coordonnees coord);
+
+
 }
