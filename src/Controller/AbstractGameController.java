@@ -78,7 +78,12 @@ public abstract class AbstractGameController implements GameControllers{
         return this.game.getMovePossible(c);
     }
 
+
+    public int getIdCurrentPlayer() {
+        return game.getIdCurrentPlayer();
+    }
     public void notifyObserver() {
         game.notifyObservers(game.getPiecesIHM());
+
     }
 }

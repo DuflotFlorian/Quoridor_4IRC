@@ -73,6 +73,9 @@ public class QuoridorGame extends Observable implements BoardGames {
         this.notifyObservers(jeu.getPiecesIHM());
     }
 
+    public int getIdCurrentPlayer() {
+        return jeu.getIntIdCurrentPlayer();
+    }
     public List<PieceIHMs> getPiecesIHM() {
         return jeu.getPiecesIHM();
     }

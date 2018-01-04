@@ -151,6 +151,9 @@ public class Jeu {
 		return result;
 	}
 
+	public int getIntIdCurrentPlayer() {
+		return idCurrentPlayer;
+  }
 	/**
 	 * Permet de savoir si une piece de type mur à cette coord
 	 * @param coord
