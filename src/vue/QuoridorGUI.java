@@ -150,7 +150,9 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             boolean b;
             b = quoridorGameController.putWall(coordFinal);
             if(b){
-                positionneUnMur(new Coordonnees(x - tailleLargeurGarageMur, y));
+                System.out.println(coordFinal);
+                //positionneUnMur(new Coordonnees(x - tailleLargeurGarageMur, y));
+                positionneUnMur(coordFinal , new Coordonnees(x-tailleLargeurGarageMur ,y));
             }
         }
     }
@@ -365,54 +367,24 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
      * affiche un mur à l'emplacement des coordonnées passées
      * horizontal, on part de la gauche puis les 3 cases à droites
      * vertical : on part du haut ; puis les 3 cases dessous
-     *
+     * Avant d'appeler cette méthode la vérification et le placement coté model/controller doivennt être faites
      * @param c Coordonnées
      */
-    private void positionneUnMur(Coordonnees c) {
-
-        Case murOrPion = checkIfMurOrPion(c);// vérifie quel est le type du panel (pion, murH,murV, croisemnt)
-        Component celluleGaucheOuHaut = mapCoordPanelMur.get(c); // cellule à horizontale ou verticale à coloriser
-        Component celluleCentre, celluleDroiteOuBas; // cellules adjacentes
-
-        if (murOrPion.equals(Case.MURHORIZONTAL)) {
-            if (c.getY() <= 14 && c.getY()>= 0) {
-                // détermine les cases horizontale à côté du composant cliqué
-                celluleCentre = mapCoordPanelMur.get(new Coordonnees(c.getX(),c.getY()+1));
-                celluleDroiteOuBas = mapCoordPanelMur.get(new Coordonnees(c.getX(),c.getY()+2));
-                if (celluleGaucheOuHaut.getBackground() != couleurMur && celluleCentre.getBackground() != couleurMur && celluleDroiteOuBas.getBackground() !=couleurMur)
-                {
-                    colorisePanelMur(celluleGaucheOuHaut, celluleCentre, celluleDroiteOuBas);
-                }
-            }
-        }
-
-        if (murOrPion.equals(Case.MURVERTICAL)) {
-            if (c.getX() <= 14 && c.getX()>= 0) {
-                // détermine les cases horizontale à côté du composant cliqué
-                celluleCentre = mapCoordPanelMur.get(new Coordonnees(c.getX()+1,c.getY()));
-                celluleDroiteOuBas = mapCoordPanelMur.get(new Coordonnees(c.getX()+2,c.getY()));
-                if (celluleGaucheOuHaut.getBackground() != couleurMur && celluleCentre.getBackground() != couleurMur && celluleDroiteOuBas.getBackground() !=couleurMur)
-                {
-                    colorisePanelMur(celluleGaucheOuHaut, celluleCentre, celluleDroiteOuBas);
-                }
-            }
+    private void positionneUnMur(Coordonnees cJeu, Coordonnees cInterface) {
+        if(Mur.isWallBeHorizontal(cJeu)) {
+            colorisePanelMur(this.mapCoordPanelMur.get(cJeu));
+            colorisePanelMur(this.mapCoordPanelMur.get(new Coordonnees(cJeu.getX(), cJeu.getY()+1)));
+            colorisePanelMur(this.mapCoordPanelMur.get(new Coordonnees(cJeu.getX(), cJeu.getY()+2)));
+        } else {
+            colorisePanelMur(this.mapCoordPanelMur.get(cJeu));
+            colorisePanelMur(this.mapCoordPanelMur.get(new Coordonnees(cJeu.getX()+1, cJeu.getY())));
+            colorisePanelMur(this.mapCoordPanelMur.get(new Coordonnees(cJeu.getX()+2, cJeu.getY())));
         }
     }
 
-    /**
-     * fonction colorisant les Jpanel des cellules recevant un mur
-     * @param celluleGaucheOuHaut
-     * @param celluleCentre
-     * @param celluleDroiteOuBas
-     */
-    private void colorisePanelMur(Component celluleGaucheOuHaut, Component celluleCentre, Component celluleDroiteOuBas) {
-        JPanel j = (JPanel) celluleGaucheOuHaut; //cast en Jpanel
-        JPanel k = (JPanel) celluleCentre;
-        JPanel l = (JPanel) celluleDroiteOuBas;
 
-        j.setBackground(couleurMur); //colorise la case courante
-        k.setBackground(couleurMur);
-        l.setBackground(couleurMur);
+    private void colorisePanelMur(JPanel cellule) {
+        cellule.setBackground(couleurMur); //colorise la case courante
     }
 
     private Coordonnees pixelToCell(JPanel component){
