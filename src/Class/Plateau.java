@@ -1,6 +1,6 @@
 package Class;
 
-public class Plateau {
+public class Plateau implements Cloneable {
 	private GrillePion grillePion;
 	private GrilleMur grilleMur;
 	
@@ -23,7 +23,26 @@ public class Plateau {
 
 	//TODO
 	public boolean isThereAPath(){
-		AStar.findPath(this.grilleMur, new Coordonnees(1,1), new Coordonnees(16,1));
-		return true;
+		return AStar.findPath(this.grilleMur, new Coordonnees(1,1), new Coordonnees(16,1));
 	}
+
+	public void addMur(Mur m) {
+		grilleMur.ajouterMur(m);
+	}
+
+	public Object clone() {
+		Object o = null;
+		try {
+			// On récupère l'instance à renvoyer par l'appel de la
+			// méthode super.clone()
+			o = super.clone();
+		} catch(CloneNotSupportedException cnse) {
+			// Ne devrait jamais arriver car nous implémentons
+			// l'interface Cloneable
+			cnse.printStackTrace(System.err);
+		}
+		// on renvoie le clone
+		return o;
+	}
+
 }

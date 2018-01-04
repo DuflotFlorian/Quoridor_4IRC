@@ -78,9 +78,16 @@ public class Jeu {
 		if (j.isWallOk(wallCoord)) {
 			//Le placement du mur de base est valide
 			//Vérification de non croisement et tentative poser un mur deja existant
-				if(isCoordCoverByWallForPutWall(wallCoord)) {
-					return false;
-				}
+			if(isCoordCoverByWallForPutWall(wallCoord)) {
+				return false;
+			}
+
+			//Test de la présence d'un chemin
+			Plateau clonePlateau = (Plateau)this.plateau.clone();
+			clonePlateau.addMur(new Mur(wallCoord,getIdCurrentPlayer().getCouleurs(),Mur.isWallBeHorizontal(wallCoord)));
+			if(!isThereAPath()) {
+				return false;
+			}
 
 			j.putWall(wallCoord);
 			changeJoueur();
@@ -226,8 +233,8 @@ public class Jeu {
 		return joueurs[numPlayer].getCouleurs();
 	}
 
-	public void isThereAPath(){
-		this.plateau.isThereAPath();
+	public boolean isThereAPath(){
+		return this.plateau.isThereAPath();
 	}
 
 }
