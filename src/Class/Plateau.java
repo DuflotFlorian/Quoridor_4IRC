@@ -20,4 +20,10 @@ public class Plateau {
 	public String toString(){
 		return this.grillePion.toString() + "\n" + this.grilleMur.toString();
 	}
+
+	//TODO
+	public boolean isThereAPath(){
+		AStar.findPath(this.grilleMur, new Coordonnees(1,1), new Coordonnees(16,1));
+		return true;
+	}
 }

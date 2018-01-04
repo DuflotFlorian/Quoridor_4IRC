@@ -7,10 +7,12 @@ public class Jeu {
 	private Joueur[] joueurs;
 	private int nbJoueurs;
 	private int idCurrentPlayer;
+	private Plateau plateau;
 
 	public Jeu(int nbJoueurs) {
 		this.nbJoueurs = nbJoueurs;
 		this.idCurrentPlayer = 0;
+		this.plateau = new Plateau();
 
 		switch (this.nbJoueurs) {
 		case 2:
@@ -148,7 +150,7 @@ public class Jeu {
 		Piece p;
 		for(Joueur jou : joueurs) {
 			p = jou.findPiece(coord);
-			if(p != null) {
+			if(p != null && !(p instanceof Pion)) {
 				return true;
 			}
 		}
@@ -187,12 +189,16 @@ public class Jeu {
 	 * @return
 	 */
 	private  boolean isCoordCoverByWallForMovePion(Coordonnees coord){
-		if(isWallHere(coord)){ //Partie gauche d'un mur horizontal ou partie haute d'un mur vertical
+		if(isWallHere(coord)){
 			return true;
-		} else if(isWallHere(new Coordonnees(coord.getX(),coord.getY()-2))){// Partie droite d'un mur horizontal
-			return true;
-		} else if(isWallHere(new Coordonnees(coord.getX()-2,coord.getY()))){// Partie basse d'un mur horizontal
-			return true;
+		}else if (Mur.isWallBeHorizontal(coord)) {
+			if (isWallHere(new Coordonnees(coord.getX(), coord.getY() - 2))) {
+				return true;
+			}
+		}else {
+			if (isWallHere(new Coordonnees(coord.getX() - 2, coord.getY()))) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -218,6 +224,10 @@ public class Jeu {
 
 	public Couleur getPlayerColor(int numPlayer){
 		return joueurs[numPlayer].getCouleurs();
+	}
+
+	public void isThereAPath(){
+		this.plateau.isThereAPath();
 	}
 
 }

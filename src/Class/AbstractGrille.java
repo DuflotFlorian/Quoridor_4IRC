@@ -29,4 +29,8 @@ public abstract class AbstractGrille {
     public String getName(){
         return this.name;
     }
+
+    public int getNumberElement(){
+        return this.elements.size();
+    }
 }
