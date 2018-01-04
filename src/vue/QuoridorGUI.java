@@ -255,13 +255,15 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         mapPanelPiece = new HashMap<JLabel, PieceIHM>();
 
         for(PieceIHM pieceIHM : piecesIHM) {
-            String url = "images" + File.separator + "Pion" + pieceIHM.getCouleur().toString() + ".png";
-            java.net.URL s = QuoridorGUI.class.getResource(url);
-            JLabel piece = new JLabel(new ImageIcon(s));
-            JPanel panel = (JPanel) plateauQuoridor.getComponent((pieceIHM.getCoordonnees().getY() * 17)+pieceIHM.getCoordonnees().getX());
-            mapPanelPiece.put(piece, pieceIHM);
-            panel.removeAll();
-            panel.add(piece);
+            if(pieceIHM.getNamePiece().equals("Pion")) {
+                String url = "images" + File.separator + "Pion" + pieceIHM.getCouleur().toString() + ".png";
+                java.net.URL s = QuoridorGUI.class.getResource(url);
+                JLabel piece = new JLabel(new ImageIcon(s));
+                JPanel panel = (JPanel) plateauQuoridor.getComponent((pieceIHM.getCoordonnees().getY() * 17) + pieceIHM.getCoordonnees().getX());
+                mapPanelPiece.put(piece, pieceIHM);
+                panel.removeAll();
+                panel.add(piece);
+            }
         }
 
         remplissagePanelCote(piecesIHM);
