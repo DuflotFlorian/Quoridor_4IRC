@@ -15,8 +15,8 @@ public class Jeu {
 		switch (this.nbJoueurs) {
 		case 2:
 			this.joueurs = new Joueur[2];
-			this.joueurs[0] = new Joueur(10, Couleur.BLANC, new Coordonnees(0,8),new Coordonnees(16,8));
-			this.joueurs[1] = new Joueur(10, Couleur.NOIR, new Coordonnees(16,8),new Coordonnees(0,8));
+			this.joueurs[0] = new Joueur(10, Couleur.BLEU, new Coordonnees(0,8),new Coordonnees(16,8));
+			this.joueurs[1] = new Joueur(10, Couleur.ROUGE, new Coordonnees(16,8),new Coordonnees(0,8));
 			break;
 
 		default:
