@@ -25,7 +25,7 @@ public class Mur extends AbstractPiece{
 	}
 
 	//TODO
-	public boolean isMoveOk(Coordonnees finalCoord){
+	public boolean isMoveOk(Coordonnees finalCoord, boolean isJumping){
 		return true;
 	}
 
