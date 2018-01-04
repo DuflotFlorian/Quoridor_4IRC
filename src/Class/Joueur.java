@@ -42,6 +42,12 @@ public class Joueur {
 		return winCoord;
 	}
 
+	/**
+	 * Toujours tester le isMoveOK avant pour éviter toute erreur
+	 * @param initCoord
+	 * @param finalCoord
+	 * @return
+	 */
 	public boolean move(Coordonnees initCoord, Coordonnees finalCoord){
 		Piece p = findPiece(initCoord);
 		p.move(finalCoord);
@@ -50,10 +56,31 @@ public class Joueur {
 		return true;
 	}
 
-	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord){
+
+	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord, boolean isJumping){
 		Piece p = null;
 		p = findPiece(initCoord);
-		return p.isMoveOk(finalCoord);
+		return p.isMoveOk(finalCoord, isJumping);
+
+	}
+
+
+	public boolean isWallOk(Coordonnees wallCoord) {
+		Piece p = getWallUnsued();
+		if (p != null){ //Quand le joueur n'as plus de mur dispo
+			return p.isMoveOk(wallCoord);
+		} else {
+			return false;
+		}
+	}
+
+	public boolean putWall(Coordonnees wallCoord) {
+		Piece p = getWallUnsued();
+		if (p != null){ //Quand le joueur n'as plus de mur dispo
+			return p.move(wallCoord);
+		} else {
+			return false;
+		}
 	}
 
 	public List<PieceIHMs> getPiecesIHM(){
@@ -88,5 +115,19 @@ public class Joueur {
 
 		return j.getCouleurs().equals(this.getCouleurs());
 	}
+
+    /**
+     * Renvoi un mur non utilisé. Si il ne reste plus de mur non utilisés la fonction renvoi null.
+     * @return
+     */
+	private Piece getWallUnsued(){
+		for (Piece p : pieces) {
+			if(p.getCoordonnees().equals(new Coordonnees(-1,-1)) && p.getName().equals("Mur")) {
+				return p;
+			}
+		}
+		return null;
+	}
+
 }
 

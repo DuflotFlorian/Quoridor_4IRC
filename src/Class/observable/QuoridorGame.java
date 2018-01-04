@@ -18,11 +18,10 @@ public class QuoridorGame extends Observable implements BoardGames {
     @Override
     public boolean move(Coordonnees initCoord, Coordonnees finalCoord, boolean isWall) {
         boolean ret = false;
-
         ret = jeu.isMoveOk(initCoord, finalCoord);
         if(ret){
             if(isWall){
-                ret = jeu.putWall(finalCoord);
+                ret = jeu.putWall(jeu.getIdCurrentPlayer(),finalCoord);
             } else {
                 for(Joueur j : jeu.listPlayer()){
                     if(j.getActualCoord().equals(initCoord)){
@@ -76,5 +75,8 @@ public class QuoridorGame extends Observable implements BoardGames {
 
     public int getIdCurrentPlayer() {
         return jeu.getIntIdCurrentPlayer();
+    }
+    public List<PieceIHMs> getPiecesIHM() {
+        return jeu.getPiecesIHM();
     }
 }

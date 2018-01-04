@@ -35,9 +35,8 @@ public abstract class AbstractGameController implements GameControllers{
 
     public boolean putWall(Coordonnees wallCoord){
         boolean ret = false;
-
+        System.out.println(wallCoord);
         ret = this.moveModel(null, wallCoord, true);
-
         return ret;
     }
 
@@ -79,7 +78,12 @@ public abstract class AbstractGameController implements GameControllers{
         return this.game.getMovePossible(c);
     }
 
+
     public int getIdCurrentPlayer() {
         return game.getIdCurrentPlayer();
+    }
+    public void notifyObserver() {
+        game.notifyObservers(game.getPiecesIHM());
+
     }
 }
