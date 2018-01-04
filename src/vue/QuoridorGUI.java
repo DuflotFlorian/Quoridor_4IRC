@@ -215,6 +215,13 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                 pion = null;
             }
         }
+        else {
+            //Lors d'un click en dehors de l'IHM
+            //On remet l'IHM dans les conditions avant deplacement
+            System.out.println("mouseReleased hors case pion");
+            quoridorGameController.notifyObserver();
+            pion=null;
+        }
 
         if(quoridorGameController.isEnd()){
             class EndWindow extends JFrame{

@@ -77,4 +77,8 @@ public abstract class AbstractGameController implements GameControllers{
     public List<Coordonnees> getMovePossible(Coordonnees c){
         return this.game.getMovePossible(c);
     }
+
+    public void notifyObserver() {
+        game.notifyObservers(game.getPiecesIHM());
+    }
 }

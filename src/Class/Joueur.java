@@ -42,6 +42,12 @@ public class Joueur {
 		return winCoord;
 	}
 
+	/**
+	 * Toujours tester le isMoveOK avant pour éviter toute erreur
+	 * @param initCoord
+	 * @param finalCoord
+	 * @return
+	 */
 	public boolean move(Coordonnees initCoord, Coordonnees finalCoord){
 		Piece p = findPiece(initCoord);
 		p.move(finalCoord);
@@ -50,10 +56,11 @@ public class Joueur {
 		return true;
 	}
 
-	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord){
+
+	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord, boolean isJumping){
 		Piece p = null;
 		p = findPiece(initCoord);
-		return p.isMoveOk(finalCoord);
+		return p.isMoveOk(finalCoord, isJumping);
 
 	}
 

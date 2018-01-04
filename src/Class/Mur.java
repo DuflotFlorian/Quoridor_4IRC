@@ -24,13 +24,8 @@ public class Mur extends AbstractPiece{
 		this.isHorizontal = isHorizontal;
 	}
 
-	public boolean isMoveOk(Coordonnees finalCoord){
-        if (finalCoord.getX() % 2 == 1 && finalCoord.getY() % 2 == 0 ) { //Verif que la case est une case mur horizontale
-				return true;
-		} else if (finalCoord.getX() % 2 == 0 && finalCoord.getY() % 2 == 1){ //Vérif que la case est une case mur verticale
-				return true;
-		}
-		return false;
+	public boolean isMoveOk(Coordonnees finalCoord, Boolean isJumping){
+		return true;
 	}
 
 	public String toString(){
