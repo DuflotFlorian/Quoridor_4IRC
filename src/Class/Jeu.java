@@ -85,9 +85,9 @@ public class Jeu {
 			//Test de la présence d'un chemin
 			Plateau clonePlateau = (Plateau)this.plateau.clone();
 			clonePlateau.addMur(new Mur(wallCoord,getIdCurrentPlayer().getCouleurs(),Mur.isWallBeHorizontal(wallCoord)));
-			if(!isThereAPath()) {
+			/*if(!isThereAPath()) {
 				return false;
-			}
+			}*/
 
 			j.putWall(wallCoord);
 			changeJoueur();
@@ -235,6 +235,10 @@ public class Jeu {
 
 	public boolean isThereAPath(){
 		return this.plateau.isThereAPath();
+	}
+
+	public int getPlayerWallRemaining(int numPlayer){
+		return joueurs[numPlayer].getWallRemaining();
 	}
 
 }

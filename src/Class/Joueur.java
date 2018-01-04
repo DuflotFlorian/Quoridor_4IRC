@@ -10,6 +10,7 @@ public class Joueur {
 	private Couleur couleur;
 	private Coordonnees actualCoord;
 	private Coordonnees winCoord;
+	private int nbMurs;
 
 	public Joueur(int nbMurs, Couleur c, Coordonnees coord, Coordonnees winCoord) {
 		this.couleur = c;
@@ -21,7 +22,7 @@ public class Joueur {
 			Mur m = new Mur(new Coordonnees(-1, -1), c, true);
 			pieces.add(m);
 		}
-
+		this.nbMurs = nbMurs;
 		this.winCoord = winCoord;
 	}
 
@@ -124,6 +125,16 @@ public class Joueur {
 			}
 		}
 		return null;
+	}
+
+	public int getWallRemaining(){
+		int i = nbMurs;
+		for (Piece p : pieces) {
+			if(!(p.getCoordonnees().equals(new Coordonnees(-1,-1)) || p.getName().equals("Pion"))) {
+				i--;
+			}
+		}
+		return i;
 	}
 }
 

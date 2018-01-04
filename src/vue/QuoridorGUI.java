@@ -488,7 +488,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         jl1.setHorizontalAlignment(JLabel.CENTER);
         jl1.setFont(new Font("Impact", Font.PLAIN, coeffTaille/3));
         jp.add(jl1);
-        JLabel jl2 = new JLabel(""+8);
+        JLabel jl2 = new JLabel(""+quoridorGameController.getPlayerWallRemaining(numJoueur-1));
         jl2.setForeground(c);
         jl2.setHorizontalAlignment(JLabel.CENTER);
         jl2.setFont(new Font("Impact", Font.PLAIN, coeffTaille/2));

@@ -86,4 +86,6 @@ public abstract class AbstractGameController implements GameControllers{
     public void notifyObserver() {
         game.notifyObservers(game.getPiecesIHM());
     }
+
+
 }
