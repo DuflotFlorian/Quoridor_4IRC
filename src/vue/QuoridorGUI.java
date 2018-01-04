@@ -246,17 +246,19 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     public void update(Observable o, Object arg) {
         List<PieceIHM> piecesIHM = (List<PieceIHM>) arg;
         mapPanelPiece = new HashMap<JLabel, PieceIHM>();
-
+        
         for(PieceIHM pieceIHM : piecesIHM) {
-            String url = "images" + File.separator + "Pion" + pieceIHM.getCouleur().toString() + ".png";
-            java.net.URL s = QuoridorGUI.class.getResource(url);
-            JLabel piece = new JLabel();
-            piece.setIcon(new ImageIcon(new ImageIcon(s).getImage().getScaledInstance(tailleCasePion, tailleCasePion, Image.SCALE_SMOOTH)));
+            if(pieceIHM.getNamePiece().equals("Pion")){
+                String url = "images" + File.separator + "Pion" + pieceIHM.getCouleur().toString() + ".png";
+                java.net.URL s = QuoridorGUI.class.getResource(url);
+                JLabel piece = new JLabel();
+                piece.setIcon(new ImageIcon(new ImageIcon(s).getImage().getScaledInstance(tailleCasePion, tailleCasePion, Image.SCALE_SMOOTH)));
 
-            JPanel panel = (JPanel) plateauQuoridor.getComponent((pieceIHM.getCoordonnees().getY() * 17)+pieceIHM.getCoordonnees().getX());
-            mapPanelPiece.put(piece, pieceIHM);
-            panel.removeAll();
-            panel.add(piece);
+                JPanel panel = (JPanel) plateauQuoridor.getComponent((pieceIHM.getCoordonnees().getY() * 17)+pieceIHM.getCoordonnees().getX());
+                mapPanelPiece.put(piece, pieceIHM);
+                panel.removeAll();
+                panel.add(piece);
+            }  
         }
     }
 
