@@ -70,19 +70,4 @@ public class Mur extends AbstractPiece{
 
 	}
 
-	/**
-	 * Renvoi true si le mur posé à cette case est Vertical
-	 * Renvoi false si le mur est horizontal ou impossible
-	 * @param wallCoord
-	 * @return
-	 */
-	public static boolean isWallBeVertical(Coordonnees wallCoord){
-		if (wallCoord.getX() % 2 == 0 && wallCoord.getY() % 2 == 1) { //Verif que la case est une case verticale
-			return true;
-		} else {
-			return false;
-		}
-
-	}
-
 }
