@@ -9,10 +9,7 @@ import javax.swing.*;
 import Class.*;
 import Controller.GameController;
 
-/**
- *
- * @author Kevin & ludo
- */
+
 public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionListener, Observer {
     private GameController quoridorGameController;
     private JLayeredPane layeredPane;
@@ -134,10 +131,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             }
         }
 
-        //placement pions initiale
-        affichePion(new Coordonnees(0,8),Couleur.BLEU);
-        affichePion(new Coordonnees(16,8),Couleur.ROUGE);
-
     }
 
     public enum Case {
@@ -169,7 +162,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int x = e.getX();
         int y = e.getY();
         JPanel jp;
-        coordInit = new Coordonnees(x,y);
+        
         Component cmp =  layeredPane.findComponentAt(x,y);
         if (mapCoordPanelPion.containsValue(cmp)) {
             jp = (JPanel) cmp;
@@ -203,7 +196,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
         int x = e.getX();
         int y = e.getY();
-        coordInit = new Coordonnees(x,y);
 
         pion.setVisible(false);
         Component cmp = findComponentAt(x , y);
@@ -343,14 +335,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             return y-1;
         }
         return ((x*17)-17) + y-1;
-    }
-
-    public HashMap<Coordonnees, JPanel> getMapCoordPanelPion() {
-        return mapCoordPanelPion;
-    }
-
-    public HashMap<Coordonnees, JPanel> getMapCoordPanelMur() {
-        return mapCoordPanelMur;
     }
 
 

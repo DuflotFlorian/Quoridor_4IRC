@@ -126,9 +126,7 @@ public class Jeu {
 	}
 
 
-	public void isThereAPath(){
-		this.plateau.isThereAPath();
-	}
+
 
   public List<PieceIHMs> getPiecesIHM() {
 	  List<PieceIHMs> result = new ArrayList<PieceIHMs>();
