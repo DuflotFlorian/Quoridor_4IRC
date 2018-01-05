@@ -33,4 +33,5 @@ public class GrilleMur extends AbstractGrille{
 	public Mur getWall(int i){
 		return (Mur)this.getElements().get(i);
 	}
+
 }

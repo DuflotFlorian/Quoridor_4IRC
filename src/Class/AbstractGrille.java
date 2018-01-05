@@ -33,4 +33,5 @@ public abstract class AbstractGrille {
     public int getNumberElement(){
         return this.elements.size();
     }
+
 }

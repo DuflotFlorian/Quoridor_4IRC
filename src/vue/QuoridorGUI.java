@@ -9,8 +9,10 @@ import javax.swing.*;
 import Class.*;
 import Controller.GameController;
 
-
-
+/**
+ *
+ * @author Kevin & ludo
+ */
 public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionListener, Observer {
     private GameController quoridorGameController;
     private JLayeredPane layeredPane;
@@ -18,7 +20,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private JPanel garageMurGauche;
     private JPanel garageMurDroit;
     private Coordonnees coordInit;
-    // private JLabel chessPiece;
     private int xPionAdjustment;
     private int yPionAdjustment;
     private Dimension dim;
@@ -54,7 +55,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         mapCoordPanelMur = new HashMap<Coordonnees,JPanel>();
         arrayPanelCote = new ArrayList<JPanel>();
         this.coeffTaille = defineCoeffTaille();
-
         this.taille=taille;
         this.couleurMur = new Color(404040);
         tailleCasePion = (int) ((0.85 * coeffTaille));
@@ -95,6 +95,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         //GridBagLayout pour grille personnalisée
         plateauQuoridor.setLayout(new GridBagLayout());
 
+        //plateauQuoridor.setPreferredSize(dim);
         plateauQuoridor.setPreferredSize(new Dimension(taillePlateauQuoridor, taillePlateauQuoridor));
         plateauQuoridor.setBounds(tailleLargeurGarageMur, 0, taillePlateauQuoridor, taillePlateauQuoridor);
 
@@ -132,6 +133,11 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                 }
             }
         }
+
+        //placement pions initiale
+        affichePion(new Coordonnees(0,8),Couleur.BLEU);
+        affichePion(new Coordonnees(16,8),Couleur.ROUGE);
+
     }
 
     public enum Case {
@@ -150,11 +156,12 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             boolean b;
             b = quoridorGameController.putWall(coordFinal);
             if(b){
-                System.out.println(coordFinal);
-                //positionneUnMur(new Coordonnees(x - tailleLargeurGarageMur, y));
                 positionneUnMur(coordFinal , new Coordonnees(x-tailleLargeurGarageMur ,y));
             }
         }
+
+
+
     }
 
     @Override
@@ -162,8 +169,8 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int x = e.getX();
         int y = e.getY();
         JPanel jp;
+        coordInit = new Coordonnees(x,y);
         Component cmp =  layeredPane.findComponentAt(x,y);
-
         if (mapCoordPanelPion.containsValue(cmp)) {
             jp = (JPanel) cmp;
         }
@@ -181,6 +188,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             yPionAdjustment = parentLocation.y - e.getY();
             pion.setLocation(e.getX() + xPionAdjustment + plateauQuoridor.getX(), e.getY() + yPionAdjustment + plateauQuoridor.getY());
             layeredPane.add(pion, JLayeredPane.DRAG_LAYER);
+
         }
         else {
             System.out.println("Clique hors plateau de jeu");
@@ -195,6 +203,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
         int x = e.getX();
         int y = e.getY();
+        coordInit = new Coordonnees(x,y);
 
         pion.setVisible(false);
         Component cmp = findComponentAt(x , y);
@@ -255,7 +264,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     public void update(Observable o, Object arg) {
         List<PieceIHM> piecesIHM = (List<PieceIHM>) arg;
         mapPanelPiece = new HashMap<JLabel, PieceIHM>();
-
+        
         for(PieceIHM pieceIHM : piecesIHM) {
             if(pieceIHM.getNamePiece().equals("Pion")) {
                 String url = "images" + File.separator + "Pion" + pieceIHM.getCouleur().toString() + ".png";
@@ -334,7 +343,14 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             return y-1;
         }
         return ((x*17)-17) + y-1;
+    }
 
+    public HashMap<Coordonnees, JPanel> getMapCoordPanelPion() {
+        return mapCoordPanelPion;
+    }
+
+    public HashMap<Coordonnees, JPanel> getMapCoordPanelMur() {
+        return mapCoordPanelMur;
     }
 
 
@@ -356,7 +372,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int largeur = (int)(dim.getWidth()-tailleIHMLargeur)/2;
         int hauteur = (int)(dim.getHeight()-tailleIHMHauteur)/2 -coeffTaille/2;
         Point p = new Point(largeur,hauteur);
-
         return p;
     }
 
@@ -383,9 +398,37 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
     }
 
-
     private void colorisePanelMur(JPanel cellule) {
         cellule.setBackground(couleurMur); //colorise la case courante
+    }
+
+    /**
+     * fonction colorisant les Jpanel des cellules recevant un mur
+     * @param celluleGaucheOuHaut
+     * @param celluleCentre
+     * @param celluleDroiteOuBas
+     */
+    private void colorisePanelMur(Component celluleGaucheOuHaut, Component celluleCentre, Component celluleDroiteOuBas) {
+        JPanel j = (JPanel) celluleGaucheOuHaut; //cast en Jpanel
+        JPanel k = (JPanel) celluleCentre;
+        JPanel l = (JPanel) celluleDroiteOuBas;
+
+        j.setBackground(couleurMur); //colorise la case courante
+        k.setBackground(couleurMur);
+        l.setBackground(couleurMur);
+    }
+
+    /**
+     * Permet de passer au dessus des problématiques de PATH et de windows ou linux pour les séparateurs
+     * le File.separator permet dez choisir \ sous windows,  / sous nux
+     * @param coord
+     * @param c
+     */
+    private void affichePion(Coordonnees coord, Couleur c) {
+        java.net.URL imageURL = QuoridorGUI.class.getResource("images" + File.separator+ "Pion" + c.toString() + ".png");
+        JPanel j = (JPanel) plateauQuoridor.getComponent((coord.getY() * 17)+coord.getX()); // colone 8 , ligne 0
+        JLabel piece = new JLabel(new ImageIcon(imageURL));
+        j.add(piece);
     }
 
     private Coordonnees pixelToCell(JPanel component){
@@ -403,7 +446,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
         return null;
     }
-
 
     @Override
     public void mouseEntered(MouseEvent mouseEvent) {
@@ -479,7 +521,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         if(quoridorGameController.getPlayerColor(numJoueur-1).equals(Couleur.BLEU)) {
             c = new Color(0x8CC6D7); //Bleu pale
         } else if (quoridorGameController.getPlayerColor(numJoueur-1).equals(Couleur.ROUGE)) {
-            c = new Color(0xDB0B32);
+            c = new Color(0xDB0B32); //Proche Rouge Pion
         }
 
         jp.setBackground(new Color(0x808080)); //gris foncé

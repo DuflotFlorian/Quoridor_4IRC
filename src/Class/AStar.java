@@ -39,7 +39,8 @@ public class AStar {
     private static void append_neighbors(Tile[][] grid,ArrayList<Coordonnees> open,ArrayList<Coordonnees> close,Coordonnees next,Coordonnees goal
     ){
         for (Coordonnees neigh:
-                getNeighbors(grid, next)) {
+
+            getNeighbors(grid, next)) {
             Tile neigh_tile = getTile(grid,neigh);
             if(!neigh_tile.wall && !close.contains(neigh)){
                 neigh_tile.G = calcG(grid,neigh);
@@ -69,9 +70,9 @@ public class AStar {
     private static boolean isInTable(Tile[][] grid, Coordonnees coord){
         return
                 coord.getX() < 17 &&
-                        coord.getY() < 17 &&
-                        coord.getX() >= 0 &&
-                        coord.getY() >= 0;
+                coord.getY() < 17 &&
+                coord.getX() >= 0 &&
+                coord.getY() >= 0;
     }
 
     private static boolean compareCoord(Coordonnees start, Coordonnees stop){
@@ -99,6 +100,7 @@ public class AStar {
                 if (min == -1)
                     min = getTile(grid,c).G;
                 else
+
                 if (getTile(grid,c).G != -1 && getTile(grid,c).G < min)
                     min = getTile(grid,c).G;
             }
@@ -130,6 +132,7 @@ public class AStar {
                 grid[x][y+1].wall = true;
                 grid[x][y+2].wall = true;
             }
+
         }
 
         return grid;
@@ -173,3 +176,4 @@ public class AStar {
         }
     }
 }
+

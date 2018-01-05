@@ -31,6 +31,7 @@ public class Jeu {
 	}
 
 	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord){
+
 		return true;
 	}
 
@@ -124,15 +125,20 @@ public class Jeu {
 		return result;
 	}
 
-    public List<PieceIHMs> getPiecesIHM() {
-	    List<PieceIHMs> result = new ArrayList<PieceIHMs>();
-	    for(Joueur j: joueurs){
-	        result.addAll(j.getPiecesIHM());
-        }
-        return result;
-    }
 
-    public Couleur getPieceColor(Coordonnees coord){
+	public void isThereAPath(){
+		this.plateau.isThereAPath();
+	}
+
+  public List<PieceIHMs> getPiecesIHM() {
+	  List<PieceIHMs> result = new ArrayList<PieceIHMs>();
+	  for(Joueur j: joueurs){
+	      result.addAll(j.getPiecesIHM());
+    }
+      return result;
+  }
+
+  public Couleur getPieceColor(Coordonnees coord){
 		return joueurs[idCurrentPlayer].getCouleurs();
 	}
 
