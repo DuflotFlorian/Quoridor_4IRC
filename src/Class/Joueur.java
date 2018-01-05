@@ -60,13 +60,15 @@ public class Joueur {
 	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord, boolean isJumping){
 		Piece p = null;
 		p = findPiece(initCoord);
-		return p.isMoveOk(finalCoord, isJumping);
+                Pion pi = (Pion)p;
+		return pi.isMoveOk(finalCoord, isJumping);
 	}
 
 	public boolean isWallOk(Coordonnees wallCoord) {
 		Piece p = getWallUnsued();
 		if (p != null){ //Quand le joueur n'as plus de mur dispo
-			return p.isMoveOk(wallCoord ,false);
+                        Mur wall = (Mur) p;
+			return wall.isMoveOk(wallCoord);
 		} else {
 			return false;
 		}
