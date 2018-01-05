@@ -26,7 +26,12 @@ public class GrilleMur extends AbstractGrille{
 		this.addElement(m);
 	}
 
-	public int getNumberWall(){ return this.getNumberElement(); }
+	public int getNumberWall(){
+		return this.getNumberElement();
+	}
 
-	public Mur getWall(int i){ return (Mur)this.getElements().get(i); }
+	public Mur getWall(int i){
+		return (Mur)this.getElements().get(i);
+	}
+
 }

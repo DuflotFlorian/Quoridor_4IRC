@@ -39,7 +39,8 @@ public class AStar {
     private static void append_neighbors(Tile[][] grid,ArrayList<Coordonnees> open,ArrayList<Coordonnees> close,Coordonnees next,Coordonnees goal
     ){
         for (Coordonnees neigh:
-             getNeighbors(grid, next)) {
+
+            getNeighbors(grid, next)) {
             Tile neigh_tile = getTile(grid,neigh);
             if(!neigh_tile.wall && !close.contains(neigh)){
                 neigh_tile.G = calcG(grid,neigh);
@@ -52,18 +53,18 @@ public class AStar {
     }
 
     private static Coordonnees getNext(Tile[][] grid, ArrayList<Coordonnees> open){
-       Coordonnees next;
-       next = open.get(0);
-       for(int i=1; i < open.size(); i++){
-           if (getTile(grid,open.get(i)).F < getTile(grid,next).F)
-               next = open.get(i);
-           else
-               if(getTile(grid,open.get(i)).F == getTile(grid,next).F &&
-                       getTile(grid, open.get(i)).H < getTile(grid,next).H){
-               next = open.get(i);
-               }
-       }
-       return next;
+        Coordonnees next;
+        next = open.get(0);
+        for(int i=1; i < open.size(); i++){
+            if (getTile(grid,open.get(i)).F < getTile(grid,next).F)
+                next = open.get(i);
+            else
+            if(getTile(grid,open.get(i)).F == getTile(grid,next).F &&
+                    getTile(grid, open.get(i)).H < getTile(grid,next).H){
+                next = open.get(i);
+            }
+        }
+        return next;
     }
 
     private static boolean isInTable(Tile[][] grid, Coordonnees coord){
@@ -99,8 +100,9 @@ public class AStar {
                 if (min == -1)
                     min = getTile(grid,c).G;
                 else
-                    if (getTile(grid,c).G != -1 && getTile(grid,c).G < min)
-                        min = getTile(grid,c).G;
+
+                if (getTile(grid,c).G != -1 && getTile(grid,c).G < min)
+                    min = getTile(grid,c).G;
             }
         }
         return min + 1;
@@ -129,7 +131,8 @@ public class AStar {
             else{
                 grid[x][y+1].wall = true;
                 grid[x][y+2].wall = true;
-             }
+            }
+
         }
 
         return grid;
@@ -173,3 +176,4 @@ public class AStar {
         }
     }
 }
+

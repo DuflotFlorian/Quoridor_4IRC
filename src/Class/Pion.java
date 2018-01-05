@@ -10,16 +10,16 @@ public class Pion extends AbstractPiece{
 		super(coord, color);
 	}
 
-	public boolean isMoveOk(Coordonnees finalCoord, Boolean isJumping){
-			return getAvailableMove(isJumping).contains(finalCoord);
+	public boolean isMoveOk(Coordonnees finalCoord, boolean isJumping){
+		return getAvailableMove(isJumping).contains(finalCoord);
 	}
 
-	private ArrayList<Coordonnees> getAvailableMove(Boolean isJumping) {
+	private ArrayList<Coordonnees> getAvailableMove(boolean isJumping) {
 		ArrayList<Coordonnees> result = new ArrayList<Coordonnees>();
 		boolean validX, validY;
 		int diffOk = 2;
 		if(isJumping){
-			diffOk = 4;
+				diffOk = 4;
 		}
 		for(int x = 0; x < 17; x++){
 			for(int y = 0; y < 17; y++){

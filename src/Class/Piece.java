@@ -8,7 +8,7 @@ public interface Piece {
 
     public Coordonnees getCoordonnees();
 
-    public boolean isMoveOk(Coordonnees finalCoord, Boolean isJumping);
-
     public boolean move(Coordonnees coord);
+
+
 }

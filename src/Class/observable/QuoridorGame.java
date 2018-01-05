@@ -76,7 +76,16 @@ public class QuoridorGame extends Observable implements BoardGames {
     public int getIdCurrentPlayer() {
         return jeu.getIntIdCurrentPlayer();
     }
+
     public List<PieceIHMs> getPiecesIHM() {
         return jeu.getPiecesIHM();
+    }
+
+    public Couleur getPlayerColor(int numPlayer){
+        return jeu.getPlayerColor(numPlayer);
+    }
+
+    public int getPlayerWallRemaining(int numPlayer) {
+        return jeu.getPlayerWallRemaining(numPlayer);
     }
 }

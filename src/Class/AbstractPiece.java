@@ -37,11 +37,9 @@ public abstract class AbstractPiece implements Piece{
         return this.name;
     }
 
-    public abstract boolean isMoveOk(Coordonnees finalCoord, Boolean isJumping);
-
     public boolean move(Coordonnees coord){
             this.coordonnees = coord;
-            return true;
+        return true;
     }
 
 }

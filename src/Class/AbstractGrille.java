@@ -30,5 +30,8 @@ public abstract class AbstractGrille {
         return this.name;
     }
 
-    public int getNumberElement(){ return this.elements.size(); }
+    public int getNumberElement(){
+        return this.elements.size();
+    }
+
 }
