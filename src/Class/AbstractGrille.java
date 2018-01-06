@@ -34,4 +34,8 @@ public abstract class AbstractGrille {
         return this.elements.size();
     }
 
+    public void removeElement(AbstractPiece p){
+        elements.remove(p);
+    }
+
 }

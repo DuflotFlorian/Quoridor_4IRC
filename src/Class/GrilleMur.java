@@ -2,7 +2,7 @@ package Class;
 import java.util.ArrayList;
 
 public class GrilleMur extends AbstractGrille{
-	private ArrayList<Mur> listMurs;
+	//private ArrayList<Mur> listMurs;
 	
 	public GrilleMur() {
 		super(new ArrayList<Mur>());
@@ -34,4 +34,7 @@ public class GrilleMur extends AbstractGrille{
 		return (Mur)this.getElements().get(i);
 	}
 
+	public void removeMur(Mur m) {
+		this.removeElement(m);
+	}
 }
