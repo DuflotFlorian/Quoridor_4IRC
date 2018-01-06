@@ -30,8 +30,7 @@ public class Jeu {
 		return this.joueurs[idCurrentPlayer];
 	}
 
-	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord){
-
+	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord, boolean isWall){
 		return true;
 	}
 
@@ -83,6 +82,12 @@ public class Jeu {
 				return false;
 			}
 
+			// verif de l'intégralité du mur à l'intérieur du plateau
+			if (!isWallInside(wallCoord)) {
+			    return false;
+            }
+
+
 			//Test de la présence d'un chemin
 			Plateau clonePlateau = (Plateau)this.plateau.clone();
 			clonePlateau.addMur(new Mur(wallCoord,getIdCurrentPlayer().getCouleurs(),Mur.isWallBeHorizontal(wallCoord)));
@@ -93,9 +98,9 @@ public class Jeu {
 			j.putWall(wallCoord);
 			changeJoueur();
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	public void changeJoueur(){
@@ -117,10 +122,15 @@ public class Jeu {
 	public boolean isWin(){
 		boolean result = false;
 		for(Joueur j : joueurs){
-			if(j.getActualCoord().equals(j.getWinCoord())){
-				result = true;
-				break;
-			}
+			if (j.getCouleurs().equals(Couleur.BLEU) || j.getCouleurs().equals(Couleur.ROUGE) ) {
+                if (j.getActualCoord().getX() == j.getWinCoord().getX()) {
+                    result = true;
+                    break;
+                }
+            } else if (j.getActualCoord().getY() == j.getWinCoord().getY()) {
+                    result = true;
+                    break;
+            }
 		}
 		return result;
 	}
@@ -232,6 +242,21 @@ public class Jeu {
 		}
 		return false;
 	}
+
+    /**
+     * Permet de s'assurer qu'on essaye de positionner un mur avec ses 3 cases dans le plateau sans en sortir
+     * @param coord la coordonnées de placement du mur
+     * @return boolean
+     */
+	private boolean isWallInside(Coordonnees coord) {
+            if (coord.getX() % 2 != 0 && coord.getY() < 15) { // clic horizontal
+                return true;
+            }
+            if (coord.getX() % 2 == 0 && coord.getX() < 15) {
+                return true;
+            }
+	    return false;
+    }
 
 	public Couleur getPlayerColor(int numPlayer){
 		return joueurs[numPlayer].getCouleurs();
