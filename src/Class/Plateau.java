@@ -22,9 +22,8 @@ public class Plateau {
 		return this.grillePion.toString() + "\n" + this.grilleMur.toString();
 	}
 
-	//TODO
-	public boolean isThereAPath(){
-		return AStar.findPath(this.grilleMur, new Coordonnees(0,0), new Coordonnees(16,0));
+	public boolean isThereAPath(Coordonnees init,Coordonnees dest){
+		return AStar.findPath(this.grilleMur, init, dest);
 	}
 
 	public void addMur(Mur m) {
@@ -33,7 +32,6 @@ public class Plateau {
 
 	public void removeMur(Mur m){
 		grilleMur.removeMur(m);
-		System.out.println("Toto");
 	}
 
 }

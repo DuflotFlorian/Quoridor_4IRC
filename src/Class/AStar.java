@@ -169,7 +169,7 @@ public class AStar {
             current = turn(grid, open, close, goal);
         }
         /*Debug*/
-        printGrid(grid);
+        //printGrid(grid);
         if(current.getX() == goal.getX() && current.getY() == goal.getY())
             return true;
         return false;

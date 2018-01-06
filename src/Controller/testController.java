@@ -5,7 +5,7 @@ public class testController {
 
     public static void main(String[] args){
         Jeu monJeu = new Jeu(2);
-        monJeu.isThereAPath();
+        //monJeu.isThereAPath();
 
     }
     public static void test_movement(){
