@@ -35,7 +35,7 @@ public abstract class AbstractGrille {
     }
 
     public void removeElement(AbstractPiece p){
-        elements.remove(p);
+        this.elements.remove(p);
     }
 
 }

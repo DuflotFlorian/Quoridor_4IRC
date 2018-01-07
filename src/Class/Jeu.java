@@ -83,10 +83,9 @@ public class Jeu {
 				return false;
 			}
 			if(!addNewWallIfPaths(wallCoord)){
-				System.out.println("No Path");
+				//Enfermement si on pose un mur à cette coordonnée
 				return false;
 			}
-			System.out.println("Path");
 			j.putWall(wallCoord);
 			changeJoueur();
 			return true;
@@ -253,24 +252,20 @@ public class Jeu {
 		plateau.addMur(tmpMur);
 		//Test de la présence d'un chemin pour chaque Joueur
 		boolean retJoueur = false;
+		int lineToCheck = -1;
 		for (Joueur jou : joueurs){
-			//TODO optimiser ça et remove debug inutiles + clean
 			if(jou.getCouleurs().equals(Couleur.BLEU)){
-				for(int i=0; i<17 ;i=i+2){
-					if(isThereAPath(jou.getActualCoord(),new Coordonnees(16,i))) {
-						retJoueur = true;
-						break;
-					}
-				}
+				lineToCheck = 16;
 			}else if (jou.getCouleurs().equals(Couleur.ROUGE)){
-				for(int i=0; i<17 ;i=i+2){
-					if(isThereAPath(jou.getActualCoord(),new Coordonnees(0,i))) {
-						retJoueur = true;
-						break;
-					}
+				lineToCheck = 0;
+			}
+			for(int i=0; i<17 ;i=i+2){
+				if(isThereAPath(jou.getActualCoord(),new Coordonnees(lineToCheck,i))) {
+					retJoueur = true;
+					break;
 				}
 			}
-			if( retJoueur == false) { //Si un des joueurs n'a pas de chemin on stope
+			if( retJoueur == false) { //Si un des joueurs n'a pas de chemin on stoppe
 				plateau.removeMur(tmpMur);
 				return false;
 			} else {
