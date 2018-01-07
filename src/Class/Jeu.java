@@ -81,20 +81,15 @@ public class Jeu {
 			if(isCoordCoverByWallForPutWall(wallCoord)) {
 				return false;
 			}
-
-			// verif de l'intégralité du mur à l'intérieur du plateau
-			if (!isWallInside(wallCoord)) {
-			    return false;
+            // verif de l'intégralité du mur à l'intérieur du plateau
+            if (!isWallInside(wallCoord)) {
+                return false;
             }
 
-
-			//Test de la présence d'un chemin
-			Plateau clonePlateau = (Plateau)this.plateau.clone();
-			clonePlateau.addMur(new Mur(wallCoord,getIdCurrentPlayer().getCouleurs(),Mur.isWallBeHorizontal(wallCoord)));
-			/*if(!isThereAPath()) {
+			if(!addNewWallIfPaths(wallCoord)){
+				//Enfermement si on pose un mur à cette coordonnée
 				return false;
-			}*/
-
+			}
 			j.putWall(wallCoord);
 			changeJoueur();
 			return true;
@@ -262,12 +257,46 @@ public class Jeu {
 		return joueurs[numPlayer].getCouleurs();
 	}
 
-	public boolean isThereAPath(){
-		return this.plateau.isThereAPath();
+
+	private boolean isThereAPath(Coordonnees init,Coordonnees dest){
+		return this.plateau.isThereAPath(init,dest);
 	}
 
 	public int getPlayerWallRemaining(int numPlayer){
 		return joueurs[numPlayer].getWallRemaining();
 	}
 
+	/** Ajoute le nouveau mur à la grille Mur et renvoi true si un chemin est possible après pose de ce mur
+	 *
+	 * @param wallCoord
+	 * @return
+	 */
+	public boolean addNewWallIfPaths(Coordonnees wallCoord){
+		Mur tmpMur = new Mur(wallCoord,getIdCurrentPlayer().getCouleurs(),Mur.isWallBeHorizontal(wallCoord));
+		plateau.addMur(tmpMur);
+		//Test de la présence d'un chemin pour chaque Joueur
+		boolean retJoueur = false;
+		int lineToCheck = -1;
+		for (Joueur jou : joueurs){
+			if(jou.getCouleurs().equals(Couleur.BLEU)){
+				lineToCheck = 16;
+			}else if (jou.getCouleurs().equals(Couleur.ROUGE)){
+				lineToCheck = 0;
+			}
+			for(int i=0; i<17 ;i=i+2){
+				if(isThereAPath(jou.getActualCoord(),new Coordonnees(lineToCheck,i))) {
+					retJoueur = true;
+					break;
+				}
+			}
+			if( retJoueur == false) { //Si un des joueurs n'a pas de chemin on stoppe
+				plateau.removeMur(tmpMur);
+				return false;
+			} else {
+				retJoueur = false;
+			}
+
+		}
+		return true;
+	}
 }

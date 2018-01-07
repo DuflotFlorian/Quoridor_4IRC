@@ -116,21 +116,27 @@ public class AStar {
         Tile[][] grid = new Tile[17][17];
         for(int i=0;i<17;i++){
             for(int j=0;j<17;j++){
-                grid[i][j]= new Tile(-1,0,0, false);
+                //Par défaut les piosn ne passent pas par les casses de type croisement, donc tous les croisements sont des murs
+                if (i%2 == 1 && j%2 == 1){
+                    grid[i][j]= new Tile(-1,0,0, true);
+                }else {
+                    grid[i][j]= new Tile(-1,0,0, false);
+                }
+
             }
         }
+
+
         for(int i=0;i<listWall.getNumberWall();i++){
             Mur wall = listWall.getWall(i);
             int x = wall.getCoordonnees().getX();
             int y = wall.getCoordonnees().getY();
             grid[x][y].wall = true;
             if(wall.getSens()) {
-                grid[x+1][y].wall = true;
-                grid[x+2][y].wall = true;
+                grid[x][y+2].wall = true;
             }
             else{
-                grid[x][y+1].wall = true;
-                grid[x][y+2].wall = true;
+                grid[x+2][y].wall = true;
             }
 
         }
@@ -159,6 +165,7 @@ public class AStar {
         while (!compareCoord(current, goal) && open.size() >0) {
             current = turn(grid, open, close, goal);
         }
+
         if(current.getX() == goal.getX() && current.getY() == goal.getY())
             return true;
         return false;
