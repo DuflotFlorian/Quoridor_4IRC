@@ -271,7 +271,7 @@ public class Jeu {
 	 * @param wallCoord
 	 * @return
 	 */
-	public boolean addNewWallIfPaths(Coordonnees wallCoord){
+	private boolean addNewWallIfPaths(Coordonnees wallCoord){
 		Mur tmpMur = new Mur(wallCoord,getIdCurrentPlayer().getCouleurs(),Mur.isWallBeHorizontal(wallCoord));
 		plateau.addMur(tmpMur);
 		//Test de la présence d'un chemin pour chaque Joueur
@@ -289,7 +289,7 @@ public class Jeu {
 					break;
 				}
 			}
-			if( retJoueur == false) { //Si un des joueurs n'a pas de chemin on stoppe
+			if( !retJoueur) { //Si un des joueurs n'a pas de chemin on stoppe
 				plateau.removeMur(tmpMur);
 				return false;
 			} else {
