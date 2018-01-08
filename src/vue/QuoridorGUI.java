@@ -2,7 +2,6 @@ package vue;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
@@ -33,7 +32,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private int taillePlateauQuoridor;
     private int coeffTaille;
     private  Color couleurMur;
-    private ArrayList<JPanel> arrayPanelCote ;
 
     // Coordonnées de la position initiale de la pièce déplacée
     private Coordonnees coordFinal;
@@ -50,7 +48,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         //Creation des maps murs + pions
         mapCoordPanelPion = new HashMap<Coordonnees,JPanel>();
         mapCoordPanelMur = new HashMap<Coordonnees,JPanel>();
-        arrayPanelCote = new ArrayList<JPanel>();
         this.coeffTaille = defineCoeffTaille();
         this.taille=taille;
         this.couleurMur = new Color(404040);
@@ -66,7 +63,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         //Definition de la taille general de la frame
         dim = new Dimension(tailleIHMLargeur,tailleIHMHauteur);
         getContentPane().setPreferredSize(dim);
-        //getContentPane().setLayout(new BorderLayout());
         layeredPane = new JLayeredPane();
         getContentPane().add(layeredPane);
         layeredPane.setPreferredSize(dim);
@@ -92,7 +88,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         //GridBagLayout pour grille personnalisée
         plateauQuoridor.setLayout(new GridBagLayout());
 
-        //plateauQuoridor.setPreferredSize(dim);
         plateauQuoridor.setPreferredSize(new Dimension(taillePlateauQuoridor, taillePlateauQuoridor));
         plateauQuoridor.setBounds(tailleLargeurGarageMur, 0, taillePlateauQuoridor, taillePlateauQuoridor);
 
@@ -259,7 +254,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         
         for(PieceIHM pieceIHM : piecesIHM) {
             if(pieceIHM.getNamePiece().equals("Pion")) {
-                String url = "images" + File.separator + "Pion" + pieceIHM.getCouleur().toString() + ".png";
+                String url = "/vue/images/Pion" + pieceIHM.getCouleur().toString() + ".png";
                 java.net.URL s = QuoridorGUI.class.getResource(url);
                 JLabel piece = new JLabel();
                 piece.setIcon(new ImageIcon(new ImageIcon(s).getImage().getScaledInstance(tailleCasePion, tailleCasePion, Image.SCALE_SMOOTH)));
@@ -273,34 +268,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         remplissagePanelCote();
     }
 
-    /**
-     * nous donne le type de cellule sélectionnée
-     * @param c coordonnées
-     * @return case de type pion, murHorizontal, murVertical croisement
-     */
-    private Case checkIfMurOrPion(Coordonnees c) {
-        int i=c.getX(), j=c.getY();
-
-        if (i%2 == 0 && j%2 == 0 ) {
-            return Case.PION;
-        } else if (i%2 == 1 && j%2 == 1) {
-            return Case.CROISEMENT;
-        } else if (i%2 == 0 && j%2 == 1){
-            return Case.MURVERTICAL;
-        }
-        return Case.MURHORIZONTAL;
-    }
-
-    /**
-     * permet de retourner une coordonnée sur un clic dans le plateau
-     * @param x en Pixels
-     * @param y en Pixels
-     * @return Coordonnée offset  (numéro de ligne, numéro de colonne)
-     */
-    private Coordonnees getArrayPosition(int x, int y) {
-        Coordonnees c = new Coordonnees(getOffsetFromPixel(x),getOffsetFromPixel(y));
-        return c;
-    }
 
     /**
      *  retourne une position offset dans le plateau
@@ -400,19 +367,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         j.setBackground(couleurMur); //colorise la case courante
         k.setBackground(couleurMur);
         l.setBackground(couleurMur);
-    }
-
-    /**
-     * Permet de passer au dessus des problématiques de PATH et de windows ou linux pour les séparateurs
-     * le File.separator permet dez choisir \ sous windows,  / sous nux
-     * @param coord
-     * @param c
-     */
-    private void affichePion(Coordonnees coord, Couleur c) {
-        java.net.URL imageURL = QuoridorGUI.class.getResource("images" + File.separator+ "Pion" + c.toString() + ".png");
-        JPanel j = (JPanel) plateauQuoridor.getComponent((coord.getY() * 17)+coord.getX()); // colone 8 , ligne 0
-        JLabel piece = new JLabel(new ImageIcon(imageURL));
-        j.add(piece);
     }
 
     private Coordonnees pixelToCell(JPanel component){
