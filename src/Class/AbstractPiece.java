@@ -25,7 +25,7 @@ public abstract class AbstractPiece implements Piece{
         return this.coordonnees;
     }
 
-    Couleur getCouleur() {
+    public Couleur getCouleur() {
         return couleur;
     }
 
@@ -37,14 +37,9 @@ public abstract class AbstractPiece implements Piece{
         return this.name;
     }
 
-    public abstract boolean isMoveOk(Coordonnees finalCoord);
-
     public boolean move(Coordonnees coord){
-        if(isMoveOk(coord)){
             this.coordonnees = coord;
-            return true;
-        }
-        return false;
+        return true;
     }
 
 }

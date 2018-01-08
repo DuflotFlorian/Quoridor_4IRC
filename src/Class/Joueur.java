@@ -1,67 +1,106 @@
 package Class;
 
 import java.util.ArrayList;
-
-import static java.lang.Math.abs;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class Joueur {
-	private Pion pion;
-	private ArrayList<Mur> listMurs;
-	private int nbMaxMurs;
+	private List<Piece> pieces;
+	private Couleur couleur;
+	private Coordonnees actualCoord;
 	private Coordonnees winCoord;
+	private int nbMurs;
 
-	public Joueur(int nbMurs, Couleur c, Coordonnees coord) {
-		this.pion = new Pion(coord, c);
-		this.listMurs = new ArrayList<Mur>();
-		this.nbMaxMurs = nbMurs;
+	public Joueur(int nbMurs, Couleur c, Coordonnees coord, Coordonnees winCoord) {
+		this.couleur = c;
+		this.actualCoord = coord;
+		Pion pion = new Pion(coord, c);
+		pieces = new ArrayList<Piece>();
+		pieces.add(pion);
+		for(int i = 0; i < nbMurs; i++){
+			Mur m = new Mur(new Coordonnees(-1, -1), c, true);
+			pieces.add(m);
+		}
+		this.nbMurs = nbMurs;
+		this.winCoord = winCoord;
 	}
 
 	public Couleur getCouleurs() {
-		return pion.getCouleur();
+		return this.couleur;
 	}
 
-	public Pion getPion(){
-		return this.pion;
-	}
-	
-	public int nbMursPosee(){
-		return this.listMurs.size();
-	}
-
-	public int getNbMaxMurs() {
-		return nbMaxMurs;
-	}
-
-	public Coordonnees getCoordonnees() {
-		return this.pion.getCoordonnees();
+	public Piece findPiece(Coordonnees coord){
+		for(Piece p : pieces){
+			if(p.getCoordonnees().equals(coord)){
+				return p;
+			}
+		}
+		return null;
 	}
 
 	public Coordonnees getWinCoord() {
 		return winCoord;
 	}
 
-	public void setWinCoord(Coordonnees coord){
-		this.winCoord = coord;
+	/**
+	 * Toujours tester le isMoveOK avant pour éviter toute erreur
+	 * @param initCoord
+	 * @param finalCoord
+	 * @return
+	 */
+	public boolean move(Coordonnees initCoord, Coordonnees finalCoord){
+		Piece p = findPiece(initCoord);
+		p.move(finalCoord);
+		this.actualCoord = finalCoord;
+		pieces.set(pieces.indexOf(p),p);
+		return true;
 	}
 
-	public void setPionCoordonnees(Coordonnees coord){
-		this.pion.setCoordonnees(coord);
+	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord, boolean isJumping){
+		Piece p = null;
+		p = findPiece(initCoord);
+                Pion pi = (Pion)p;
+		return pi.isMoveOk(finalCoord, isJumping);
 	}
 
-	public void move(Coordonnees coord){
-		this.pion.setCoordonnees(coord);
+	public boolean isWallOk(Coordonnees wallCoord) {
+		Piece p = getWallUnsued();
+		if (p != null){ //Quand le joueur n'as plus de mur dispo
+                        Mur wall = (Mur) p;
+			return wall.isMoveOk(wallCoord);
+		} else {
+			return false;
+		}
 	}
 
-	public boolean isMoveOk(Coordonnees c){
-		return this.pion.isMoveOk(c);
+	public boolean putWall(Coordonnees wallCoord) {
+		Piece p = getWallUnsued();
+		if (p != null){ //Quand le joueur n'as plus de mur dispo
+			return p.move(wallCoord);
+		} else {
+			return false;
+		}
+	}
+
+	public List<PieceIHMs> getPiecesIHM(){
+		List<PieceIHMs> result = new LinkedList<PieceIHMs>();
+		for (Piece p : pieces) {
+			if(!p.getCoordonnees().equals(new Coordonnees(-1,-1))){
+				PieceIHM pIhm = new PieceIHM(p);
+				result.add(pIhm);
+			}
+		}
+		return result;
+	}
+
+	public Coordonnees getActualCoord() {
+		return this.actualCoord;
 	}
 
 	public String toString() {
 		String res = "";
 		res += "\tCouleur : " + this.getCouleurs() + "\n";
-		res += "\tNombre max de murs : " + this.nbMaxMurs + "\n";
-		res += "\tPosition pion : " + this.pion.getCoordonnees().toString() + "\n";
 		return res;
 	}
 
@@ -75,6 +114,29 @@ public class Joueur {
 		Joueur j = (Joueur) obj;
 
 		return j.getCouleurs().equals(this.getCouleurs());
+	}
+
+	/**
+	 * Renvoi un mur non utilisé. Si il ne reste plus de mur non utilisés la fonction renvoi null.
+	 * @return
+	 */
+	private Piece getWallUnsued(){
+		for (Piece p : pieces) {
+			if(p.getCoordonnees().equals(new Coordonnees(-1,-1)) && p.getName().equals("Mur")) {
+				return p;
+			}
+		}
+		return null;
+	}
+
+	public int getWallRemaining(){
+		int i = nbMurs;
+		for (Piece p : pieces) {
+			if(!(p.getCoordonnees().equals(new Coordonnees(-1,-1)) || p.getName().equals("Pion"))) {
+				i--;
+			}
+		}
+		return i;
 	}
 }
 
