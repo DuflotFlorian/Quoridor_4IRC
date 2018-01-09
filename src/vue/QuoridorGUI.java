@@ -344,7 +344,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
      */
     private int defineCoeffTaille () {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        return ((int) dim.getWidth() / 18); //18 est un rapport taille/ecran
+        return ((int) dim.getHeight() / 11); //11 est un rapport taille/ecran
     }
 
     /**
