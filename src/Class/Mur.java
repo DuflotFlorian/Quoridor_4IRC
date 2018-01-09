@@ -1,6 +1,5 @@
 package Class;
 
-import java.util.Objects;
 
 public class Mur extends AbstractPiece{
 	private boolean isHorizontal;
