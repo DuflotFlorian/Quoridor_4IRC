@@ -29,4 +29,13 @@ public abstract class AbstractGrille {
     public String getName(){
         return this.name;
     }
+
+    public int getNumberElement(){
+        return this.elements.size();
+    }
+
+    public void removeElement(AbstractPiece p){
+        this.elements.remove(p);
+    }
+
 }

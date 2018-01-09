@@ -37,14 +37,9 @@ public abstract class AbstractPiece implements Piece{
         return this.name;
     }
 
-    public abstract boolean isMoveOk(Coordonnees finalCoord);
-
     public boolean move(Coordonnees coord){
-        if(isMoveOk(coord)){
             this.coordonnees = coord;
-            return true;
-        }
-        return false;
+        return true;
     }
 
 }
