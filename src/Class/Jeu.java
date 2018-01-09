@@ -17,10 +17,16 @@ public class Jeu {
 		switch (this.nbJoueurs) {
 		case 2:
 			this.joueurs = new Joueur[2];
-			this.joueurs[0] = new Joueur(10, Couleur.BLEU, new Coordonnees(0,8),new Coordonnees(16,8));
-			this.joueurs[1] = new Joueur(10, Couleur.ROUGE, new Coordonnees(16,8),new Coordonnees(0,8));
+			this.joueurs[0] = new Joueur(10, Couleur.BLUE, new Coordonnees(0,8),new Coordonnees(16,8));
+			this.joueurs[1] = new Joueur(10, Couleur.RED, new Coordonnees(16,8),new Coordonnees(0,8));
 			break;
-
+		case 4:
+			this.joueurs = new Joueur[4];
+			this.joueurs[0] = new Joueur(5, Couleur.BLUE, new Coordonnees(0,8),new Coordonnees(16,8));
+			this.joueurs[1] = new Joueur(5, Couleur.RED, new Coordonnees(16,8),new Coordonnees(0,8));
+			this.joueurs[2] = new Joueur(5, Couleur.YELLOW, new Coordonnees(8,0),new Coordonnees(8,16));
+			this.joueurs[3] = new Joueur(5, Couleur.GREEN, new Coordonnees(8,16),new Coordonnees(8,0));
+			break;
 		default:
 			break;
 		}
@@ -117,7 +123,7 @@ public class Jeu {
 	public boolean isWin(){
 		boolean result = false;
 		for(Joueur j : joueurs){
-			if (j.getCouleurs().equals(Couleur.BLEU) || j.getCouleurs().equals(Couleur.ROUGE) ) {
+			if (j.getCouleurs().equals(Couleur.BLUE) || j.getCouleurs().equals(Couleur.RED) ) {
                 if (j.getActualCoord().getX() == j.getWinCoord().getX()) {
                     result = true;
                     break;
@@ -136,7 +142,7 @@ public class Jeu {
   public List<PieceIHMs> getPiecesIHM() {
 	  List<PieceIHMs> result = new ArrayList<PieceIHMs>();
 	  for(Joueur j: joueurs){
-	      result.addAll(j.getPiecesIHM());
+		  result.addAll(j.getPiecesIHM());
     }
       return result;
   }
@@ -278,9 +284,9 @@ public class Jeu {
 		boolean retJoueur = false;
 		int lineToCheck = -1;
 		for (Joueur jou : joueurs){
-			if(jou.getCouleurs().equals(Couleur.BLEU)){
+			if(jou.getCouleurs().equals(Couleur.BLUE)){
 				lineToCheck = 16;
-			}else if (jou.getCouleurs().equals(Couleur.ROUGE)){
+			}else if (jou.getCouleurs().equals(Couleur.RED)){
 				lineToCheck = 0;
 			}
 			for(int i=0; i<17 ;i=i+2){

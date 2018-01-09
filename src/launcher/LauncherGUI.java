@@ -14,7 +14,7 @@ public class LauncherGUI {
         QuoridorGame quoridorGame;
         GameController quoridorGameController;
 
-        quoridorGame = new QuoridorGame();
+        quoridorGame = new QuoridorGame(4);
         quoridorGameController = new GameController(quoridorGame);
 
         frame = new QuoridorGUI("Quoridor", quoridorGameController,  9);

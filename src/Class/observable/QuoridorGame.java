@@ -9,9 +9,9 @@ import Class.*;
 public class QuoridorGame extends Observable implements BoardGames {
     private Jeu jeu;
 
-    public QuoridorGame() {
+    public QuoridorGame(int nb) {
         super();
-        this.jeu = new Jeu(2);
+        this.jeu = new Jeu(nb);
         this.notifyObservers(jeu.getPiecesIHM());
     }
 
