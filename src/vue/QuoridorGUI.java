@@ -35,10 +35,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private  Color couleurMur;
     private ArrayList<JPanel> arrayPanelCote ;
 
-    private JLabel jLabelAide;
-    private JPanel jPanelAide;
-
-
     // Coordonnées de la position initiale de la pièce déplacée
     private Coordonnees coordFinal;
 
@@ -96,6 +92,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         //GridBagLayout pour grille personnalisée
         plateauQuoridor.setLayout(new GridBagLayout());
 
+        //plateauQuoridor.setPreferredSize(dim);
         plateauQuoridor.setPreferredSize(new Dimension(taillePlateauQuoridor, taillePlateauQuoridor));
         plateauQuoridor.setBounds(tailleLargeurGarageMur, 0, taillePlateauQuoridor, taillePlateauQuoridor);
 
@@ -134,34 +131,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             }
         }
 
-
-        jLabelAide = new JLabel();
-        jLabelAide.setBounds(tailleLargeurGarageMur/2 - coeffTaille/2,tailleIHMHauteur-coeffTaille,coeffTaille,coeffTaille);//placement adapté à la résolution
-
-        String urlAide = "images" + File.separator + "iconeAide.png";
-        java.net.URL sAide = QuoridorGUI.class.getResource(urlAide);
-        jLabelAide.setIcon(new ImageIcon(new ImageIcon(sAide).getImage().getScaledInstance(coeffTaille, coeffTaille, Image.SCALE_SMOOTH)));
-
-        layeredPane.add(jLabelAide, JLayeredPane.PALETTE_LAYER);//Affichage juste dessus de l'interface de base, evite les colisions
-
-        //Creation du JPanel d'aide à afficher
-        jPanelAide = new JPanel();
-        createAideUtilisateur(jPanelAide);
-
-        //Ajout d'un listener sur le JLabelAide
-        jLabelAide.addMouseListener(new MouseAdapter() {
-
-            @Override
-            public void mouseEntered(MouseEvent me) {
-                jPanelAide.setVisible(true);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent me) {
-                jPanelAide.setVisible(false);
-            }
-
-        });
     }
 
     public enum Case {
@@ -183,6 +152,9 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                 positionneUnMur(coordFinal , new Coordonnees(x-tailleLargeurGarageMur ,y));
             }
         }
+
+
+
     }
 
     @Override
@@ -190,6 +162,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int x = e.getX();
         int y = e.getY();
         JPanel jp;
+        
         Component cmp =  layeredPane.findComponentAt(x,y);
         if (mapCoordPanelPion.containsValue(cmp)) {
             jp = (JPanel) cmp;
@@ -208,6 +181,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             yPionAdjustment = parentLocation.y - e.getY();
             pion.setLocation(e.getX() + xPionAdjustment + plateauQuoridor.getX(), e.getY() + yPionAdjustment + plateauQuoridor.getY());
             layeredPane.add(pion, JLayeredPane.DRAG_LAYER);
+
         }
         else {
             System.out.println("Clique hors plateau de jeu");
@@ -282,7 +256,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     public void update(Observable o, Object arg) {
         List<PieceIHM> piecesIHM = (List<PieceIHM>) arg;
         mapPanelPiece = new HashMap<JLabel, PieceIHM>();
-
+        
         for(PieceIHM pieceIHM : piecesIHM) {
             if(pieceIHM.getNamePiece().equals("Pion")) {
                 String url = "images" + File.separator + "Pion" + pieceIHM.getCouleur().toString() + ".png";
@@ -348,6 +322,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         return i-1;
     }
 
+
     /**
      *
      * @param x position en X
@@ -360,7 +335,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             return y-1;
         }
         return ((x*17)-17) + y-1;
-
     }
 
 
@@ -470,23 +444,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
 
-    }
-
-    private void createAideUtilisateur(JPanel jp) {
-        jp.setBounds(tailleIHMLargeur/2 - coeffTaille*2,tailleIHMHauteur/2 -coeffTaille*2,coeffTaille*4,coeffTaille*4);
-        jp.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY ,coeffTaille/12));
-
-        //Ajout du contenu
-        jp.setLayout(new GridLayout(2,1));
-
-        JLabel txtAidePion = new JLabel("<html>Déplacement d'un pion:<br/>- Cliquer sur votre pion et faites le glisser sur la case voulue.<br/>- Si le déplacement n'est pas autorisé, le pion revient à sa position de départ.<br/></html>");
-        JLabel txtAideMur = new JLabel("<html>Positionnement d'un mur:<br/>- Pour un mur horizontal:<br/>&emsp;&emsp;Cliquer sur la case la plus à gauche du mur<br/>- Pour un mur vertical:<br/>&emsp;&emsp;Cliquer sur la case la plus en haut du mur<br/></html>");
-
-        jp.add(txtAidePion);
-        jp.add(txtAideMur);
-
-        layeredPane.add(jp, JLayeredPane.MODAL_LAYER);
-        jp.setVisible(false);
     }
 
     private void remplissagePanelCote () {
