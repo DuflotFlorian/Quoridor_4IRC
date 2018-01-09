@@ -2,6 +2,7 @@ package vue;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
@@ -254,7 +255,8 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         
         for(PieceIHM pieceIHM : piecesIHM) {
             if(pieceIHM.getNamePiece().equals("Pion")) {
-                String url = "/vue/images/Pion" + pieceIHM.getCouleur().toString() + ".png";
+                String url = File.separator + "vue" + File.separator + "images" +
+                        File.separator + "Pion" + pieceIHM.getCouleur().toString() + ".png";
                 java.net.URL s = QuoridorGUI.class.getResource(url);
                 JLabel piece = new JLabel();
                 piece.setIcon(new ImageIcon(new ImageIcon(s).getImage().getScaledInstance(tailleCasePion, tailleCasePion, Image.SCALE_SMOOTH)));
