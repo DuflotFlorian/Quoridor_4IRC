@@ -10,6 +10,7 @@ public class Joueur {
 	private Couleur couleur;
 	private Coordonnees actualCoord;
 	private Coordonnees winCoord;
+	private int nbMurs;
 
 	public Joueur(int nbMurs, Couleur c, Coordonnees coord, Coordonnees winCoord) {
 		this.couleur = c;
@@ -21,7 +22,7 @@ public class Joueur {
 			Mur m = new Mur(new Coordonnees(-1, -1), c, true);
 			pieces.add(m);
 		}
-
+		this.nbMurs = nbMurs;
 		this.winCoord = winCoord;
 	}
 
@@ -42,6 +43,12 @@ public class Joueur {
 		return winCoord;
 	}
 
+	/**
+	 * Toujours tester le isMoveOK avant pour éviter toute erreur
+	 * @param initCoord
+	 * @param finalCoord
+	 * @return
+	 */
 	public boolean move(Coordonnees initCoord, Coordonnees finalCoord){
 		Piece p = findPiece(initCoord);
 		p.move(finalCoord);
@@ -50,10 +57,30 @@ public class Joueur {
 		return true;
 	}
 
-	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord){
+	public boolean isMoveOk(Coordonnees initCoord, Coordonnees finalCoord, boolean isJumping){
 		Piece p = null;
 		p = findPiece(initCoord);
-		return p.isMoveOk(finalCoord);
+                Pion pi = (Pion)p;
+		return pi.isMoveOk(finalCoord, isJumping);
+	}
+
+	public boolean isWallOk(Coordonnees wallCoord) {
+		Piece p = getWallUnsued();
+		if (p != null){ //Quand le joueur n'as plus de mur dispo
+                        Mur wall = (Mur) p;
+			return wall.isMoveOk(wallCoord);
+		} else {
+			return false;
+		}
+	}
+
+	public boolean putWall(Coordonnees wallCoord) {
+		Piece p = getWallUnsued();
+		if (p != null){ //Quand le joueur n'as plus de mur dispo
+			return p.move(wallCoord);
+		} else {
+			return false;
+		}
 	}
 
 	public List<PieceIHMs> getPiecesIHM(){
@@ -87,6 +114,29 @@ public class Joueur {
 		Joueur j = (Joueur) obj;
 
 		return j.getCouleurs().equals(this.getCouleurs());
+	}
+
+	/**
+	 * Renvoi un mur non utilisé. Si il ne reste plus de mur non utilisés la fonction renvoi null.
+	 * @return
+	 */
+	private Piece getWallUnsued(){
+		for (Piece p : pieces) {
+			if(p.getCoordonnees().equals(new Coordonnees(-1,-1)) && p.getName().equals("Mur")) {
+				return p;
+			}
+		}
+		return null;
+	}
+
+	public int getWallRemaining(){
+		int i = nbMurs;
+		for (Piece p : pieces) {
+			if(!(p.getCoordonnees().equals(new Coordonnees(-1,-1)) || p.getName().equals("Pion"))) {
+				i--;
+			}
+		}
+		return i;
 	}
 }
 

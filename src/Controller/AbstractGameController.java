@@ -15,10 +15,8 @@ public abstract class AbstractGameController implements GameControllers{
 
     final public boolean move(Coordonnees initCoord, Coordonnees finalCoord) {
         boolean ret = false;
-
         // si c'est bien au tour du joueur courant de jouer
         if (this.isPlayerOK(initCoord)) {
-
             // Déplacement métier
             ret = this.moveModel(initCoord, finalCoord, false);
 
@@ -35,9 +33,7 @@ public abstract class AbstractGameController implements GameControllers{
 
     public boolean putWall(Coordonnees wallCoord){
         boolean ret = false;
-
         ret = this.moveModel(null, wallCoord, true);
-
         return ret;
     }
 
@@ -77,5 +73,13 @@ public abstract class AbstractGameController implements GameControllers{
 
     public List<Coordonnees> getMovePossible(Coordonnees c){
         return this.game.getMovePossible(c);
+    }
+
+    public int getIdCurrentPlayer() {
+        return game.getIdCurrentPlayer();
+    }
+
+    public void notifyObserver() {
+        game.notifyObservers(game.getPiecesIHM());
     }
 }
