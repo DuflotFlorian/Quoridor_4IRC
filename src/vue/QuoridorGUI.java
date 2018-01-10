@@ -5,7 +5,9 @@ import java.awt.event.*;
 import java.io.File;
 import java.util.*;
 import java.util.List;
+import java.awt.Color;
 import javax.swing.*;
+import javax.swing.text.html.StyleSheet;
 import Class.*;
 import Controller.GameController;
 
@@ -177,9 +179,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                 positionWall(coordFinal);
             }
         }
-
-
-
     }
 
     @Override
@@ -187,7 +186,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int x = e.getX();
         int y = e.getY();
         JPanel jp;
-        
+
         Component cmp =  layeredPane.findComponentAt(x,y);
         if (mapCoordPanelPawn.containsValue(cmp)) {
             jp = (JPanel) cmp;
@@ -304,7 +303,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
      */
     private int defineCoeffSize() {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        return ((int) dim.getWidth() / 18); //18 est un rapport taille/ecran
+        return ((int) dim.getHeight() / 11); //11 est un rapport taille/ecran
     }
 
     /**
@@ -438,29 +437,56 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     private void createSideLabel(JPanel jp, int numPlayer) {
         int numCurrentPlayer =  quoridorGameController.getCurrentPlayer();
+    private void createLabelCote (JPanel jp, int numJoueur) {
+        int numCurrentPlayer =  quoridorGameController.getIdCurrentPlayer(); //Numéro du joueur courant
+        Couleur currentCouleurPlayer = quoridorGameController.getPlayerColor(numJoueur - 1);
 
-        if(numPlayer == numCurrentPlayer + 1) {
-            jp.setBorder(BorderFactory.createLineBorder(Color.GREEN, coeffSize / 12));
+        //set the current color player to the border
+        String stringColorPlayer = String.valueOf(quoridorGameController.getPlayerColor(numJoueur - 1));
+        StyleSheet s = new StyleSheet();
+        Color currentColorPlayer = s.stringToColor(stringColorPlayer);
+        if(numJoueur == numCurrentPlayer+1) {
+            jp.setBorder(BorderFactory.createLineBorder(currentColorPlayer, coeffTaille / 12));
         }
+
+        // display the player name in french
+        JLabel playerName= new JLabel("");
         Color c = null;
-        //Adapté pour 2 joueurs, rajouter les conditions lors du passage à 4 joueurs
-        if(quoridorGameController.getPlayerColor(numPlayer - 1).equals(QuoridorColor.BLUE)) {
-            c = new Color(0x8CC6D7); //Bleu pale
-        } else if (quoridorGameController.getPlayerColor(numPlayer - 1).equals(QuoridorColor.RED)) {
-            c = new Color(0xDB0B32); //Proche Rouge Pawn
+        switch (currentCouleurPlayer) {
+            case BLUE:
+                c = new Color(0x8CC6D7); //Bleu pale
+                playerName =  new JLabel("Joueur BLEU");
+                break;
+            case RED:
+                c = new Color(0xDB0B32); //Proche Rouge Pion
+                playerName =  new JLabel("Joueur ROUGE");
+                break;
+            case GREEN:
+                c = new Color(0x86DB1F); //Proche vert Pion
+                playerName =  new JLabel("Joueur VERT");
+                break;
+            case YELLOW:
+                c = new Color(0xD8DB66); //Proche vert Pion
+                playerName =  new JLabel("Joueur JAUNE");
+                break;
+            default:
+                break;
         }
 
+        // set the player panel
         jp.setBackground(new Color(0x808080)); //gris foncé
-        jp.setLayout(new GridLayout(2, 1));
-        JLabel jl1 =  new JLabel("Player " + quoridorGameController.getPlayerColor(numPlayer - 1));
-        jl1.setForeground(c);
-        jl1.setHorizontalAlignment(JLabel.CENTER);
-        jl1.setFont(new Font("Impact", Font.PLAIN, coeffSize / 3));
-        jp.add(jl1);
-        JLabel jl2 = new JLabel("" + quoridorGameController.getPlayerWallRemaining(numPlayer - 1));
-        jl2.setForeground(c);
-        jl2.setHorizontalAlignment(JLabel.CENTER);
-        jl2.setFont(new Font("Impact", Font.PLAIN, coeffSize / 2));
-        jp.add(jl2);
+        jp.setLayout(new GridLayout(2,1));
+        playerName.setForeground(c);
+        playerName.setHorizontalAlignment(JLabel.CENTER);
+        playerName.setFont(new Font("Impact", Font.PLAIN, coeffTaille/3));
+        jp.add(playerName);
+
+        // display the remaining wall of current player
+        JLabel remainWall = new JLabel(""+quoridorGameController.getPlayerWallRemaining(numJoueur-1));
+        remainWall.setForeground(c);
+        remainWall.setHorizontalAlignment(JLabel.CENTER);
+        remainWall.setFont(new Font("Impact", Font.PLAIN, coeffTaille/2));
+        jp.add(remainWall);
+
     }
 }

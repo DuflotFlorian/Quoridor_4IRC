@@ -74,7 +74,7 @@ public class LauncherGUI extends javax.swing.JFrame {
                 QuoridorGame quoridorGame;
                 GameController quoridorGameController;
 
-                quoridorGame = new QuoridorGame();
+                quoridorGame = new QuoridorGame(2);
                 quoridorGameController = new GameController(quoridorGame);
 
                 quoridorFrame = new QuoridorGUI("Quoridor", quoridorGameController,  9);
@@ -88,7 +88,30 @@ public class LauncherGUI extends javax.swing.JFrame {
 
             }
         });
-        btn4Player.setEnabled(false);
+        btn4Player.setEnabled(true);
+        btn4Player.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+
+                JFrame quoridorFrame;
+                QuoridorGame quoridorGame;
+                GameController quoridorGameController;
+
+                quoridorGame = new QuoridorGame(4);
+                quoridorGameController = new GameController(quoridorGame);
+
+                quoridorFrame = new QuoridorGUI("Quoridor", quoridorGameController,  9);
+                quoridorGame.addObserver((Observer) quoridorFrame);
+                quoridorFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                quoridorFrame.pack();
+                quoridorFrame.setVisible(true);
+
+                //On cache le launcher
+                frameLauncher.setVisible(false);
+
+            }
+        });
         btnScore.setEnabled(false);
         btnExit.addActionListener(new ActionListener()
         {
@@ -99,7 +122,7 @@ public class LauncherGUI extends javax.swing.JFrame {
         });
 
         //On cache les bouttons non utilisés
-        btn4Player.setVisible(false);
+        btn4Player.setVisible(true);
         btnScore.setVisible(false);
 
         this.pack();
