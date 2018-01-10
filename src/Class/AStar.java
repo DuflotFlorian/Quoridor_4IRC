@@ -149,7 +149,25 @@ public class AStar {
         return next;
     }
 
-    public static boolean findPath(WallGrid listWall, Coordinates start, Coordinates goal) {
+    // get the path from the visited Tiles
+    private static ArrayList<Coordinates> getPath(Tile[][] tab, ArrayList<Coordinates> close, Coordinates goal) {
+        ArrayList<Coordinates> path = new ArrayList<Coordinates>();
+        path.add(goal);
+        Coordinates current = new Coordinates(goal);
+        while (getTile(tab,current).G != 0)  {
+            for (Coordinates neighbour: getNeighbors(tab,current)) {
+                Tile t = getTile(tab,neighbour);
+                if(t.G == getTile(tab,current).G-1)
+                    path.add(0,neighbour);
+                    current = neighbour;
+                    break;
+            }
+        }
+        return path;
+    }
+
+    // main method, returns the shortest path between start and goal, given all the obstacles
+    public static ArrayList<Coordinates> findPath(WallGrid listWall, Coordinates start, Coordinates goal) {
         Tile[][] grid = initGrid(listWall);
         ArrayList<Coordinates> open = new ArrayList<Coordinates>();
         ArrayList<Coordinates> close = new ArrayList<Coordinates>();
@@ -163,8 +181,13 @@ public class AStar {
         }
 
         if (current.getX() == goal.getX() && current.getY() == goal.getY())
-            return true;
-        return false;
+            return getPath(grid, close, goal);
+        return new ArrayList<Coordinates>();
+    }
+
+    // only returns a boolean to know if a path exists
+    public static boolean isThereAPath(WallGrid listWall, Coordinates start, Coordinates goal) {
+       return (findPath(listWall, start, goal).size() > 0);
     }
 
     private static void printGrid(Tile[][] grid) {

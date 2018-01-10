@@ -22,7 +22,7 @@ public class Board {
     }
 
     public boolean isThereAPath(Coordinates init, Coordinates dest) {
-        return AStar.findPath(this.wallGrid, init, dest);
+        return AStar.isThereAPath(this.wallGrid, init, dest);
     }
 
     public void addWall(Wall m) {
