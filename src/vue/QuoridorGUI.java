@@ -441,7 +441,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
 
         if(numPlayer == numCurrentPlayer + 1) {
-            jp.setBorder(BorderFactory.createLineBorder(currentPlayerColor.getColor_box(), coeffSize / 12));
+            jp.setBorder(BorderFactory.createLineBorder(currentPlayerColor.getColorBox(), coeffSize / 12));
         }
 
         // display the player name in french
@@ -455,7 +455,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
         // display the remaining wall of current player
         JLabel remainWall = new JLabel("" + quoridorGameController.getPlayerWallRemaining(numPlayer - 1));
-        remainWall.setForeground(currentPlayerColor.getColor_box());
+        remainWall.setForeground(currentPlayerColor.getColorBox());
         remainWall.setHorizontalAlignment(JLabel.CENTER);
         remainWall.setFont(new Font("Impact", Font.PLAIN, coeffSize / 2));
         jp.add(remainWall);
