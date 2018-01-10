@@ -3,9 +3,12 @@ package vue;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.List;
 import java.awt.Color;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.html.StyleSheet;
 import Class.*;
@@ -61,8 +64,13 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         int sizeBoardQuoridor = (size * sizeSquarePawn) + ((size - 1) * sizeSquareWall);
 
         /*Chargement de l'icone du programme*/
-        java.net.URL iconeURL = QuoridorGUI.class.getResource(".." + File.separator + "SharedFiles"+ File.separator + "iconQuoridor.png");
-        ImageIcon imgIcon = new ImageIcon(iconeURL);
+        InputStream iconeURL = getClass().getResourceAsStream("/images/iconQuoridor.png");
+        ImageIcon imgIcon = null;
+        try {
+            imgIcon = new ImageIcon(ImageIO.read(iconeURL));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.setIconImage(imgIcon.getImage());
 
         setLocation(definePositionInScreen());
@@ -138,9 +146,12 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         jLabelHelp = new JLabel();
         jLabelHelp.setBounds(widthPanelInfo / 2 - coeffSize / 2, heightIHM - coeffSize, coeffSize, coeffSize);//placement adapté à la résolution
 
-        String urlHelp = "images" + File.separator + "iconeAide.png";
-        java.net.URL sHelp = QuoridorGUI.class.getResource(urlHelp);
-        jLabelHelp.setIcon(new ImageIcon(new ImageIcon(sHelp).getImage().getScaledInstance(coeffSize, coeffSize, Image.SCALE_SMOOTH)));
+        InputStream urlHelp = getClass().getResourceAsStream("/images/iconeAide.png");
+        try {
+            jLabelHelp.setIcon(new ImageIcon(new ImageIcon(ImageIO.read(urlHelp)).getImage().getScaledInstance(coeffSize, coeffSize, Image.SCALE_SMOOTH)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         layeredPane.add(jLabelHelp, JLayeredPane.PALETTE_LAYER);//Affichage juste dessus de l'interface de base, evite les colisions
 
@@ -283,10 +294,14 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
         for(PieceIHM pieceIHM : piecesIHM) {
             if(pieceIHM.getNamePiece().equals("Pawn")) {
-                String url = "images" + File.separator + "Pawn" + pieceIHM.getQuoridorColor().toString() + ".png";
-                java.net.URL s = QuoridorGUI.class.getResource(url);
+                String url = "/images/Pawn" + pieceIHM.getQuoridorColor().toString() + ".png";
+                InputStream inputStreamUrl = getClass().getResourceAsStream(url);
                 JLabel piece = new JLabel();
-                piece.setIcon(new ImageIcon(new ImageIcon(s).getImage().getScaledInstance(sizeSquarePawn, sizeSquarePawn, Image.SCALE_SMOOTH)));
+                try {
+                    piece.setIcon(new ImageIcon(new ImageIcon(ImageIO.read(inputStreamUrl)).getImage().getScaledInstance(sizeSquarePawn, sizeSquarePawn, Image.SCALE_SMOOTH)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 JPanel panel = (JPanel) boardQuoridor.getComponent((pieceIHM.getCoordinates().getY() * 17) + pieceIHM.getCoordinates().getX());
                 mapPanelPiece.put(piece, pieceIHM);
                 panel.removeAll();
