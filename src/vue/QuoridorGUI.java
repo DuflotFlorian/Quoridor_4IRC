@@ -34,7 +34,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private JLabel pion;
     private int taillePlateauQuoridor;
     private int coeffTaille;
-    private  Color couleurMur;
+    private Color couleurMur;
     private ArrayList<JPanel> arrayPanelCote ;
 
     // Coordonnées de la position initiale de la pièce déplacée
@@ -479,45 +479,49 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     private void createLabelCote (JPanel jp, int numJoueur) {
         int numCurrentPlayer =  quoridorGameController.getIdCurrentPlayer(); //Numéro du joueur courant
+        Couleur currentCouleurPlayer = quoridorGameController.getPlayerColor(numJoueur - 1);
 
         //set the current color player to the border
         String stringColorPlayer = String.valueOf(quoridorGameController.getPlayerColor(numJoueur - 1));
         StyleSheet s = new StyleSheet();
-        String str = stringColorPlayer;
-        Color currentColorPlayer = s.stringToColor(str);
+        Color currentColorPlayer = s.stringToColor(stringColorPlayer);
         if(numJoueur == numCurrentPlayer+1) {
             jp.setBorder(BorderFactory.createLineBorder(currentColorPlayer, coeffTaille / 12));
         }
 
+        // display the player name in french
+        JLabel playerName= new JLabel("");
         Color c = null;
-        if(quoridorGameController.getPlayerColor(numJoueur-1).equals(Couleur.BLUE)) {
-            c = new Color(0x8CC6D7); //Bleu pale
-        } else if (quoridorGameController.getPlayerColor(numJoueur-1).equals(Couleur.RED)) {
-            c = new Color(0xDB0B32); //Proche Rouge Pion
-        }  else if (quoridorGameController.getPlayerColor(numJoueur-1).equals(Couleur.GREEN)) {
-            c = new Color(0x86DB1F); //Proche vert Pion
-        } else if (quoridorGameController.getPlayerColor(numJoueur-1).equals(Couleur.YELLOW)) {
-            c = new Color(0xD8DB66); //Proche vert Pion
+        switch (currentCouleurPlayer) {
+            case BLUE:
+                c = new Color(0x8CC6D7); //Bleu pale
+                playerName =  new JLabel("Joueur BLEU");
+                break;
+            case RED:
+                c = new Color(0xDB0B32); //Proche Rouge Pion
+                playerName =  new JLabel("Joueur ROUGE");
+                break;
+            case GREEN:
+                c = new Color(0x86DB1F); //Proche vert Pion
+                playerName =  new JLabel("Joueur VERT");
+                break;
+            case YELLOW:
+                c = new Color(0xD8DB66); //Proche vert Pion
+                playerName =  new JLabel("Joueur JAUNE");
+                break;
+            default:
+                break;
         }
 
+        // set the player panel
         jp.setBackground(new Color(0x808080)); //gris foncé
         jp.setLayout(new GridLayout(2,1));
-
-        JLabel playerName= new JLabel(""); // le nom du joueur
-        if(quoridorGameController.getPlayerColor(numJoueur-1).equals(Couleur.BLUE)) {
-            playerName =  new JLabel("Joueur BLEU");
-        } else if(quoridorGameController.getPlayerColor(numJoueur-1).equals(Couleur.RED)) {
-            playerName =  new JLabel("Joueur ROUGE");
-        } else if(quoridorGameController.getPlayerColor(numJoueur-1).equals(Couleur.GREEN)) {
-            playerName =  new JLabel("Joueur VERT");
-        } else if(quoridorGameController.getPlayerColor(numJoueur-1).equals(Couleur.YELLOW)) {
-            playerName =  new JLabel("Joueur JAUNE");
-        }
         playerName.setForeground(c);
         playerName.setHorizontalAlignment(JLabel.CENTER);
         playerName.setFont(new Font("Impact", Font.PLAIN, coeffTaille/3));
         jp.add(playerName);
 
+        // display the remaining wall of current player
         JLabel remainWall = new JLabel(""+quoridorGameController.getPlayerWallRemaining(numJoueur-1));
         remainWall.setForeground(c);
         remainWall.setHorizontalAlignment(JLabel.CENTER);
