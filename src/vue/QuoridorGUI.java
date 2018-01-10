@@ -30,6 +30,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private Color wallColor;
     private ArrayList<JPanel> arraySidePanel;
 
+    private JLabel jLabelAide;
+    private JPanel jPanelAide;
+
+
     // Coordonnées de la position initiale de la pièce déplacée
     private Coordinates coordFinal;
 
@@ -54,6 +58,11 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         widthIHM = size * sizeSquarePawn + (size-1)* sizeSquareWall + 2 * widthPanelInfo;
         heightIHM = size * sizeSquarePawn + (size-1)* sizeSquareWall;
         int sizeBoardQuoridor = (size * sizeSquarePawn) + ((size - 1) * sizeSquareWall);
+
+        /*Chargement de l'icone du programme*/
+        java.net.URL iconeURL = QuoridorGUI.class.getResource(".." + File.separator + "SharedFiles"+ File.separator + "iconQuoridor.png");
+        ImageIcon imgIcon = new ImageIcon(iconeURL);
+        this.setIconImage(imgIcon.getImage());
 
         setLocation(definePositionInScreen());
 
@@ -86,7 +95,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         //GridBagLayout pour grille personnalisée
         boardQuoridor.setLayout(new GridBagLayout());
 
-        //boardQuoridor.setPreferredSize(dim);
         boardQuoridor.setPreferredSize(new Dimension(sizeBoardQuoridor, sizeBoardQuoridor));
         boardQuoridor.setBounds(widthPanelInfo, 0, sizeBoardQuoridor, sizeBoardQuoridor);
 
@@ -125,6 +133,38 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             }
         }
 
+
+        jLabelAide = new JLabel();
+        jLabelAide.setBounds(tailleLargeurGarageMur/2 - coeffTaille/2,tailleIHMHauteur-coeffTaille,coeffTaille,coeffTaille);//placement adapté à la résolution
+
+        String urlAide = "images" + File.separator + "iconeAide.png";
+        java.net.URL sAide = QuoridorGUI.class.getResource(urlAide);
+        jLabelAide.setIcon(new ImageIcon(new ImageIcon(sAide).getImage().getScaledInstance(coeffTaille, coeffTaille, Image.SCALE_SMOOTH)));
+
+        layeredPane.add(jLabelAide, JLayeredPane.PALETTE_LAYER);//Affichage juste dessus de l'interface de base, evite les colisions
+
+        //Creation du JPanel d'aide à afficher
+        jPanelAide = new JPanel();
+        createAideUtilisateur(jPanelAide);
+
+        //Ajout d'un listener sur le JLabelAide
+        jLabelAide.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseEntered(MouseEvent me) {
+                jPanelAide.setVisible(true);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent me) {
+                jPanelAide.setVisible(false);
+            }
+
+        });
+    }
+
+    public enum Case {
+        PION, MURHORIZONTAL, MURVERTICAL, CROISEMENT
     }
 
     @Override
@@ -246,7 +286,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     public void update(Observable o, Object arg) {
         List<PieceIHM> piecesIHM = (List<PieceIHM>) arg;
         mapPanelPiece = new HashMap<JLabel, PieceIHM>();
-        
+
         for(PieceIHM pieceIHM : piecesIHM) {
             if(pieceIHM.getNamePiece().equals("Pawn")) {
                 String url = "images" + File.separator + "Pawn" + pieceIHM.getQuoridorColor().toString() + ".png";
@@ -262,6 +302,71 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
         fillSidePanel();
     }
+
+    /**
+     * nous donne le type de cellule sélectionnée
+     * @param c coordonnées
+     * @return case de type pion, murHorizontal, murVertical croisement
+     */
+    private Case checkIfMurOrPion(Coordonnees c) {
+        int i=c.getX(), j=c.getY();
+
+        if (i%2 == 0 && j%2 == 0 ) {
+            return Case.PION;
+        } else if (i%2 == 1 && j%2 == 1) {
+            return Case.CROISEMENT;
+        } else if (i%2 == 0 && j%2 == 1){
+            return Case.MURVERTICAL;
+        }
+        return Case.MURHORIZONTAL;
+    }
+
+    /**
+     * permet de retourner une coordonnée sur un clic dans le plateau
+     * @param x en Pixels
+     * @param y en Pixels
+     * @return Coordonnée offset  (numéro de ligne, numéro de colonne)
+     */
+    private Coordonnees getArrayPosition(int x, int y) {
+        Coordonnees c = new Coordonnees(getOffsetFromPixel(x),getOffsetFromPixel(y));
+        return c;
+    }
+
+    /**
+     *  retourne une position offset dans le plateau
+     *  cette fonction est appelée une fois par Axe (ligne ou colonne)
+     *
+     * @param p la position en pixel (soit un X soit un Y)
+     * @return offset du tableau de jeu
+     */
+    private int getOffsetFromPixel (int p) {
+        int i=0;
+        while (p>0 && p < taillePlateauQuoridor ) {
+            if (i%2 == 0) {
+                p = p - tailleCasePion;
+            } else {
+                p = p - tailleCaseMur;
+            }
+            i++;
+        }
+        return i-1;
+    }
+
+
+    /**
+     *
+     * @param x position en X
+     * @param y position en Y
+     * @return le numéro de cellule (0 en haut a gauche, 288 en bas a droite)
+     */
+    private int convertCoordToCell(int x,int y){
+        if (x == 1) {
+
+            return y-1;
+        }
+        return ((x*17)-17) + y-1;
+    }
+
 
     /**
      * donne le coefficient de la taille du plateau en fonction de la résolution de l'écran
@@ -337,7 +442,24 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     }
 
-    private void fillSidePanel() {
+    private void createAideUtilisateur(JPanel jp) {
+        jp.setBounds(tailleIHMLargeur/2 - coeffTaille*2,tailleIHMHauteur/2 -coeffTaille*2,coeffTaille*4,coeffTaille*4);
+        jp.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY ,coeffTaille/12));
+
+        //Ajout du contenu
+        jp.setLayout(new GridLayout(2,1));
+
+        JLabel txtAidePion = new JLabel("<html>Déplacement d'un pion:<br/>- Cliquer sur votre pion et faites le glisser sur la case voulue.<br/>- Si le déplacement n'est pas autorisé, le pion revient à sa position de départ.<br/></html>");
+        JLabel txtAideMur = new JLabel("<html>Positionnement d'un mur:<br/>- Pour un mur horizontal:<br/>&emsp;&emsp;Cliquer sur la case la plus à gauche du mur<br/>- Pour un mur vertical:<br/>&emsp;&emsp;Cliquer sur la case la plus en haut du mur<br/></html>");
+
+        jp.add(txtAidePion);
+        jp.add(txtAideMur);
+
+        layeredPane.add(jp, JLayeredPane.MODAL_LAYER);
+        jp.setVisible(false);
+    }
+
+    private void fillSidePanel () {
         panelInfoRight.removeAll();
         panelInfoLeft.removeAll();
         int nbPlayer = quoridorGameController.listPlayer().size();
