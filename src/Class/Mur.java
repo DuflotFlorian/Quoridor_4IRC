@@ -1,5 +1,6 @@
 package Class;
 
+
 public class Mur extends AbstractPiece{
 	private boolean isHorizontal;
 	
