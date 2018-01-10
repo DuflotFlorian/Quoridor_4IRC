@@ -50,7 +50,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         //Creation des maps murs + pions
         mapCoordPanelPawn = new HashMap<Coordinates,JPanel>();
         mapCoordPanelWall = new HashMap<Coordinates,JPanel>();
-        arraySidePanel = new ArrayList<>();
+        arraySidePanel = new ArrayList<JPanel>();
         this.coeffSize = defineCoeffSize();
         this.wallColor = new Color(404040);
         sizeSquarePawn = (int) ((0.85 * coeffSize));
