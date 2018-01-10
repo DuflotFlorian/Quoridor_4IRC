@@ -5,7 +5,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Observer;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import Class.observable.QuoridorGame;
@@ -50,12 +54,23 @@ public class LauncherGUI extends javax.swing.JFrame {
         JPanelButton.add(btnExit);
 
         /*chargement de l'image*/
-        java.net.URL imageURL = LauncherGUI.class.getResource("images" + File.separator + "imgLauncher.jpg");
-        JLabel imgMain = new JLabel(new ImageIcon(imageURL));
+        InputStream imageURL = getClass().getResourceAsStream("/images/imgLauncher.jpg");
+        //System.out.println(imageURL);
+        JLabel imgMain = null;
+        try {
+            imgMain = new JLabel(new ImageIcon(ImageIO.read(imageURL)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         /*Chargement de l'icone du programme*/
-        java.net.URL iconeURL = LauncherGUI.class.getResource(".." + File.separator + "SharedFiles"+ File.separator + "iconQuoridor.png");
-        ImageIcon imgIcon = new ImageIcon(iconeURL);
+        InputStream iconeURL = getClass().getResourceAsStream("/images/iconQuoridor.png");
+        ImageIcon imgIcon = null;
+        try {
+            imgIcon = new ImageIcon(ImageIO.read(iconeURL));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         frameLauncher.setIconImage(imgIcon.getImage());
 
         /*Ajout de l'image*/
