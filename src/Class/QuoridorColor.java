@@ -1,5 +1,5 @@
 package Class;
 
 public enum QuoridorColor {
-    BLACK, WHITE, BLUE, RED
+    BLUE, RED, GREEN, YELLOW
 }
