@@ -4,11 +4,12 @@ public interface BoardGames {
     /**
      * Permet de deplacer une piece connaissant ses coordonnees initiales
      * vers ses coordonnees finales 	 *
-     * @param initCoord coord initial
+     *
+     * @param initCoord  coord initial
      * @param finalCoord coord final
      * @return OK si deplacement OK
      */
-    public boolean move (Coordonnees initCoord, Coordonnees finalCoord, boolean isWall);
+    public boolean move(Coordinates initCoord, Coordinates finalCoord, boolean isWall);
 
     /**
      * @return true si c'est la fin du jeu
@@ -23,11 +24,11 @@ public interface BoardGames {
     /**
      * @return la couleur du jouer courant
      */
-    public Couleur getColorCurrentPlayer();
+    public QuoridorColor getColorCurrentPlayer();
 
     /**
-     * @param c Coordonnees
+     * @param c Coordinates
      * @return la couleur de la pièce sélectionnée
      */
-    public Couleur getPieceColor(Coordonnees c);
+    public QuoridorColor getPieceColor(Coordinates c);
 }

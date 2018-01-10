@@ -13,19 +13,14 @@ import Controller.GameController;
 import vue.QuoridorGUI;
 
 public class LauncherGUI extends javax.swing.JFrame {
-
     JFrame frameLauncher;
     JPanel JPanelButton;
 
-    //Bouttons
-    JButton button2Joueurs ;
-    JButton button4Joueurs ;
-    JButton buttonScores ;
-    JButton buttonQuitter;
+    JButton btn2Player, btn4Player, btnScore, btnExit;
 
     public LauncherGUI() {
         super();
-        /*On cré un référence vers la frame*/
+        /*On créé une référence vers la frame*/
         frameLauncher = this;
 
         /*JPanel principal*/
@@ -35,10 +30,10 @@ public class LauncherGUI extends javax.swing.JFrame {
         JPanelButton = new JPanel(new FlowLayout());
 
         //Bouttons
-        button2Joueurs = new JButton("2 Joueurs");
-        button4Joueurs = new JButton("4 Joueurs");
-        buttonScores = new JButton("Scores");
-        buttonQuitter = new JButton("Quitter");
+        btn2Player = new JButton("2 Joueurs");
+        btn4Player = new JButton("4 Joueurs");
+        btnScore = new JButton("Scores");
+        btnExit = new JButton("Quitter");
 
         /*Settings JFrame*/
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -49,10 +44,10 @@ public class LauncherGUI extends javax.swing.JFrame {
         this.setTitle("Quoridor");
 
         /*Ajout des Bouttons au panel*/
-        JPanelButton.add(button2Joueurs);
-        JPanelButton.add(button4Joueurs);
-        JPanelButton.add(buttonScores);
-        JPanelButton.add(buttonQuitter);
+        JPanelButton.add(btn2Player);
+        JPanelButton.add(btn4Player);
+        JPanelButton.add(btnScore);
+        JPanelButton.add(btnExit);
 
         /*chargement de l'image*/
         java.net.URL imageURL = LauncherGUI.class.getResource("images" + File.separator + "imgLauncher.jpg");
@@ -70,7 +65,7 @@ public class LauncherGUI extends javax.swing.JFrame {
         this.add(main);
 
         /*Reglages des boutons*/
-        button2Joueurs.addActionListener(new ActionListener()
+        btn2Player.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
@@ -93,8 +88,8 @@ public class LauncherGUI extends javax.swing.JFrame {
 
             }
         });
-        button4Joueurs.setEnabled(true);
-        button4Joueurs.addActionListener(new ActionListener()
+        btn4Player.setEnabled(true);
+        btn4Player.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
@@ -117,8 +112,8 @@ public class LauncherGUI extends javax.swing.JFrame {
 
             }
         });
-        buttonScores.setEnabled(false);
-        buttonQuitter.addActionListener(new ActionListener()
+        btnScore.setEnabled(false);
+        btnExit.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
@@ -127,13 +122,11 @@ public class LauncherGUI extends javax.swing.JFrame {
         });
 
         //On cache les bouttons non utilisés
-        button4Joueurs.setVisible(true);
-        buttonScores.setVisible(false);
+        btn4Player.setVisible(true);
+        btnScore.setVisible(false);
 
         this.pack();
         this.setVisible(true);
-
-
     }
 
     public static void main(String[] args) {
@@ -158,7 +151,5 @@ public class LauncherGUI extends javax.swing.JFrame {
                 new LauncherGUI().setVisible(true);
             }
         });
-
-
     }
 }
