@@ -1,5 +1,5 @@
 package Class;
 
 public enum Couleur {
-	NOIR, BLANC, BLEU, ROUGE;
+	BLUE, RED, GREEN, YELLOW;
 }
