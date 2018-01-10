@@ -7,36 +7,37 @@ import java.util.Observer;
 import Class.*;
 
 public class QuoridorGame extends Observable implements BoardGames {
-    private Jeu jeu;
+    private Game game;
 
     public QuoridorGame() {
         super();
-        this.jeu = new Jeu(2);
-        this.notifyObservers(jeu.getPiecesIHM());
+        this.game = new Game(2);
+        this.notifyObservers(game.getPiecesIHM());
     }
 
     @Override
-    public boolean move(Coordonnees initCoord, Coordonnees finalCoord, boolean isWall) {
+    public boolean move(Coordinates initCoord, Coordinates finalCoord, boolean isWall) {
         boolean ret = false;
-        ret = jeu.isMoveOk(initCoord, finalCoord, isWall);
-        if(ret){
-            if(isWall){
-                ret = jeu.putWall(jeu.getIdCurrentPlayer(),finalCoord);
+        ret = game.isMoveOk(initCoord, finalCoord, isWall);
+        if (ret) {
+            if (isWall) {
+                ret = game.putWall(game.getCurrentPlayer(), finalCoord);
             } else {
-                for(Joueur j : jeu.listPlayer()){
-                    if(j.getActualCoord().equals(initCoord)){
-                        ret = jeu.move(j, finalCoord);
+                for (Player j : game.listPlayer()) {
+                    if (j.getActualCoord().equals(initCoord)) {
+                        ret = game.move(j, finalCoord);
                     }
                 }
             }
         }
-        this.notifyObservers(jeu.getPiecesIHM());
+        this.notifyObservers(game.getPiecesIHM());
+
         return ret;
     }
 
     @Override
     public boolean isEnd() {
-        return jeu.isWin();
+        return game.isWin();
     }
 
     @Override
@@ -45,47 +46,47 @@ public class QuoridorGame extends Observable implements BoardGames {
     }
 
     @Override
-    public Couleur getColorCurrentPlayer() {
-        return jeu.getIdCurrentPlayer().getCouleurs();
+    public QuoridorColor getColorCurrentPlayer() {
+        return game.getCurrentPlayer().getQuoridorColor();
     }
 
-    public Couleur getPieceColor(Coordonnees coord) {
-        return jeu.getPieceColor(coord);
+    public QuoridorColor getPieceColor(Coordinates coord) {
+        return game.getPieceColor(coord);
     }
 
-    public List<Coordonnees> getMovePossible(Coordonnees c){
+    public List<Coordinates> getMovePossible(Coordinates c) {
         return null;
     }
 
-    public List<Joueur> listPlayer(){
-        return jeu.listPlayer();
+    public List<Player> listPlayer() {
+        return game.listPlayer();
     }
 
     @Override
-    public void	notifyObservers(Object arg) {
+    public void notifyObservers(Object arg) {
         super.setChanged();
         super.notifyObservers(arg);
     }
 
     @Override
-    public void addObserver(Observer o){
+    public void addObserver(Observer o) {
         super.addObserver(o);
-        this.notifyObservers(jeu.getPiecesIHM());
+        this.notifyObservers(game.getPiecesIHM());
     }
 
-    public int getIdCurrentPlayer() {
-        return jeu.getIntIdCurrentPlayer();
+    public int getCurrentPlayer() {
+        return game.getIdCurrentPlayer();
     }
 
     public List<PieceIHMs> getPiecesIHM() {
-        return jeu.getPiecesIHM();
+        return game.getPiecesIHM();
     }
 
-    public Couleur getPlayerColor(int numPlayer){
-        return jeu.getPlayerColor(numPlayer);
+    public QuoridorColor getPlayerColor(int numPlayer) {
+        return game.getPlayerColor(numPlayer);
     }
 
     public int getPlayerWallRemaining(int numPlayer) {
-        return jeu.getPlayerWallRemaining(numPlayer);
+        return game.getPlayerWallRemaining(numPlayer);
     }
 }

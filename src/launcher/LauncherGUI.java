@@ -17,11 +17,11 @@ public class LauncherGUI {
         quoridorGame = new QuoridorGame();
         quoridorGameController = new GameController(quoridorGame);
 
-        frame = new QuoridorGUI("Quoridor", quoridorGameController,  9);
+        frame = new QuoridorGUI("Quoridor", quoridorGameController, 9);
         quoridorGame.addObserver((Observer) frame);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.pack();
         frame.setVisible(true);
-	}
+    }
 }

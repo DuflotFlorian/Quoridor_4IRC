@@ -7,7 +7,7 @@ import java.util.List;
 
 public class GameController extends AbstractGameController {
 
-    public GameController(QuoridorGame game){
+    public GameController(QuoridorGame game) {
         super(game);
     }
 
@@ -22,29 +22,27 @@ public class GameController extends AbstractGameController {
     }
 
     @Override
-    public List<Coordonnees> getMovePossible(Coordonnees c) {
+    public List<Coordinates> getMovePossible(Coordinates c) {
         return game.getMovePossible(c);
     }
 
     @Override
-    public boolean isPlayerOK(Coordonnees initCoord) {
+    public boolean isPlayerOK(Coordinates initCoord) {
         return game.getColorCurrentPlayer().equals(game.getPieceColor(initCoord));
     }
 
-    public List<Joueur> listPlayer(){
+    public List<Player> listPlayer() {
         return game.listPlayer();
     }
 
-    public Couleur getPlayerColor(int numPlayer){
+    public QuoridorColor getPlayerColor(int numPlayer) {
         return game.getPlayerColor(numPlayer);
     }
 
-    public int getPlayerWallRemaining(int numPlayer){
+    public int getPlayerWallRemaining(int numPlayer) {
         return game.getPlayerWallRemaining(numPlayer);
     }
 
     @Override
-    protected void endMove(Coordonnees initCoord, Coordonnees finalCoord) {
-
-    }
+    protected void endMove(Coordinates initCoord, Coordinates finalCoord) { }
 }

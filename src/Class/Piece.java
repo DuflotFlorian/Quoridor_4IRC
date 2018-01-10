@@ -2,13 +2,11 @@ package Class;
 
 public interface Piece {
 
-    public Couleur getCouleur();
+    QuoridorColor getQuoridorColor();
 
-    public String getName();
+    String getName();
 
-    public Coordonnees getCoordonnees();
+    Coordinates getCoordinates();
 
-    public boolean move(Coordonnees coord);
-
-
+    boolean move(Coordinates coord);
 }
