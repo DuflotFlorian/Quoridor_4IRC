@@ -39,6 +39,10 @@ public class Game {
     }
 
     public boolean isMoveOk(Coordinates initCoord, Coordinates finalCoord, boolean isWall) {
+        if(initCoord.equals(finalCoord)){
+            return false;
+        }
+
         return true;
     }
 
