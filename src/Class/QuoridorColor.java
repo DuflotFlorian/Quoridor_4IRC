@@ -29,8 +29,8 @@ public enum QuoridorColor {
         return colorBox;
     }
 
-    public void setColorBox(Color color_box) {
-        this.colorBox = color_box;
+    public void setColorBox(Color colorBox) {
+        this.colorBox = colorBox;
     }
 
     public JLabel getPlayerName() {
