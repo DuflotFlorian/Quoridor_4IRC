@@ -102,9 +102,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         panelInfoRight.setBackground(this.backgroundColor);
         //Ajout du plateau de jeu
         boardQuoridor = new JPanel();
-        // ABkr 4
         layeredPane.add(boardQuoridor, JLayeredPane.DEFAULT_LAYER);
-        // troisZones.add(boardQuoridor, BorderLayout.CENTER);
 
         //GridBagLayout pour grille personnalisée
         boardQuoridor.setLayout(new GridBagLayout());
@@ -432,14 +430,14 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         tabLeftPanel = new JPanel[nbRowInColumn][1];
         for (int i = 0; i < nbRowInColumn; i++) {
             tabLeftPanel[i][0] = new JPanel();
-            tabLeftPanel[i][0].setBackground(this.backgroundColor); //Bleu-Nuit
+            tabLeftPanel[i][0].setBackground(this.backgroundColor);
             panelInfoLeft.add(tabLeftPanel[i][0]);
         }
 
         tabRightPanel = new JPanel[nbRowInColumn][1];
         for (int i = 0; i < nbRowInColumn; i++) {
             tabRightPanel[i][0] = new JPanel();
-            tabRightPanel[i][0].setBackground(this.backgroundColor); //Bleu-Nuit
+            tabRightPanel[i][0].setBackground(this.backgroundColor);
             panelInfoRight.add(tabRightPanel[i][0]);
         }
 
