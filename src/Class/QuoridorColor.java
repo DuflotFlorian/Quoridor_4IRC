@@ -12,16 +12,16 @@ public enum QuoridorColor {
     YELLOW("#DFE219","Joueur JAUNE");
 
     private Color colorBox;
-    private JLabel playerName;
+    private JLabel JLabelPlayerName;
 
 
     QuoridorColor(String c, String name) {
         StyleSheet s = new StyleSheet();
 
         this.colorBox  = s.stringToColor(c);
-        this.playerName = new JLabel(name);
-        this.playerName.setForeground(this.colorBox);
-        this.playerName.setHorizontalAlignment(JLabel.CENTER);
+        this.JLabelPlayerName = new JLabel(name);
+        this.JLabelPlayerName.setForeground(this.colorBox);
+        this.JLabelPlayerName.setHorizontalAlignment(JLabel.CENTER);
     }
 
 
@@ -33,12 +33,12 @@ public enum QuoridorColor {
         this.colorBox = colorBox;
     }
 
-    public JLabel getPlayerName() {
-        return playerName;
+    public JLabel getJLabelPlayerName() {
+        return JLabelPlayerName;
     }
 
-    public void setPlayerName(JLabel playerName) {
-        this.playerName = playerName;
+    public void setJLabelPlayerName(JLabel playerName) {
+        this.JLabelPlayerName = playerName;
     }
 }
 

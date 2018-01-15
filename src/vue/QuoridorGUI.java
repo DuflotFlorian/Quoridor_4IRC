@@ -445,7 +445,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
 
         // display the player name in french
-        JLabel playerName = currentPlayerColor.getPlayerName();
+        JLabel playerName = currentPlayerColor.getJLabelPlayerName();
 
         // set the player panel
         jp.setBackground(new Color(0x808080)); //gris foncé
