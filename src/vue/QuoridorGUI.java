@@ -33,6 +33,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private JLabel pawn;
     private int coeffSize;
     private Color wallColor;
+    private Color backgroundColor;
     private ArrayList<JPanel> arraySidePanel;
 
     private JLabel jLabelHelp;
@@ -56,13 +57,13 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         arraySidePanel = new ArrayList<JPanel>();
         this.coeffSize = defineCoeffSize();
         this.wallColor = new Color(404040);
+        this.backgroundColor = new Color(404040);
         sizeSquarePawn = (int) ((0.85 * coeffSize));
         int sizeSquareWall = (int) ((0.15 * coeffSize));
         int widthPanelInfo = (int) (2.5 * coeffSize);
         widthIHM = size * sizeSquarePawn + (size-1)* sizeSquareWall + 2 * widthPanelInfo;
         heightIHM = size * sizeSquarePawn + (size-1)* sizeSquareWall;
         int sizeBoardQuoridor = (size * sizeSquarePawn) + ((size - 1) * sizeSquareWall);
-
         /*Chargement de l'icone du programme*/
         InputStream iconeURL = getClass().getResourceAsStream("/images/iconQuoridor.png");
         ImageIcon imgIcon = null;
@@ -72,11 +73,11 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             e.printStackTrace();
         }
         this.setIconImage(imgIcon.getImage());
-
         setLocation(definePositionInScreen());
 
         //Definition de la size general de la frame
         Dimension dim = new Dimension(widthIHM, heightIHM);
+
         getContentPane().setPreferredSize(dim);
         //getContentPane().setLayout(new BorderLayout());
         layeredPane = new JLayeredPane();
@@ -84,19 +85,21 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         layeredPane.setPreferredSize(dim);
         layeredPane.addMouseListener(this);
         layeredPane.addMouseMotionListener(this);
+        getContentPane().setBackground(this.backgroundColor);
 
         //Creation du stockage à murs gauche
         panelInfoLeft = new JPanel();
+        panelInfoLeft.setBackground(this.backgroundColor);
         layeredPane.add(panelInfoLeft, JLayeredPane.DEFAULT_LAYER);
         panelInfoLeft.setPreferredSize(new Dimension(widthPanelInfo, heightIHM));
         panelInfoLeft.setBounds(0, 0, widthPanelInfo, heightIHM);
 
-        //Creation du stockage à murs gauche
+        //Creation du stockage à murs droite
         panelInfoRight = new JPanel();
         layeredPane.add(panelInfoRight, JLayeredPane.DEFAULT_LAYER);
         panelInfoRight.setPreferredSize(new Dimension(widthPanelInfo, heightIHM));
         panelInfoRight.setBounds(sizeBoardQuoridor + widthPanelInfo, 0, widthPanelInfo, heightIHM);
-
+        panelInfoRight.setBackground(this.backgroundColor);
         //Ajout du plateau de jeu
         boardQuoridor = new JPanel();
         layeredPane.add(boardQuoridor, JLayeredPane.DEFAULT_LAYER);
@@ -427,14 +430,14 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         tabLeftPanel = new JPanel[nbRowInColumn][1];
         for (int i = 0; i < nbRowInColumn; i++) {
             tabLeftPanel[i][0] = new JPanel();
-            tabLeftPanel[i][0].setBackground(new Color(404040)); //Bleu-Nuit
+            tabLeftPanel[i][0].setBackground(this.backgroundColor);
             panelInfoLeft.add(tabLeftPanel[i][0]);
         }
 
         tabRightPanel = new JPanel[nbRowInColumn][1];
         for (int i = 0; i < nbRowInColumn; i++) {
             tabRightPanel[i][0] = new JPanel();
-            tabRightPanel[i][0].setBackground(new Color(404040)); //Bleu-Nuit
+            tabRightPanel[i][0].setBackground(this.backgroundColor);
             panelInfoRight.add(tabRightPanel[i][0]);
         }
 
