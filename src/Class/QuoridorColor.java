@@ -6,7 +6,7 @@ import java.awt.*;
 
 public enum QuoridorColor {
 
-    BLUE("#0FB1CB", "Joueur BLEU"),
+    BLUE("#8CC6D7", "Joueur BLEU"),
     RED("#CA2B0F", "Joueur ROUGE"),
     GREEN("#90D30D", "Joueur VERT"),
     YELLOW("#DFE219","Joueur JAUNE");
