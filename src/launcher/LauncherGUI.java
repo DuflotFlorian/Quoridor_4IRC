@@ -154,7 +154,7 @@ public class LauncherGUI extends javax.swing.JFrame {
         quoridorFrame.setVisible(true);
 
         //On cache le launcher
-        frameLauncher.setVisible(false);
+        frameLauncher.dispose();
     }
 
     private void displayScoreTab() {
