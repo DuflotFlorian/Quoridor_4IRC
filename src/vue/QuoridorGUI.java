@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.text.html.StyleSheet;
 import Class.*;
 import Controller.GameController;
+import launcher.LauncherGUI;
 
 
 public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionListener, Observer {
@@ -258,21 +259,46 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
 
         if(quoridorGameController.isEnd()){
-            class EndWindow extends JFrame{
-                private JButton button = new JButton("FIN DE LA PARTIE");
+            quoridorGameController.deleteObservers();
+
+            class EndWindow extends JOptionPane{
+                private JButton btnQuit = new JButton("Quitter");
+                private JButton btnSave = new JButton("Sauvegarde");
+                private JButton btnMenu = new JButton("Menu Principal");
+                Object[] options = {btnQuit,
+                                    btnSave,
+                                    btnMenu};
 
                 public EndWindow(){
-                    this.setTitle("INFORMATION");
-                    this.setSize(300, 100);
-                    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    this.setLocationRelativeTo(null);
-                    this.getContentPane().setLayout(new FlowLayout());
-                    this.getContentPane().add(button);
-                    button.addActionListener(new ActionListener(){
+                    btnQuit.addActionListener(new ActionListener(){
                         public void actionPerformed(ActionEvent arg0) {
                             System.exit(0);
                         }
                     });
+
+                    btnSave.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent actionEvent) {
+
+                        }
+                    });
+
+                    btnMenu.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent actionEvent) {
+                            QuoridorGUI.super.dispose();
+                            new LauncherGUI().setVisible(true);
+                        }
+                    });
+
+                    JOptionPane.showOptionDialog(layeredPane,
+                            "Vous avez fini!",
+                            "FIN DE LA PARTIE",
+                            JOptionPane.YES_NO_CANCEL_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            options,
+                            options[1]);
 
                     this.setVisible(true);
                 }
