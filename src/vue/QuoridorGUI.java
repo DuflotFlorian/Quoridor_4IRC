@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.html.StyleSheet;
 import Class.*;
+import Class.observable.QuoridorGame;
 import Controller.GameController;
 
 
@@ -145,7 +146,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             }
         }
 
-
         jLabelHelp = new JLabel();
         jLabelHelp.setBounds(widthPanelInfo / 2 - coeffSize / 2, heightIHM - coeffSize, coeffSize, coeffSize);//placement adapté à la résolution
 
@@ -278,7 +278,13 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                 }
             }
 
-            new EndWindow();
+            //enregistrement de la partie dans le fichier de score
+            int numCurrentPlayer =  quoridorGameController.getCurrentPlayer();
+            QuoridorColor currentPlayerColor = quoridorGameController.getPlayerColor(numCurrentPlayer-1);
+            quoridorGameController.createJson(currentPlayerColor);
+
+
+        new EndWindow();
         }
     }
 
