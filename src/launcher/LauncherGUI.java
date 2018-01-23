@@ -55,7 +55,6 @@ public class LauncherGUI extends javax.swing.JFrame {
 
         /*chargement de l'image*/
         InputStream imageURL = getClass().getResourceAsStream("/images/imgLauncher.jpg");
-        //System.out.println(imageURL);
         JLabel imgMain = null;
         try {
             imgMain = new JLabel(new ImageIcon(ImageIO.read(imageURL)));
@@ -84,9 +83,7 @@ public class LauncherGUI extends javax.swing.JFrame {
         {
             public void actionPerformed(ActionEvent e)
             {
-
                 launchGame(2);
-
             }
         });
 
@@ -157,7 +154,7 @@ public class LauncherGUI extends javax.swing.JFrame {
         quoridorFrame.setVisible(true);
 
         //On cache le launcher
-        frameLauncher.setVisible(false);
+        frameLauncher.dispose();
     }
 
     private void displayScoreTab() {
