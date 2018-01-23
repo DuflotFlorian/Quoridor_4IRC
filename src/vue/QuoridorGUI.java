@@ -279,6 +279,23 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                     btnSave.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent actionEvent) {
+                            //enregistrement de la partie dans le fichier de score
+                            int numCurrentPlayer =  quoridorGameController.getCurrentPlayer();
+                            QuoridorColor currentPlayerColor = quoridorGameController.getPlayerColor(numCurrentPlayer-1);
+                            List<Player> listPlayers = quoridorGameController.listPlayer();
+                            Scores.createJson(listPlayers, currentPlayerColor);
+
+                            btnSave.setEnabled(false);
+                            Window w = SwingUtilities.getWindowAncestor(btnSave);
+                            if (w != null) w.setVisible(false);
+                            JOptionPane.showOptionDialog(layeredPane,
+                                    "Score de la partie sauvegardé",
+                                    "FIN DE LA PARTIE",
+                                    JOptionPane.YES_NO_CANCEL_OPTION,
+                                    JOptionPane.QUESTION_MESSAGE,
+                                    null,
+                                    options,
+                                    options[1]);
 
                         }
                     });
@@ -304,13 +321,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                 }
             }
 
-            //enregistrement de la partie dans le fichier de score
-            int numCurrentPlayer =  quoridorGameController.getCurrentPlayer();
-            QuoridorColor currentPlayerColor = quoridorGameController.getPlayerColor(numCurrentPlayer-1);
-            quoridorGameController.createJson(currentPlayerColor);
-
-
-        new EndWindow();
+            new EndWindow();
         }
     }
 

@@ -31,5 +31,4 @@ public interface GameControllers {
 
     public List<Coordinates> getMovePossible(Coordinates c);
 
-    public void createJson(QuoridorColor winnerPlayer);
 }
