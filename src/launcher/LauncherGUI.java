@@ -20,7 +20,7 @@ public class LauncherGUI extends javax.swing.JFrame {
     JFrame frameLauncher;
     JPanel JPanelButton;
 
-    JButton btn2Player, btn4Player, btnScore, btnExit;
+    JButton btn2Player, btn4Player, btnClient, btnScore, btnExit;
 
     public LauncherGUI() {
         super();
@@ -36,8 +36,9 @@ public class LauncherGUI extends javax.swing.JFrame {
         //Bouttons
         btn2Player = new JButton("2 Joueurs");
         btn4Player = new JButton("4 Joueurs");
-        btnScore = new JButton("Scores");
-        btnExit = new JButton("Quitter");
+        btnClient  = new JButton("Se connecter a un serveur");
+        btnScore   = new JButton("Scores");
+        btnExit    = new JButton("Quitter");
 
         /*Settings JFrame*/
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -50,6 +51,7 @@ public class LauncherGUI extends javax.swing.JFrame {
         /*Ajout des Bouttons au panel*/
         JPanelButton.add(btn2Player);
         JPanelButton.add(btn4Player);
+        JPanelButton.add(btnClient);
         JPanelButton.add(btnScore);
         JPanelButton.add(btnExit);
 
@@ -83,7 +85,7 @@ public class LauncherGUI extends javax.swing.JFrame {
         {
             public void actionPerformed(ActionEvent e)
             {
-                launchGame(2);
+                launchGame(2, false);
             }
         });
 
@@ -91,7 +93,14 @@ public class LauncherGUI extends javax.swing.JFrame {
         {
             public void actionPerformed(ActionEvent e)
             {
-                launchGame(4);
+                launchGame(4, false);
+            }
+        });
+
+        btnClient.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                launchGame(2, true);
             }
         });
 
@@ -139,19 +148,19 @@ public class LauncherGUI extends javax.swing.JFrame {
     }
 
 
-    private void launchGame(int nbPlayer) {
+    private void launchGame(int nbPlayer, boolean isClient) {
         JFrame quoridorFrame;
         QuoridorGame quoridorGame;
         GameController quoridorGameController;
 
         quoridorGame = new QuoridorGame(nbPlayer);
-        quoridorGameController = new GameController(quoridorGame);
-
+        quoridorGameController = new GameController(quoridorGame, isClient);
         quoridorFrame = new QuoridorGUI("Quoridor", quoridorGameController,  9);
         quoridorGame.addObserver((Observer) quoridorFrame);
         quoridorFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         quoridorFrame.pack();
         quoridorFrame.setVisible(true);
+        quoridorGameController.listen();
 
         //On cache le launcher
         frameLauncher.dispose();
