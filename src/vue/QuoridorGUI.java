@@ -283,7 +283,11 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                             int numCurrentPlayer =  quoridorGameController.getCurrentPlayer();
                             QuoridorColor currentPlayerColor = quoridorGameController.getPlayerColor(numCurrentPlayer-1);
                             List<Player> listPlayers = quoridorGameController.listPlayer();
-                            Scores.createJson(listPlayers, currentPlayerColor);
+                            try {
+                                Scores.createJson(listPlayers, currentPlayerColor);
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
 
                             btnSave.setEnabled(false);
                             Window w = SwingUtilities.getWindowAncestor(btnSave);
