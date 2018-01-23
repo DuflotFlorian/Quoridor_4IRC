@@ -74,6 +74,11 @@ public class QuoridorGame extends Observable implements BoardGames {
         this.notifyObservers(game.getPiecesIHM());
     }
 
+    @Override
+    public void deleteObservers() {
+        super.deleteObservers();
+    }
+
     public int getCurrentPlayer() {
         return game.getIdCurrentPlayer();
     }
