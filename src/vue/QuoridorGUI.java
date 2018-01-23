@@ -253,7 +253,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         else {
             //Lors d'un click en dehors de l'IHM
             //On remet l'IHM dans les conditions avant deplacement
-            System.out.println("mouseReleased hors case pawn");
             quoridorGameController.notifyObserver();
             pawn =null;
         }

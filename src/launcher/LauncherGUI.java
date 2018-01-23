@@ -160,7 +160,6 @@ public class LauncherGUI extends javax.swing.JFrame {
         quoridorFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         quoridorFrame.pack();
         quoridorFrame.setVisible(true);
-        quoridorGameController.listen();
 
         //On cache le launcher
         frameLauncher.dispose();

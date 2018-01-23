@@ -2,9 +2,9 @@ package Controller;
 
 import Class.observable.QuoridorGame;
 import Class.*;
+import vue.QuoridorGUI;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
@@ -14,31 +14,17 @@ public class GameController extends AbstractGameController {
     boolean isClient;
     static ServerSocket ss;
     static Socket s;
-    static DataInputStream din;
-    static DataOutputStream dout;
+    static PrintWriter out;
+    static BufferedReader in;
+    String messageToSend = "";
 
     public GameController(QuoridorGame game, boolean isClient) {
         super(game);
         this.isClient = isClient;
         if(!isClient){
-            try
-            {
-                ss = new ServerSocket(1201);
-                s = ss.accept();
-                din = new DataInputStream(s.getInputStream());
-                dout = new DataOutputStream(s.getOutputStream());
-            } catch(Exception e)
-            {
-                System.out.println("Serveur : " + e.getMessage());
-            }
+            Serveur();
         }else{
-            try{
-                s = new Socket("127.0.0.1", 1201);
-                din = new DataInputStream(s.getInputStream());
-                dout = new DataOutputStream(s.getOutputStream());
-            }catch (Exception e){
-                System.out.println("Client : " + e.getMessage());
-            }
+            Client();
         }
     }
 
@@ -77,15 +63,12 @@ public class GameController extends AbstractGameController {
     @Override
     protected void endMove(Coordinates initCoord, Coordinates finalCoord) {
         try{
-            String messToSend = "";
+
             if(initCoord.equals(null)){
-                messToSend = "wall/" + finalCoord.toString();
+                messageToSend = "wall/" + finalCoord.toString();
             } else {
-                messToSend = "move/" + initCoord.toString() + "/" + finalCoord.toString();
+                messageToSend = "move/" + initCoord.toString() + "/" + finalCoord.toString();
             }
-            byte[] data=messToSend.getBytes("UTF-8");
-            dout.writeInt(data.length);
-            dout.write(data);
         } catch (Exception e){
             System.out.println("Send : " + e.getMessage());
         }
@@ -97,6 +80,7 @@ public class GameController extends AbstractGameController {
             String[] coordSplit = splitMessage[1].split("&");
             Coordinates c = new Coordinates(Integer.parseInt(coordSplit[0]), Integer.parseInt(coordSplit[1]));
             this.putWall(c);
+            this.notifyObserver();
         }
         if(splitMessage[0].equals("move")){
             String[] coordInitSplit = splitMessage[1].split("&");
@@ -104,26 +88,103 @@ public class GameController extends AbstractGameController {
             Coordinates cInit = new Coordinates(Integer.parseInt(coordInitSplit[0]), Integer.parseInt(coordInitSplit[1]));
             Coordinates cFinal = new Coordinates(Integer.parseInt(coordFinalSplit[0]), Integer.parseInt(coordFinalSplit[1]));
             this.move(cInit, cFinal);
+            this.notifyObserver();
         }
     }
 
-    public void listen() {
-        new Runnable(){
-            @Override
-            public void run() {
-                try{
-                    String message = "";
-                    while(!isEnd()){
-                        int length=din.readInt();
-                        byte[] data=new byte[length];
-                        din.readFully(data);
-                        message=new String(data,"UTF-8");
-                        traitementMessageReception(message);
-                    }
-                } catch (Exception e){
-                    System.out.println(e.getMessage());
-                }
+    private void sendMesage(){
+        if(!messageToSend.equals("")){
+            System.out.println(messageToSend);
+            out.println(messageToSend);
+        }
+    }
+
+    private void receptionMessage() {
+        String msg;
+        try {
+            msg = in.readLine();
+            //tant que le client est connecté
+            if (!isEnd()) {
+                traitementMessageReception(msg);
+                msg = in.readLine();
             }
-        };
+            //sortir de la boucle si le client a déconecté
+            System.out.println("Client déconecté");
+            //fermer le flux et la session socket
+            out.close();
+            s.close();
+            ss.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void Serveur(){
+        try
+        {
+            ss = new ServerSocket(1201);
+            s = ss.accept();
+            out = new PrintWriter(s.getOutputStream());
+            in = new BufferedReader (new InputStreamReader (s.getInputStream()));
+
+            Thread envoi= new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while(!isEnd()){
+                        sendMesage();
+                    }
+                }
+            });
+            envoi.start();
+
+            Thread recevoir= new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    receptionMessage();
+                }
+            });
+            recevoir.start();
+        } catch(Exception e)
+        {
+            System.out.println("Serveur : " + e.getMessage());
+        }
+    }
+
+    private void Client(){
+
+        try {
+         /*
+         * les informations du serveur ( port et adresse IP ou nom d'hote
+         * 127.0.0.1 est l'adresse local de la machine
+         */
+            s = new Socket("127.0.0.1",1201);
+
+            //flux pour envoyer
+            out = new PrintWriter(s.getOutputStream());
+            //flux pour recevoir
+            in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+
+            Thread envoyer = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while(!isEnd()){
+                        sendMesage();
+                    }
+                }
+            });
+            envoyer.start();
+
+            Thread recevoir = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    receptionMessage();
+                }
+            });
+            recevoir.start();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
