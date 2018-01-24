@@ -15,6 +15,7 @@ import Class.*;
 import Class.observable.QuoridorGame;
 import Controller.GameController;
 import launcher.LauncherGUI;
+import org.json.simple.parser.ParseException;
 
 
 public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionListener, Observer {
@@ -285,7 +286,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
                             List<Player> listPlayers = quoridorGameController.listPlayer();
                             try {
                                 Scores.createJson(listPlayers, currentPlayerColor);
-                            } catch (IOException e1) {
+                            } catch (IOException | ParseException e1) {
                                 e1.printStackTrace();
                             }
 
