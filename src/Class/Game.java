@@ -34,6 +34,12 @@ public class Game {
         }
     }
 
+    public Game(Game g){
+        this.nbPlayers = g.nbPlayers;
+        this.idCurrentPlayer = g.idCurrentPlayer;
+        this.board = new Board(g.board);
+    }
+
     public Player getCurrentPlayer() {
         return this.players[idCurrentPlayer];
     }
@@ -138,6 +144,18 @@ public class Game {
                 result = true;
                 break;
             }
+        }
+        return result;
+    }
+
+    public boolean isWin(Player p) {
+        boolean result = false;
+        if (p.getQuoridorColor().equals(QuoridorColor.BLUE) || p.getQuoridorColor().equals(QuoridorColor.RED)) {
+            if (p.getActualCoord().getX() == p.getWinCoord().getX()) {
+                result = true;
+            }
+        } else if (p.getActualCoord().getY() == p.getWinCoord().getY()) {
+            result = true;
         }
         return result;
     }
@@ -269,9 +287,14 @@ public class Game {
         return players[numPlayer].getQuoridorColor();
     }
 
-    private boolean isThereAPath(Coordinates init, Coordinates dest) {
+    public boolean isThereAPath(Coordinates init, Coordinates dest) {
         return this.board.isThereAPath(init, dest);
     }
+
+    public ArrayList<Coordinates> findPath(Coordinates init, Coordinates dest) {
+        return this.board.findPath(init, dest);
+    }
+
 
     public int getPlayerWallRemaining(int numPlayer) {
         return players[numPlayer].getWallRemaining();

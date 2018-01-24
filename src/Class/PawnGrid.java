@@ -8,6 +8,9 @@ public class PawnGrid extends AbstractGrid {
     public PawnGrid() {
         super(new ArrayList<Pawn>());
     }
+    public PawnGrid(PawnGrid p) {
+        super(new ArrayList(p.getElements()));
+    }
 
     public boolean isAddOk(Coordinates coord) {
         boolean validX, validY;

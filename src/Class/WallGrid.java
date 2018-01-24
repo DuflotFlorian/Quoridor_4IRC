@@ -7,6 +7,9 @@ public class WallGrid extends AbstractGrid {
     public WallGrid() {
         super(new ArrayList<Wall>());
     }
+    public WallGrid(WallGrid w) {
+        super(new ArrayList(w.getElements()));
+    }
 
     public String toString() {
         String res = "Grille mur :\n";
