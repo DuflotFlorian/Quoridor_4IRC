@@ -3,6 +3,7 @@ package Controller;
 import Class.observable.QuoridorGame;
 import Class.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameController extends AbstractGameController {
@@ -38,6 +39,8 @@ public class GameController extends AbstractGameController {
     public QuoridorColor getPlayerColor(int numPlayer) {
         return game.getPlayerColor(numPlayer);
     }
+
+    public List<Coordinates> possibleMove(Coordinates initCoord) { return game.possibleMove(initCoord); }
 
     public int getPlayerWallRemaining(int numPlayer) {
         return game.getPlayerWallRemaining(numPlayer);

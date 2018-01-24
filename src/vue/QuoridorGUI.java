@@ -34,6 +34,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private JLabel pawn;
     private int coeffSize;
     private Color wallColor;
+    private Color pawnColor;
     private Color backgroundColor;
     private ArrayList<JPanel> arraySidePanel;
 
@@ -58,6 +59,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         arraySidePanel = new ArrayList<JPanel>();
         this.coeffSize = defineCoeffSize();
         this.wallColor = new Color(404040);
+        this.pawnColor = new Color(25551204);
         this.backgroundColor = new Color(404040);
         sizeSquarePawn = (int) ((0.85 * coeffSize));
         int sizeSquareWall = (int) ((0.15 * coeffSize));
@@ -213,6 +215,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
 
         coordInit = pixelToCell(jp);
+        List<Coordinates> movePossible = quoridorGameController.possibleMove(coordInit);
+        for (Coordinates coord : movePossible) {
+            colorizePawnPanel(mapCoordPanelPawn.get(coord));
+        }
         if (jp.getComponents().length == 1) {
             pawn = (JLabel) jp.getComponent(0);
             Point parentLocation = pawn.getParent().getLocation();
@@ -238,6 +244,12 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
         pawn.setVisible(false);
         Component cmp = findComponentAt(x , y);
+
+        for (Map.Entry<Coordinates, JPanel> entry : mapCoordPanelPawn.entrySet())
+        {
+            entry.getValue().setBackground(Color.LIGHT_GRAY);
+        }
+
         if (mapCoordPanelPawn.containsValue(cmp)) {
             JPanel jp = (JPanel) cmp;
             coordFinal = pixelToCell(jp);
@@ -380,8 +392,12 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
     }
 
-    private void colorizeWallPanel(JPanel cell) {
-        cell.setBackground(wallColor); //colorize la case courante
+    private void colorizeWallPanel(JPanel cell) { cell.setBackground(wallColor);
+    //colorize la case courante
+    }
+
+    private void colorizePawnPanel(JPanel cell) {
+        cell.setBackground(pawnColor); //colorize la case courante
     }
 
     private Coordinates pixelToCell(JPanel component){

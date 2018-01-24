@@ -3,6 +3,7 @@ package Class;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import static java.lang.Math.abs;
 
 public class Game {
     private Player[] players;
@@ -38,9 +39,31 @@ public class Game {
         return this.players[idCurrentPlayer];
     }
 
+    public boolean testMove(Coordinates initCoord, Coordinates finalCoord) {
+        boolean isJumping = isJumping(initCoord, finalCoord);
+        Player j = getCurrentPlayer();
+
+        if (isPlayerHere(finalCoord)) {
+            System.out.println("Il y a deja un joueur ici\n");
+            return false;
+        }
+
+        if (!canPionPass(j.getActualCoord(), finalCoord)) {
+            System.out.println("Pawn ne passe pas");
+            return false;
+        }
+
+        if (!j.isMoveOk(j.getActualCoord(), finalCoord, isJumping)) {
+            System.out.println("Ce deplacement n'est pas permis\n");
+            return false;
+        }
+
+        return true;
+    }
+
     public boolean isMoveOk(Coordinates initCoord, Coordinates finalCoord, boolean isWall) {
-        if(initCoord != null) {
-            if(initCoord.equals(finalCoord) && !isWall){
+        if(!isWall) {
+            if(initCoord.equals(finalCoord)){
                 return false;
             }
         }
@@ -50,39 +73,13 @@ public class Game {
 
     public boolean move(Player j, Coordinates finalCoord) {
         boolean ret = false;
-        if (j.equals(getCurrentPlayer())) {
-            if (!isPlayerHere(finalCoord)) {
-                boolean isJumping = false;
-                int diff;
-                Coordinates currentCoord = j.getActualCoord();
-                if (Math.abs(currentCoord.getX() - finalCoord.getX()) == 4 && currentCoord.getY() - finalCoord.getY() == 0) {
-                    diff = currentCoord.getX() - finalCoord.getX();
-                    isJumping = isPlayerHere(new Coordinates(currentCoord.getX() - (diff / 2), currentCoord.getY()));
-                } else if (Math.abs(currentCoord.getY() - finalCoord.getY()) == 4 && currentCoord.getX() - finalCoord.getX() == 0) {
-                    diff = currentCoord.getY() - finalCoord.getY();
-                    isJumping = isPlayerHere(new Coordinates(currentCoord.getX(), currentCoord.getY() - (diff / 2)));
-                }
-
-                //Vérification présence mur pendant le deplacement
-                if (canPionPass(j.getActualCoord(), finalCoord)) {
-                    if (j.isMoveOk(j.getActualCoord(), finalCoord, isJumping)) {
-                        j.move(j.getActualCoord(), finalCoord);
-                        switchPlayer();
-                        ret = true;
-                        if (isWin()) {
-                            System.out.println("Fin du jeu");
-                        }
-                    } else {
-                        System.out.println("Ce deplacement n'est pas permis\n");
-                    }
-                } else {
-                    System.out.println("Pawn ne passe pas");
-                }
-            } else {
-                System.out.println("Il y a deja un joueur ici\n");
+        if(testMove(j.getActualCoord(), finalCoord)) {
+            j.move(j.getActualCoord(), finalCoord);
+            switchPlayer();
+            ret = true;
+            if (isWin()) {
+                System.out.println("Fin du jeu");
             }
-        } else {
-            System.out.println("Ce n'est pas le joueur courant\n");
         }
 
         return ret;
@@ -201,11 +198,24 @@ public class Game {
             return false;
         }
 
-        if (diffX == 4 || diffY == 4) { //Saut sur l'axe X ou Y
-            if (isPawnBlockedByWall(new Coordinates(initCoord.getX() + diffX - (diffX / 4), initCoord.getY() + diffY - (diffY / 4)))) { //Test de la case juste avant la case destination
+        if (abs(diffX) == 4|| abs(diffY) == 4) { //Saut sur l'axe X ou Y
+            if (isPawnBlockedByWall(new Coordinates(initCoord.getX() + diffX - (diffX / 4), initCoord.getY() + diffY - (diffY / 4)))) {
+                //Test de la case juste avant la case destination
+                System.out.println("+ + "+new Coordinates(initCoord.getX() + diffX - (diffX / 4), initCoord.getY() + diffY - (diffY / 4)) );
                 return false;
             }
+//            else if (isPawnBlockedByWall(new Coordinates(initCoord.getX() + (diffX - 2) - (diffX / 4), initCoord.getY() + diffY - (diffY / 4)))) {
+//                System.out.println("- + "+new Coordinates(initCoord.getX() + (diffX - 2) - (diffX / 4), initCoord.getY() + diffY - (diffY / 4)) );
+//                return false;
+//            }
+//
+//            else if (isPawnBlockedByWall(new Coordinates(initCoord.getX() + diffX - (diffX / 4), initCoord.getY() + (diffY - 2) - (diffY / 4)))) {
+//                System.out.println("- +"+new Coordinates(initCoord.getX() + diffX - (diffX / 4), initCoord.getY() + (diffY - 2) - (diffY / 4)));
+//                return false;
+//            }
+
         }
+
         return true;
     }
 
@@ -220,11 +230,11 @@ public class Game {
         if (isWallHere(coord)) {
             return true;
         } else if (Wall.isWallHorizontal(coord)) {
-            if (isWallHere(new Coordinates(coord.getX(), coord.getY() - 2))) {
+            if (isWallHere(new Coordinates(coord.getX(), coord.getY() - 2)) || isWallHere(new Coordinates(coord.getX(), coord.getY() - 4))) {
                 return true;
             }
         } else {
-            if (isWallHere(new Coordinates(coord.getX() - 2, coord.getY()))) {
+            if (isWallHere(new Coordinates(coord.getX() - 2, coord.getY())) || isWallHere(new Coordinates(coord.getX() - 4, coord.getY()))) {
                 return true;
             }
         }
@@ -312,5 +322,44 @@ public class Game {
 
         }
         return true;
+    }
+
+    public List<Coordinates> possibleMove(Coordinates initCoord) {
+        List<Coordinates> result = new ArrayList<Coordinates>();
+
+        boolean validX, validY, isJumping;
+        if(isPlayerHere(initCoord) && getCurrentPlayer().getActualCoord().equals(initCoord)) {
+            for (int x = 0; x < 17; x++) {
+                for (int y = 0; y < 17; y++) {
+                    isJumping = isJumping(initCoord, new Coordinates(x,y));
+
+                    int diff = ((isJumping) ? 4 : 2);
+
+                    int difX, difY;
+                    difX = abs(initCoord.getX() - x);
+                    difY = abs(initCoord.getY() - y);
+                    validX = (difX == diff) || (difX == 0);
+                    validY = (difY == diff) || (difY == 0);
+                    if ((validX && validY) && ((difX + difY == diff))) {
+                        if(testMove(initCoord, new Coordinates(x,y))){
+                            result.add(new Coordinates(x,y));
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public boolean isJumping(Coordinates initCoord, Coordinates finalCoord) {
+        boolean ret = false;
+        if (Math.abs(initCoord.getX() - finalCoord.getX()) == 4 && initCoord.getY() - finalCoord.getY() == 0) {
+            ret = isPlayerHere(new Coordinates(initCoord.getX() - ((initCoord.getX() - finalCoord.getX()) / 2), initCoord.getY()));
+        } else if (Math.abs(initCoord.getY() - finalCoord.getY()) == 4 && initCoord.getX() - finalCoord.getX() == 0) {
+            ret = isPlayerHere(new Coordinates(initCoord.getX(), initCoord.getY() - ((initCoord.getY() - finalCoord.getY()) / 2)));
+        }
+
+        return ret;
     }
 }
