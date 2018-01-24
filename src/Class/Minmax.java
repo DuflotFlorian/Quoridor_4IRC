@@ -18,7 +18,7 @@ public class Minmax {
         //int num_player = game.listPlayer().size(); // not used
         if(depth == 0){
             Move m = new Move();
-            m.value = eval(game);
+            m.value = eval(game,ia_player);
         }
         for(int i=0; i<9; i++) {
             for(int j=0; j<9; j++){
@@ -42,13 +42,13 @@ public class Minmax {
         return best_move;
     }
 
-    private static int eval(Game game) {
+    private static int eval(Game game, int ia_player) {
         ArrayList<Integer> distances = new ArrayList<Integer>();
         for(Player p: game.listPlayer()){
             distances.add(game.findPath(p.getActualCoord(),p.getWinCoord()).size());
             // returns the distance to win position for each player
         }
-        int playersDist = distances.get(game.getIdCurrentPlayer());
+        int playersDist = distances.get(ia_player);
         distances.remove(game.getIdCurrentPlayer());
         return getMin(distances) - playersDist;
     }
