@@ -4,17 +4,17 @@ import java.awt.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Observer;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
 import Class.observable.QuoridorGame;
 import Controller.GameController;
 import vue.QuoridorGUI;
+
 
 public class LauncherGUI extends javax.swing.JFrame {
     JFrame frameLauncher;
@@ -158,6 +158,9 @@ public class LauncherGUI extends javax.swing.JFrame {
     }
 
     private void displayScoreTab() {
+
+        LinkedHashMap<String, Integer> topRank =  GameController.getTopRank();
+        new ScoresGUI(topRank);
 
     }
 }

@@ -6,12 +6,23 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.io.*;
 
-import java.util.List;
+import java.util.*;
 
 public class Scores
 {
     private static File scoreFolder;
     private static File scoreFile;
+    private static JSONArray scoresArray;
+
+    static {
+        try {
+            getHomePathByOsName(); // initialise scoreFolder
+            checkOrCreateScoreFile(); // initialise scoreFile
+            getScores();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public enum OS {
         Linux, Windows, Mac
@@ -23,7 +34,7 @@ public class Scores
      * @param winnerPlayer le joueur victorieux du jeu courant
      */
     public static void createJson(List<Player> listPlayer, QuoridorColor winnerPlayer) throws IOException, ParseException {
-        checkOrCreateScoreFile();
+
         String scoreFileString = scoreFile.toString();
         RandomAccessFile f = new RandomAccessFile(scoreFileString, "rw");
         BufferedWriter bw;
@@ -33,7 +44,7 @@ public class Scores
             bw.write("[]");
             bw.close();
         }
-        scoresObj = getNumberOfScores(scoreFileString);
+        scoresObj = getScores();
         JSONArray objArray = new JSONArray();
         JSONObject objList = new JSONObject();
         JSONArray list = new JSONArray();
@@ -51,11 +62,11 @@ public class Scores
         objList.put("players", list);
         objArray.add(objList);
         bw = new BufferedWriter(new FileWriter(scoreFileString, false));
-        if(scoresObj.size()==0) {
+        if(scoresObj.size()==0) { // la premiere partie sera à la fin du tableau json
             bw.write(objArray.toJSONString());
         } else {
-            scoresObj.add(objArray);
-            bw.write(scoresObj.toJSONString());
+            objArray.addAll(scoresObj);
+            bw.write(objArray.toJSONString());
             bw.write("\n");
         }
         bw.close();
@@ -106,14 +117,71 @@ public class Scores
 
     /**
      *
-     * @param fileName  chemin et nom du fichier de scores
-     * @return le nombre de parties sauvegardées
+     * @return les parties sauvegardées au format json tableau
      * @throws IOException lève l'exception IO
      * @throws ParseException lève l'exception de parse
      */
-    private static JSONArray getNumberOfScores(String fileName) throws IOException, ParseException {
+    private static JSONArray getScores() {
         JSONParser parser = new JSONParser();
-        Object obj= parser.parse(new FileReader(fileName));
+        Object obj=null;
+        try {
+             obj = parser.parse(new FileReader(scoreFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        scoresArray = (JSONArray) obj;
         return (JSONArray) obj;
     }
+
+    public static LinkedHashMap<String, Integer> getTopRank(){
+        getScores();
+        HashMap<String, Integer> playersVictories = new HashMap();
+        for (Object anArray : scoresArray) {
+            JSONObject jsonobject = (JSONObject) anArray;
+            JSONArray a = (JSONArray) jsonobject.get("players");
+
+            for (Object anA : a) {
+                JSONObject ob = (JSONObject) anA;
+                String joueur = ob.get("joueur").toString();
+                if (!playersVictories.containsKey(joueur)) {
+                    playersVictories.put(joueur, 0);
+                }
+                Object s = ob.get("win");
+                int value = playersVictories.get(joueur);
+                value = value + Integer.parseInt(s.toString());
+                playersVictories.put(joueur, value);
+
+            }
+        }
+
+
+
+
+
+        return sortMap(playersVictories);
+    }
+
+
+    private static LinkedHashMap<String,Integer> sortMap(HashMap playersVictories){
+        // tri du Hashmap via un TreeSet
+        SortedSet<Map.Entry<String,Integer>> sortedEntries = new TreeSet<Map.Entry<String,Integer>>(
+                new Comparator<Map.Entry<String,Integer>>() {
+                    @Override public int compare(Map.Entry<String,Integer> e1, Map.Entry<String,Integer> e2) {
+                        int res = e1.getValue().compareTo(e2.getValue());
+                        return res != 0 ? -res : -1; // conserve les valeurs de victoires identiques
+                    }
+                }
+        );
+        sortedEntries.addAll(playersVictories.entrySet());
+
+        // conversion TreeSet en LinkedHashMap (qui conserve l'ordre d'insertion)
+        LinkedHashMap<String, Integer> ret = new LinkedHashMap<String, Integer>();
+        for (Map.Entry<String, Integer> score : sortedEntries) {
+            ret.put(score.getKey(), score.getValue());
+        }
+        return ret;
+    }
+
 }
