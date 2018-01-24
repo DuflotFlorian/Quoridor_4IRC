@@ -2,7 +2,6 @@ package Controller;
 
 import Class.observable.QuoridorGame;
 import Class.*;
-
 import java.util.List;
 
 public class GameController extends AbstractGameController {
@@ -26,6 +25,7 @@ public class GameController extends AbstractGameController {
         return game.getMovePossible(c);
     }
 
+
     @Override
     public boolean isPlayerOK(Coordinates initCoord) {
         return game.getColorCurrentPlayer().equals(game.getPieceColor(initCoord));
@@ -45,4 +45,5 @@ public class GameController extends AbstractGameController {
 
     @Override
     protected void endMove(Coordinates initCoord, Coordinates finalCoord) { }
+
 }
