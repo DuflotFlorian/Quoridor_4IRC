@@ -2,7 +2,6 @@ package vue;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -10,9 +9,7 @@ import java.util.List;
 import java.awt.Color;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.text.html.StyleSheet;
 import Class.*;
-import Class.observable.QuoridorGame;
 import Controller.GameController;
 import launcher.LauncherGUI;
 import org.json.simple.parser.ParseException;

@@ -163,7 +163,7 @@ public class LauncherGUI extends javax.swing.JFrame {
 
     private void displayScoreTab() {
         LinkedHashMap<String, Integer> topRank =  GameController.getTopRank();
-        LinkedHashMap<String, List<Double>> topRankByParticipation =  GameController.getTopRankByParticipation();
+        LinkedHashMap<String, List<Integer>> topRankByParticipation =  GameController.getTopRankByParticipation();
         new ScoresGUI(topRank,topRankByParticipation);
 
     }

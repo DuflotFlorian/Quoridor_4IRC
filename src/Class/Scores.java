@@ -177,32 +177,31 @@ public class Scores
         return sortMap(playersVictories);
     }
 
-    public static LinkedHashMap<String, List<Double>> getTopRankByParticipation() {
+    public static LinkedHashMap<String, List<Integer>> getTopRankByParticipation() {
         HashMap<String, Integer> arrayVictories = scoresMap;
-        HashMap<String, Double> scoreMapUnsorted = new HashMap();
+        HashMap<String, Integer> scoreMapUnsorted = new HashMap();
         Iterator it = arrayVictories.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
             String player = pair.getKey().toString();
             int playerGames = getNbGames(player);
-            double playerVictories = scoresMap.get(player);
-            double ratio = (playerVictories * 100) / playerGames;
-            ratio = Math.floor(ratio * 100) / 100;
+            int playerVictories = scoresMap.get(player);
+            int ratio = (playerVictories * 100) / playerGames;
             scoreMapUnsorted.put(player, ratio);
         }
 
-        HashMap<String, Double> scoreMapSorted = sortMapDouble(scoreMapUnsorted);
-        LinkedHashMap<String, List<Double>> scoreMapSortedList  = new LinkedHashMap<>();
+        HashMap<String, Integer> scoreMapSorted = sortMap(scoreMapUnsorted);
+        LinkedHashMap<String, List<Integer>> scoreMapSortedList  = new LinkedHashMap<>();
         Iterator it2 = scoreMapSorted.entrySet().iterator();
         while (it2.hasNext()) {
             Map.Entry pair = (Map.Entry) it2.next();
             String player = pair.getKey().toString();
 
-            double playerVictories = scoreMapSorted.get(player);
+            int playerVictories = scoreMapSorted.get(player);
             int playerGames = getNbGames(player);
-            List<Double> l = new ArrayList<>();
+            List<Integer> l = new ArrayList<>();
             l.add(playerVictories);
-            l.add((double) playerGames);
+            l.add(playerGames);
             scoreMapSortedList.put(player,l);
         }
         return scoreMapSortedList;
@@ -229,27 +228,7 @@ public class Scores
         }
         return ret;
     }
-
-
-    private static LinkedHashMap<String,Double> sortMapDouble(HashMap playersVictories){
-        // tri du Hashmap via un TreeSet
-        SortedSet<Map.Entry<String,Double>> sortedEntries = new TreeSet<Map.Entry<String,Double>>(
-                new Comparator<Map.Entry<String,Double>>() {
-                    @Override public int compare(Map.Entry<String,Double> e1, Map.Entry<String,Double> e2) {
-                        int res = e1.getValue().compareTo(e2.getValue());
-                        return res != 0 ? -res : -1; // conserve les valeurs de victoires identiques
-                    }
-                }
-        );
-        sortedEntries.addAll(playersVictories.entrySet());
-
-        // conversion TreeSet en LinkedHashMap (qui conserve l'ordre d'insertion)
-        LinkedHashMap<String, Double> ret = new LinkedHashMap<String, Double>();
-        for (Map.Entry<String, Double> score : sortedEntries) {
-            ret.put(score.getKey(), score.getValue());
-        }
-        return ret;
-    }
+    
 
     private static int getNbGames(String player){
         int playerGames = 0;
