@@ -26,8 +26,7 @@ public class ScoresGUI extends JFrame {
         this.setLocationRelativeTo(null);
         this.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - this.getPreferredSize().width /2 , (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - this.getPreferredSize().height /2 );
         this.setTitle("Scores Quoridor");
-
-
+        frameLauncher.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
         /*Chargement de l'icone du programme*/
         InputStream iconeURL = getClass().getResourceAsStream("/images/iconQuoridor.png");
@@ -39,7 +38,6 @@ public class ScoresGUI extends JFrame {
         }
         frameLauncher.setIconImage(imgIcon.getImage());
 
-
         main.setBackground(this.BackgroundColor);
         this.add(main);
 
@@ -50,8 +48,6 @@ public class ScoresGUI extends JFrame {
         JLabel titleRankByPlayed = new JLabel("% VICTOIRES / NOMBRE DE JEUX");
         titleRankByPlayed.setForeground(Color.WHITE);
         main.add(titleRankByPlayed);
-
-
 
         //tableau TopRank
         JTable tableT=new JTable(topRank.size(),2);
@@ -65,7 +61,6 @@ public class ScoresGUI extends JFrame {
         tableT.setGridColor(BackgroundColor);
         tableT.setForeground(Color.WHITE);
         main.add(tableT);
-
 
         //tableau rankRatio
         JTable tableR=new JTable(topRank.size(),3);
@@ -88,8 +83,6 @@ public class ScoresGUI extends JFrame {
         tableR.getColumnModel().getColumn(0).setPreferredWidth(150);
         main.add(tableR);
 
-        Dimension preferredSize = main.getPreferredSize();
-        this.setPreferredSize(new Dimension(preferredSize));
         this.pack();
         this.setVisible(true);
     }
