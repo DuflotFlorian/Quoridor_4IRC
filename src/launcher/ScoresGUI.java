@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.List;
 
+import static launcher.LauncherGUI.defineAutoTheme;
+
 
 public class ScoresGUI extends JFrame {
     JFrame frameLauncher;
@@ -95,20 +97,7 @@ public class ScoresGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-
-        /*Définition auto du theme en fonction du système*/
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-
+        defineAutoTheme();
     }
 
 }

@@ -9,9 +9,9 @@ import Class.*;
 public class QuoridorGame extends Observable implements BoardGames {
     private Game game;
 
-    public QuoridorGame(int nb) {
+    public QuoridorGame(int nb, List<String> name) {
         super();
-        this.game = new Game(nb);
+        this.game = new Game(nb, name);
         this.notifyObservers(game.getPiecesIHM());
     }
 
@@ -62,6 +62,7 @@ public class QuoridorGame extends Observable implements BoardGames {
         return game.listPlayer();
     }
 
+//    public String getNamePlayer() {return game.}
     @Override
     public void notifyObservers(Object arg) {
         super.setChanged();
@@ -89,6 +90,14 @@ public class QuoridorGame extends Observable implements BoardGames {
 
     public QuoridorColor getPlayerColor(int numPlayer) {
         return game.getPlayerColor(numPlayer);
+    }
+
+    public String getPlayerName(int numPlayer) {
+        return game.getPlayerName(numPlayer);
+    }
+
+    public void setPlayerName(int numPlayer, String name) {
+        game.setPlayerName(numPlayer, name);
     }
 
     public int getPlayerWallRemaining(int numPlayer) {
