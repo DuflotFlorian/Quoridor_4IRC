@@ -23,7 +23,6 @@ public class ScoresGUI extends JFrame {
         frameLauncher = this;
         JPanel main = new JPanel(new GridLayout(2,2));
         this.setResizable(false);
-//        this.setPreferredSize(new Dimension(550, 220));
         this.setLocationRelativeTo(null);
         this.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - this.getPreferredSize().width /2 , (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - this.getPreferredSize().height /2 );
         this.setTitle("Scores Quoridor");
