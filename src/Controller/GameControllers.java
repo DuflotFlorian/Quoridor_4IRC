@@ -30,4 +30,5 @@ public interface GameControllers {
     public boolean isPlayerOK(Coordinates initCoord);
 
     public List<Coordinates> getMovePossible(Coordinates c);
+
 }

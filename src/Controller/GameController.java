@@ -2,8 +2,6 @@ package Controller;
 
 import Class.observable.QuoridorGame;
 import Class.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class GameController extends AbstractGameController {
