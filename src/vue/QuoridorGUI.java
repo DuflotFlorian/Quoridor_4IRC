@@ -65,6 +65,23 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         widthIHM = size * sizeSquarePawn + (size - 1) * sizeSquareWall + 2 * widthPanelInfo;
         heightIHM = size * sizeSquarePawn + (size - 1) * sizeSquareWall;
         int sizeBoardQuoridor = (size * sizeSquarePawn) + ((size - 1) * sizeSquareWall);
+
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menuItem = new JMenu("Fichier");
+        JMenuItem itemMenuPrincipal = new JMenuItem("Menu Principal");
+
+        itemMenuPrincipal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                QuoridorGUI.super.dispose();
+                new LauncherGUI().setVisible(true);
+            }
+        });
+
+        menuItem.add(itemMenuPrincipal);
+        menuBar.add(menuItem);
+        this.setJMenuBar(menuBar);
+
         /*Chargement de l'icone du programme*/
         InputStream iconeURL = getClass().getResourceAsStream("/images/iconQuoridor.png");
         ImageIcon imgIcon = null;
