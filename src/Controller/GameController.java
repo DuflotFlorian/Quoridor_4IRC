@@ -5,7 +5,6 @@ import Class.*;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-
 public class GameController extends AbstractGameController {
 
     public GameController(QuoridorGame game) {
@@ -27,7 +26,6 @@ public class GameController extends AbstractGameController {
         return game.getMovePossible(c);
     }
 
-
     @Override
     public boolean isPlayerOK(Coordinates initCoord) {
         return game.getColorCurrentPlayer().equals(game.getPieceColor(initCoord));
@@ -40,6 +38,8 @@ public class GameController extends AbstractGameController {
     public QuoridorColor getPlayerColor(int numPlayer) {
         return game.getPlayerColor(numPlayer);
     }
+
+    public List<Coordinates> possibleMove(Coordinates initCoord) { return game.possibleMove(initCoord); }
 
     public int getPlayerWallRemaining(int numPlayer) {
         return game.getPlayerWallRemaining(numPlayer);

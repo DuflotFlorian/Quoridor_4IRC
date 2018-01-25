@@ -33,6 +33,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
     private JLabel pawn;
     private int coeffSize;
     private Color wallColor;
+    private Color possibleMoveColor;
     private Color backgroundColor;
     private ArrayList<JPanel> arraySidePanel;
 
@@ -56,6 +57,7 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         arraySidePanel = new ArrayList<JPanel>();
         this.coeffSize = defineCoeffSize();
         this.wallColor = new Color(404040);
+        this.possibleMoveColor = new Color(25551204);
         this.backgroundColor = new Color(404040);
         sizeSquarePawn = (int) ((0.85 * coeffSize));
         int sizeSquareWall = (int) ((0.15 * coeffSize));
@@ -209,6 +211,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         }
 
         coordInit = pixelToCell(jp);
+        List<Coordinates> movePossible = quoridorGameController.possibleMove(coordInit);
+        for (Coordinates coord : movePossible) {
+            colorizePossibleMovePanel(mapCoordPanelPawn.get(coord));
+        }
         if (jp.getComponents().length == 1) {
             pawn = (JLabel) jp.getComponent(0);
             Point parentLocation = pawn.getParent().getLocation();
@@ -233,6 +239,12 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
         pawn.setVisible(false);
         Component cmp = findComponentAt(x, y);
+
+        for (Map.Entry<Coordinates, JPanel> entry : mapCoordPanelPawn.entrySet())
+        {
+            entry.getValue().setBackground(Color.LIGHT_GRAY);
+        }
+
         if (mapCoordPanelPawn.containsValue(cmp)) {
             JPanel jp = (JPanel) cmp;
             coordFinal = pixelToCell(jp);
@@ -404,6 +416,10 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         cell.setBackground(wallColor); //colorize la case courante
     }
 
+    private void colorizePossibleMovePanel(JPanel cell) {
+        cell.setBackground(possibleMoveColor); //colorize la case courante
+    }
+
     private Coordinates pixelToCell(JPanel component) {
         for (Map.Entry mapEntry : mapCoordPanelPawn.entrySet()) {
             if (component.equals(mapEntry.getValue())) {
@@ -525,7 +541,6 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
         jp.add(remainWall);
 
     }
-
 
     private int getCurrentNumPlayer(int nbPlayers) {
         int numCurrentPlayer = quoridorGameController.getCurrentPlayer();
