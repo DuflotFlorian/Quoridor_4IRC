@@ -11,7 +11,7 @@ public class Game {
     private int idCurrentPlayer;
     private Board board;
 
-    public Game(int nbPlayers) {
+    public Game(int nbPlayers, List<String> name) {
         this.nbPlayers = nbPlayers;
         this.idCurrentPlayer = 0;
         this.board = new Board();
@@ -19,15 +19,15 @@ public class Game {
         switch (this.nbPlayers) {
             case 2:
                 this.players = new Player[2];
-                this.players[0] = new Player(10, QuoridorColor.BLUE, new Coordinates(0, 8), new Coordinates(16, 8));
-                this.players[1] = new Player(10, QuoridorColor.RED, new Coordinates(16, 8), new Coordinates(0, 8));
+                this.players[0] = new Player(10, QuoridorColor.BLUE, new Coordinates(0, 8), new Coordinates(16, 8), name.get(0));
+                this.players[1] = new Player(10, QuoridorColor.RED, new Coordinates(16, 8), new Coordinates(0, 8), name.get(1));
                 break;
             case 4:
                 this.players = new Player[4];
-                this.players[0] = new Player(5, QuoridorColor.BLUE, new Coordinates(0,8), new Coordinates(16,8));
-                this.players[1] = new Player(5, QuoridorColor.RED, new Coordinates(16,8), new Coordinates(0,8));
-                this.players[2] = new Player(5, QuoridorColor.YELLOW, new Coordinates(8,0), new Coordinates(8,16));
-                this.players[3] = new Player(5, QuoridorColor.GREEN, new Coordinates(8,16), new Coordinates(8,0));
+                this.players[0] = new Player(5, QuoridorColor.BLUE, new Coordinates(0,8), new Coordinates(16,8), name.get(0));
+                this.players[1] = new Player(5, QuoridorColor.RED, new Coordinates(16,8), new Coordinates(0,8), name.get(1));
+                this.players[2] = new Player(5, QuoridorColor.YELLOW, new Coordinates(8,0), new Coordinates(8,16), name.get(2));
+                this.players[3] = new Player(5, QuoridorColor.GREEN, new Coordinates(8,16), new Coordinates(8,0), name.get(3));
                 break;
 
             default:
@@ -270,6 +270,15 @@ public class Game {
 
     public QuoridorColor getPlayerColor(int numPlayer) {
         return players[numPlayer].getQuoridorColor();
+    }
+
+
+    public String getPlayerName(int numPlayer) {
+        return players[numPlayer].getName();
+    }
+
+    public void setPlayerName(int numPlayer, String name) {
+        players[numPlayer].setName(name);
     }
 
     private boolean isThereAPath(Coordinates init, Coordinates dest) {

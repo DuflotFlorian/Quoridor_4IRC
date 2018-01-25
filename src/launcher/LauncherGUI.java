@@ -83,7 +83,7 @@ public class LauncherGUI extends javax.swing.JFrame {
         {
             public void actionPerformed(ActionEvent e)
             {
-                launchGame(2);
+                launchNames(2);
             }
         });
 
@@ -91,7 +91,7 @@ public class LauncherGUI extends javax.swing.JFrame {
         {
             public void actionPerformed(ActionEvent e)
             {
-                launchGame(4);
+                launchNames(4);
             }
         });
 
@@ -120,7 +120,32 @@ public class LauncherGUI extends javax.swing.JFrame {
     }
 
     public static void main(String[] args) {
+        defineAutoTheme();
+        //Lancement de la fenêtre de jeu
+        java.awt.EventQueue.invokeLater(new Runnable() {
 
+            public void run() {
+                new LauncherGUI().setVisible(true);
+            }
+        });
+    }
+
+
+    private void launchNames(int nbPlayers) {
+        frameLauncher.dispose();
+        new NamesGUI(nbPlayers);
+    }
+
+
+
+    private void displayScoreTab() {
+        LinkedHashMap<String, Integer> topRank =  GameController.getTopRank();
+        LinkedHashMap<String, List<Integer>> topRankByParticipation =  GameController.getTopRankByParticipation();
+        new ScoresGUI(topRank,topRankByParticipation);
+
+    }
+
+    public static void defineAutoTheme(){
         /*Définition auto du theme en fonction du système*/
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -133,39 +158,5 @@ public class LauncherGUI extends javax.swing.JFrame {
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-
-        //Lancement de la fenêtre de jeu
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                new LauncherGUI().setVisible(true);
-            }
-        });
-    }
-
-
-    private void launchGame(int nbPlayer) {
-        JFrame quoridorFrame;
-        QuoridorGame quoridorGame;
-        GameController quoridorGameController;
-
-        quoridorGame = new QuoridorGame(nbPlayer);
-        quoridorGameController = new GameController(quoridorGame);
-
-        quoridorFrame = new QuoridorGUI("Quoridor", quoridorGameController,  9);
-        quoridorGame.addObserver((Observer) quoridorFrame);
-        quoridorFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        quoridorFrame.pack();
-        quoridorFrame.setVisible(true);
-
-        //On cache le launcher
-        frameLauncher.dispose();
-    }
-
-    private void displayScoreTab() {
-        LinkedHashMap<String, Integer> topRank =  GameController.getTopRank();
-        LinkedHashMap<String, List<Integer>> topRankByParticipation =  GameController.getTopRankByParticipation();
-        new ScoresGUI(topRank,topRankByParticipation);
-
     }
 }

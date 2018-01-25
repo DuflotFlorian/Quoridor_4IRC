@@ -534,6 +534,8 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
 
     private void createSideLabel(JPanel jp, int numPlayer) {
         int numCurrentPlayer = quoridorGameController.getCurrentPlayer();
+        String name = quoridorGameController.getPlayerName(numPlayer - 1);
+
         QuoridorColor currentPlayerColor = quoridorGameController.getPlayerColor(numPlayer - 1);
 
 
@@ -541,8 +543,15 @@ public class QuoridorGUI extends JFrame implements MouseListener, MouseMotionLis
             jp.setBorder(BorderFactory.createLineBorder(currentPlayerColor.getColorBox(), coeffSize / 12));
         }
 
+
+
+        currentPlayerColor.setJLabelPlayerName(new JLabel(name));
+        System.out.println(name);
         // display the player name in french
         JLabel playerName = currentPlayerColor.getJLabelPlayerName();
+        Color colorBox = currentPlayerColor.getColorBox();
+        playerName.setForeground(colorBox);
+        playerName.setHorizontalAlignment(JLabel.CENTER);
 
         // set the player panel
         jp.setBackground(new Color(0x808080)); //gris foncé

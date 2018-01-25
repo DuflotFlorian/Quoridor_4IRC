@@ -8,10 +8,10 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.List;
 
+import static launcher.LauncherGUI.defineAutoTheme; //TODO delete ?
 
 public class ScoresGUI extends JFrame {
     JFrame frameLauncher;
-    JPanel JPanelButton;
     Color BackgroundColor = new Color(404040);
     LinkedHashMap<String, Integer> topRank;
     LinkedHashMap<String, List<Integer>> rankRatio;
@@ -26,7 +26,8 @@ public class ScoresGUI extends JFrame {
         this.setLocationRelativeTo(null);
         this.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - this.getPreferredSize().width /2 , (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - this.getPreferredSize().height /2 );
         this.setTitle("Scores Quoridor");
-        frameLauncher.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+
+
 
         /*Chargement de l'icone du programme*/
         InputStream iconeURL = getClass().getResourceAsStream("/images/iconQuoridor.png");
@@ -88,20 +89,7 @@ public class ScoresGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-
-        /*Définition auto du theme en fonction du système*/
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-
+        defineAutoTheme();
     }
 
 }

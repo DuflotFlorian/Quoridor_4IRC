@@ -7,13 +7,15 @@ import java.util.List;
 public class Player {
     private List<Piece> pieces;
     private QuoridorColor quoridorColor;
+    private String name;
     private Coordinates actualCoord;
     private Coordinates winCoord;
     private int nbWall;
 
-    public Player(int nbWall, QuoridorColor c, Coordinates coord, Coordinates winCoord) {
+    public Player(int nbWall, QuoridorColor c, Coordinates coord, Coordinates winCoord, String name) {
         this.quoridorColor = c;
         this.actualCoord = coord;
+        this.name = name;
         Pawn pawn = new Pawn(coord, c);
         pieces = new ArrayList<Piece>();
         pieces.add(pawn);
@@ -100,7 +102,7 @@ public class Player {
 
     public String toString() {
         String res = "";
-        res += "\tQuoridorColor : " + this.getQuoridorColor() + "\n";
+        res += "\tQuoridorColor : " + this.name + "\n";
         return res;
     }
 
@@ -138,6 +140,14 @@ public class Player {
             }
         }
         return i;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
 
