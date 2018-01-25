@@ -10,10 +10,8 @@ import java.util.List;
 
 import static launcher.LauncherGUI.defineAutoTheme;
 
-
 public class ScoresGUI extends JFrame {
     JFrame frameLauncher;
-    JPanel JPanelButton;
     Color BackgroundColor = new Color(404040);
     LinkedHashMap<String, Integer> topRank;
     LinkedHashMap<String, List<Integer>> rankRatio;
@@ -40,8 +38,6 @@ public class ScoresGUI extends JFrame {
             e.printStackTrace();
         }
         frameLauncher.setIconImage(imgIcon.getImage());
-
-
         main.setBackground(this.BackgroundColor);
         this.add(main);
 

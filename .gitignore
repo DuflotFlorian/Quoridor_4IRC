@@ -15,7 +15,7 @@ tomcat
 *.gz
 *.iso
 *.jar
-*.rar
+#*.rar commented to allow include json-simple librarie to repository
 *.tar
 *.zip
 *.war
