@@ -111,6 +111,7 @@ public class LauncherGUI extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e)
             {
                 dispose();
+                System.exit(0);
             }
         });
 

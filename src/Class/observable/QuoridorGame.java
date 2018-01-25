@@ -103,4 +103,6 @@ public class QuoridorGame extends Observable implements BoardGames {
     public int getPlayerWallRemaining(int numPlayer) {
         return game.getPlayerWallRemaining(numPlayer);
     }
+
+    public List<Coordinates> possibleMove(Coordinates initCoord) { return game.possibleMove(initCoord); }
 }

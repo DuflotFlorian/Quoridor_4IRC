@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.List;
 
-import static launcher.LauncherGUI.defineAutoTheme;
+import static launcher.LauncherGUI.defineAutoTheme; //TODO delete ?
 
 public class ScoresGUI extends JFrame {
     JFrame frameLauncher;
@@ -38,6 +38,7 @@ public class ScoresGUI extends JFrame {
             e.printStackTrace();
         }
         frameLauncher.setIconImage(imgIcon.getImage());
+
         main.setBackground(this.BackgroundColor);
         this.add(main);
 
@@ -48,8 +49,6 @@ public class ScoresGUI extends JFrame {
         JLabel titleRankByPlayed = new JLabel("% VICTOIRES / NOMBRE DE JEUX");
         titleRankByPlayed.setForeground(Color.WHITE);
         main.add(titleRankByPlayed);
-
-
 
         //tableau TopRank
         JTable tableT=new JTable(topRank.size(),2);
@@ -63,7 +62,6 @@ public class ScoresGUI extends JFrame {
         tableT.setGridColor(BackgroundColor);
         tableT.setForeground(Color.WHITE);
         main.add(tableT);
-
 
         //tableau rankRatio
         JTable tableR=new JTable(topRank.size(),3);
@@ -86,8 +84,6 @@ public class ScoresGUI extends JFrame {
         tableR.getColumnModel().getColumn(0).setPreferredWidth(150);
         main.add(tableR);
 
-        Dimension preferredSize = main.getPreferredSize();
-        this.setPreferredSize(new Dimension(preferredSize));
         this.pack();
         this.setVisible(true);
     }
