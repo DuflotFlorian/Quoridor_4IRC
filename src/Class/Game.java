@@ -200,20 +200,11 @@ public class Game {
 
         if (abs(diffX) == 4|| abs(diffY) == 4) { //Saut sur l'axe X ou Y
             if (isPawnBlockedByWall(new Coordinates(initCoord.getX() + diffX - (diffX / 4), initCoord.getY() + diffY - (diffY / 4)))) {
-                //Test de la case juste avant la case destination
-                System.out.println("+ + "+new Coordinates(initCoord.getX() + diffX - (diffX / 4), initCoord.getY() + diffY - (diffY / 4)) );
                 return false;
             }
-//            else if (isPawnBlockedByWall(new Coordinates(initCoord.getX() + (diffX - 2) - (diffX / 4), initCoord.getY() + diffY - (diffY / 4)))) {
-//                System.out.println("- + "+new Coordinates(initCoord.getX() + (diffX - 2) - (diffX / 4), initCoord.getY() + diffY - (diffY / 4)) );
-//                return false;
-//            }
-//
-//            else if (isPawnBlockedByWall(new Coordinates(initCoord.getX() + diffX - (diffX / 4), initCoord.getY() + (diffY - 2) - (diffY / 4)))) {
-//                System.out.println("- +"+new Coordinates(initCoord.getX() + diffX - (diffX / 4), initCoord.getY() + (diffY - 2) - (diffY / 4)));
-//                return false;
-//            }
-
+            if (isPawnBlockedByWall(new Coordinates(initCoord.getX() + diffX / 4, initCoord.getY() + diffY / 4))) {
+                return false;
+            }
         }
 
         return true;
@@ -230,11 +221,11 @@ public class Game {
         if (isWallHere(coord)) {
             return true;
         } else if (Wall.isWallHorizontal(coord)) {
-            if (isWallHere(new Coordinates(coord.getX(), coord.getY() - 2)) || isWallHere(new Coordinates(coord.getX(), coord.getY() - 4))) {
+            if (isWallHere(new Coordinates(coord.getX(), coord.getY() - 2))) {
                 return true;
             }
         } else {
-            if (isWallHere(new Coordinates(coord.getX() - 2, coord.getY())) || isWallHere(new Coordinates(coord.getX() - 4, coord.getY()))) {
+            if (isWallHere(new Coordinates(coord.getX() - 2, coord.getY()))) {
                 return true;
             }
         }
