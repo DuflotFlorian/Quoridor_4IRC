@@ -23,7 +23,7 @@ public class ScoresGUI extends JFrame {
         frameLauncher = this;
         JPanel main = new JPanel(new GridLayout(2,2));
         this.setResizable(false);
-        this.setPreferredSize(new Dimension(500, 220));
+//        this.setPreferredSize(new Dimension(550, 220));
         this.setLocationRelativeTo(null);
         this.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - this.getPreferredSize().width /2 , (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - this.getPreferredSize().height /2 );
         this.setTitle("Scores Quoridor");
@@ -78,14 +78,19 @@ public class ScoresGUI extends JFrame {
             tableR.setValueAt(player,row,0);
             ArrayList a = (ArrayList) pair.getValue();
             tableR.setValueAt(a.get(0)+" %",row,1);
-            tableR.setValueAt(a.get(1)+" jeux",row,2);
+            tableR.setValueAt("["+a.get(1)+" jeux]",row,2);
             row++;
         }
 
         tableR.setBackground(BackgroundColor);
         tableR.setGridColor(BackgroundColor);
         tableR.setForeground(Color.WHITE);
+        tableR.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        tableR.getColumnModel().getColumn(0).setPreferredWidth(150);
         main.add(tableR);
+
+        Dimension preferredSize = main.getPreferredSize();
+        this.setPreferredSize(new Dimension(preferredSize));
         this.pack();
         this.setVisible(true);
     }

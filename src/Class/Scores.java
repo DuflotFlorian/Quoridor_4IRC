@@ -191,7 +191,7 @@ public class Scores
         }
 
         HashMap<String, Integer> scoreMapSorted = sortMap(scoreMapUnsorted);
-        LinkedHashMap<String, List<Integer>> scoreMapSortedList  = new LinkedHashMap<>();
+        LinkedHashMap<String, List<Integer>> scoreMapSortedList  = new LinkedHashMap<String, List<Integer>>();
         Iterator it2 = scoreMapSorted.entrySet().iterator();
         while (it2.hasNext()) {
             Map.Entry pair = (Map.Entry) it2.next();
@@ -199,7 +199,7 @@ public class Scores
 
             int playerVictories = scoreMapSorted.get(player);
             int playerGames = getNbGames(player);
-            List<Integer> l = new ArrayList<>();
+            List<Integer> l = new ArrayList<Integer>();
             l.add(playerVictories);
             l.add(playerGames);
             scoreMapSortedList.put(player,l);
