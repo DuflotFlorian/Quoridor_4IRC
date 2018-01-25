@@ -11,7 +11,9 @@ public class Minmax {
         private int value;
     }
 
-    private static Move minmax(Game game) { return minmax(game,3, 1); }
+    public static Coordinates bestMove(Game game) { return minmax(game,3, game.getIdCurrentPlayer()).coordinates; }
+    public static Coordinates bestMove(Game game, int depth, int player) { return minmax(game,depth, player).coordinates; }
+
     private static Move minmax(Game game, int depth, int ia_player){
         Move best_move = new Move();
         best_move.value = Integer.MIN_VALUE;
@@ -19,25 +21,26 @@ public class Minmax {
         if(depth == 0){
             Move m = new Move();
             m.value = eval(game,ia_player);
-        }
-        for(int i=0; i<9; i++) {
-            for(int j=0; j<9; j++){
-                Game g = new Game(game);
-                if( g.move(g.getCurrentPlayer(),new Coordinates(i,j))
-                    || g.putWall(g.getCurrentPlayer(),new Coordinates(i,j))
-                    ){
-                   Move m = minmax(g, depth-1, 1);
-                   boolean test;
-                   if(g.getIdCurrentPlayer() == ia_player){
-                        test = m.value < best_move.value;
-                   }else{
-                        test = m.value > best_move.value;
-                   }
-                   if(test){
-                      best_move.value = m.value;
-                   }
+        }else{
+            for(int i=0; i<17; i++) {
+                for (int j = 0; j < 17; j++) {
+                    Game g = new Game(game);
+                    if (g.move(g.getCurrentPlayer(), new Coordinates(i, j))
+                            || g.putWall(g.getCurrentPlayer(), new Coordinates(i, j))
+                            ) {
+                        Move m = minmax(g, depth - 1, 1);
+                        boolean test;
+                        if (g.getIdCurrentPlayer() == ia_player) {
+                            test = m.value < best_move.value;
+                        } else {
+                            test = m.value > best_move.value;
+                        }
+                        if (test) {
+                            best_move.value = m.value;
+                        }
+                    }
                 }
-           }
+            }
         }
         return best_move;
     }
