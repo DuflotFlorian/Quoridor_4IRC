@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Observer;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -98,7 +98,11 @@ public class LauncherGUI extends javax.swing.JFrame {
         btnScore.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                displayScoreTab();
+                if(GameController.isScores()){
+                    displayScoreTab();
+                } else {
+                    btnScore.setEnabled(false);
+                }
             }
         });
 
@@ -158,9 +162,9 @@ public class LauncherGUI extends javax.swing.JFrame {
     }
 
     private void displayScoreTab() {
-
         LinkedHashMap<String, Integer> topRank =  GameController.getTopRank();
-        new ScoresGUI(topRank);
+        LinkedHashMap<String, List<Double>> topRankByParticipation =  GameController.getTopRankByParticipation();
+        new ScoresGUI(topRank,topRankByParticipation);
 
     }
 }

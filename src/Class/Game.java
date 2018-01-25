@@ -18,14 +18,14 @@ public class Game {
         switch (this.nbPlayers) {
             case 2:
                 this.players = new Player[2];
-                this.players[0] = new Player(10, QuoridorColor.BLUE, new Coordinates(0, 8), new Coordinates(2, 8));
+                this.players[0] = new Player(10, QuoridorColor.BLUE, new Coordinates(0, 8), new Coordinates(2, 8)); //debug
                 this.players[1] = new Player(10, QuoridorColor.RED, new Coordinates(16, 8), new Coordinates(0, 8));
                 break;
             case 4:
                 this.players = new Player[4];
                 this.players[0] = new Player(5, QuoridorColor.BLUE, new Coordinates(0,8), new Coordinates(16,8));
-                this.players[1] = new Player(5, QuoridorColor.RED, new Coordinates(16,8), new Coordinates(14,8));
-                this.players[2] = new Player(5, QuoridorColor.YELLOW, new Coordinates(8,0), new Coordinates(8,16));
+                this.players[1] = new Player(5, QuoridorColor.RED, new Coordinates(16,8), new Coordinates(14,8)); // debug
+                this.players[2] = new Player(5, QuoridorColor.YELLOW, new Coordinates(8,0), new Coordinates(8,2)); //debug
                 this.players[3] = new Player(5, QuoridorColor.GREEN, new Coordinates(8,16), new Coordinates(8,0));
                 break;
 

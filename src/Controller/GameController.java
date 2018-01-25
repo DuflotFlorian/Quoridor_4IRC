@@ -49,8 +49,18 @@ public class GameController extends AbstractGameController {
     @Override
     protected void endMove(Coordinates initCoord, Coordinates finalCoord) { }
 
+    public static boolean isScores() {
+        return Scores.isScores();
+    }
+
     public static LinkedHashMap<String, Integer> getTopRank() {
+        if(!Scores.isScores()) return null;
         return Scores.getTopRank();
+    }
+
+    public static LinkedHashMap<String, List<Double>> getTopRankByParticipation() {
+        if(!Scores.isScores()) return null;
+        return Scores.getTopRankByParticipation();
     }
 
 }

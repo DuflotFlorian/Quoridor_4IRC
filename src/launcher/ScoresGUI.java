@@ -7,8 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 
 public class ScoresGUI extends JFrame {
@@ -17,10 +17,12 @@ public class ScoresGUI extends JFrame {
     JButton btnExit;
     Color BackgroundColor = new Color(404040);
     LinkedHashMap<String, Integer> topRank;
+    LinkedHashMap<String, List<Double>> rankRatio;
 
-    public ScoresGUI(LinkedHashMap<String, Integer> tr) {
+    public ScoresGUI(LinkedHashMap<String, Integer> tr, LinkedHashMap<String, List<Double>> rr) {
         super();
         this.topRank = tr;
+        this.rankRatio = rr;
         /*On créé une référence vers la frame*/
         frameLauncher = this;
 
@@ -73,22 +75,45 @@ public class ScoresGUI extends JFrame {
         titleTopRank.setForeground(Color.WHITE);
         main.add(titleTopRank);
 
-        JLabel titleRankByPayed = new JLabel("RANK BY GAME PLAYED");
+        JLabel titleRankByPayed = new JLabel("% VICTOIRES");
         titleRankByPayed.setForeground(Color.WHITE);
         main.add(titleRankByPayed);
 
+
+
         //tableau TopRank
-        JTable table=new JTable(topRank.size(),2);
+        JTable tableT=new JTable(topRank.size(),2);
         int row=0;
         for(Map.Entry<String,Integer> entry: topRank.entrySet()){
-            table.setValueAt(entry.getKey(),row,0);
-            table.setValueAt(entry.getValue(),row,1);
+            tableT.setValueAt(entry.getKey(),row,0);
+            tableT.setValueAt(entry.getValue(),row,1);
             row++;
         }
-        table.setBackground(BackgroundColor);
-        table.setGridColor(BackgroundColor);
-        table.setForeground(Color.WHITE);
-        main.add(table);
+        tableT.setBackground(BackgroundColor);
+        tableT.setGridColor(BackgroundColor);
+        tableT.setForeground(Color.WHITE);
+        main.add(tableT);
+
+
+        //tableau rankRatio
+        JTable tableR=new JTable(topRank.size(),3);
+        Iterator it = rankRatio.entrySet().iterator();
+        row=0;
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            String player = pair.getKey().toString();
+            tableR.setValueAt(player,row,0);
+            ArrayList a = (ArrayList) pair.getValue();
+            tableR.setValueAt(a.get(0)+" %",row,1);
+            tableR.setValueAt("/ "+a.get(1)+" jeux",row,2);
+            row++;
+        }
+
+        tableR.setBackground(BackgroundColor);
+        tableR.setGridColor(BackgroundColor);
+        tableR.setForeground(Color.WHITE);
+        main.add(tableR);
+
 
         
 
