@@ -35,6 +35,11 @@ public class Game {
     }
 
     public Game(Game g){
+        this.players = new Player[g.listPlayer().size()];
+        for(int i=0; i<g.listPlayer().size(); i++){
+            Player p = g.listPlayer().get(i);
+            this.players[i] = new Player(p.getWallRemaining(),p.getQuoridorColor(),p.getActualCoord(),p.getWinCoord());
+        }
         this.nbPlayers = g.nbPlayers;
         this.idCurrentPlayer = g.idCurrentPlayer;
         this.board = new Board(g.board);
@@ -119,6 +124,7 @@ public class Game {
     public void switchPlayer() {
         this.idCurrentPlayer += 1;
         this.idCurrentPlayer = this.idCurrentPlayer % this.nbPlayers;
+        //System.out.println(Minmax.bestMove(this,1,this.idCurrentPlayer));
     }
 
     public boolean isPlayerHere(Coordinates coord) {
