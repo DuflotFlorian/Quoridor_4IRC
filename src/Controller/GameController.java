@@ -2,7 +2,9 @@ package Controller;
 
 import Class.observable.QuoridorGame;
 import Class.*;
+import java.util.LinkedHashMap;
 import java.util.List;
+
 
 public class GameController extends AbstractGameController {
 
@@ -45,5 +47,19 @@ public class GameController extends AbstractGameController {
 
     @Override
     protected void endMove(Coordinates initCoord, Coordinates finalCoord) { }
+
+    public static boolean isScores() {
+        return Scores.isScores();
+    }
+
+    public static LinkedHashMap<String, Integer> getTopRank() {
+        if(!Scores.isScores()) return null;
+        return Scores.getTopRank();
+    }
+
+    public static LinkedHashMap<String, List<Integer>> getTopRankByParticipation() {
+        if(!Scores.isScores()) return null;
+        return Scores.getTopRankByParticipation();
+    }
 
 }
