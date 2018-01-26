@@ -2,11 +2,11 @@ package Class;
 
 import java.util.ArrayList;
 
-public abstract class AbstractGrille {
+public abstract class AbstractGrid {
     private ArrayList<AbstractPiece> elements;
     private String name;
 
-    AbstractGrille(ArrayList elem){
+    AbstractGrid(ArrayList elem) {
         super();
         this.elements = elem;
         this.name = this.getClass().getSimpleName();
@@ -16,25 +16,27 @@ public abstract class AbstractGrille {
         return elements;
     }
 
-    public abstract boolean isAddOk(Coordonnees coord);
+    public abstract boolean isAddOk(Coordinates coord);
 
-    public boolean addElement(AbstractPiece elem){
-        if(isAddOk(elem.getCoordonnees())){
+    public boolean addElement(AbstractPiece elem) {
+        if (isAddOk(elem.getCoordinates())) {
             this.elements.add(elem);
+
             return true;
         }
+
         return false;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
-    public int getNumberElement(){
+    public int getNumberElement() {
         return this.elements.size();
     }
 
-    public void removeElement(AbstractPiece p){
+    public void removeElement(AbstractPiece p) {
         this.elements.remove(p);
     }
 

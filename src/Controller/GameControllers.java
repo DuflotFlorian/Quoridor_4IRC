@@ -1,8 +1,7 @@
 package Controller;
 
-import Class.*;
-
 import java.util.List;
+import Class.*;
 
 public interface GameControllers {
 
@@ -11,24 +10,25 @@ public interface GameControllers {
      * @param finalCoord
      * @return true si le déplacement s'est bien passé
      */
-    public boolean move(Coordonnees initCoord, Coordonnees finalCoord);
+    boolean move(Coordinates initCoord, Coordinates finalCoord);
 
     /**
      * @return message relatif aux déplacement, capture, etc.
      */
-    public String getMessage();
+    String getMessage();
 
     /**
      * @return true si fin de partie OK (echec et mat, pat, etc.)
      */
-    public boolean isEnd();
+    boolean isEnd();
 
     /**
      * @param initCoord
      * @return une info dont la vue se servira
      * pour empêcher tout déplacement sur le damier
      */
-    public boolean isPlayerOK(Coordonnees initCoord);
+    boolean isPlayerOK(Coordinates initCoord);
 
-    public List<Coordonnees> getMovePossible(Coordonnees c);
+    List<Coordinates> getMovePossible(Coordinates c);
+
 }

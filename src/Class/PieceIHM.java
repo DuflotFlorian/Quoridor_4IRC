@@ -1,22 +1,20 @@
 package Class;
 
-import Class.*;
-
 public class PieceIHM implements PieceIHMs {
     Piece piece;
 
-    public PieceIHM(Piece piece){
+    public PieceIHM(Piece piece) {
         this.piece = piece;
     }
 
     @Override
-    public Coordonnees getCoordonnees() {
-        return piece.getCoordonnees();
+    public Coordinates getCoordinates() {
+        return piece.getCoordinates();
     }
 
     @Override
-    public Couleur getCouleur() {
-        return piece.getCouleur();
+    public QuoridorColor getQuoridorColor() {
+        return piece.getQuoridorColor();
     }
 
     @Override

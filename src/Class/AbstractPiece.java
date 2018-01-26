@@ -1,45 +1,43 @@
 package Class;
 
-public abstract class AbstractPiece implements Piece{
+public abstract class AbstractPiece implements Piece {
 
-    private Coordonnees coordonnees;
-    private Couleur couleur;
+    private Coordinates coordinates;
+    private QuoridorColor quoridorColor;
     private String name;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) { }
 
-    }
-
-    AbstractPiece(Coordonnees coord, Couleur color){
+    AbstractPiece(Coordinates coord, QuoridorColor color) {
         super();
-        this.coordonnees = coord;
-        this.couleur = color;
+        this.coordinates = coord;
+        this.quoridorColor = color;
         this.name = this.getClass().getSimpleName();
     }
 
-    public void setCoordonnees(Coordonnees coord){
-        this.coordonnees = coord;
+    public void setCoordinates(Coordinates coord) {
+        this.coordinates = coord;
     }
 
-    public Coordonnees getCoordonnees(){
-        return this.coordonnees;
+    public Coordinates getCoordinates() {
+        return this.coordinates;
     }
 
-    public Couleur getCouleur() {
-        return couleur;
+    public QuoridorColor getQuoridorColor() {
+        return quoridorColor;
     }
 
-    public void setCouleur(Couleur couleur) {
-        this.couleur = couleur;
+    public void setQuoridorColor(QuoridorColor quoridorColor) {
+        this.quoridorColor = quoridorColor;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
-    public boolean move(Coordonnees coord){
-            this.coordonnees = coord;
+    public boolean move(Coordinates coord) {
+        this.coordinates = coord;
+
         return true;
     }
-
 }
